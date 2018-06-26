@@ -1,4 +1,18 @@
-# t: A Runtime Typechecker for Roblox
+<h1 align="center">t</h1>
+<div align="center">
+	<a href="https://travis-ci.org/osyrisrblx/t">
+		<img src="https://api.travis-ci.org/osyrisrblx/t.svg?branch=master" alt="Travis-CI Build Status" />
+	</a>
+	<a href="https://coveralls.io/github/osyrisrblx/t?branch=master">
+		<img src="https://coveralls.io/repos/github/osyrisrblx/t/badge.svg?branch=master" alt="Coveralls Coverage" />
+	</a>
+</div>
+
+<div align="center">
+	A Runtime Typechecker for Roblox
+</div>
+
+<div>&nbsp;</div>
 
 t is a module which allows you to create type definitions to check values against.
 
