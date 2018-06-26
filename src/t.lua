@@ -204,7 +204,7 @@ function t.tuple(...)
 		for i = 1, #checks do
 			local success, errMsg = checks[i](args[i])
 			if success == false then
-				return false, string.format("Bad tuple index #%d: %s", i, errMsg or "")
+				return false, string.format("Bad tuple index #%d:\n\t%s", i, errMsg or "")
 			end
 		end
 		return true
@@ -223,7 +223,7 @@ function t.strictKeys(check)
 		for key in pairs(value) do
 			local success, errMsg = check(key)
 			if success == false then
-				return false, string.format("table bad key %s: %s", key, errMsg or "")
+				return false, string.format("bad key %s:\n\t%s", key, errMsg or "")
 			end
 		end
 
@@ -243,7 +243,7 @@ function t.strictValues(check)
 		for i, val in pairs(value) do
 			local success, errMsg = check(val)
 			if success == false then
-				return false, string.format("table bad value for key %d: %s", i, errMsg or "")
+				return false, string.format("bad value for key %d:\n\t%s", i, errMsg or "")
 			end
 		end
 
@@ -278,7 +278,7 @@ do
 	function t.array(value)
 		local keySuccess, keyErrMsg = arrayKeysCheck(value)
 		if keySuccess == false then
-			return false, keyErrMsg or ""
+			return false, string.format("[array] %s", keyErrMsg or "")
 		end
 
 		-- all keys are sequential
@@ -309,7 +309,7 @@ function t.strictArray(check)
 
 		local valueSuccess, valueErrMsg = strictValuesCheck(value)
 		if not valueSuccess then
-			return false, valueErrMsg or ""
+			return false, string.format("[array] %s", valueErrMsg or "")
 		end
 
 		return true
@@ -349,11 +349,6 @@ do
 	end
 end
 
-function t.strictArray(check)
-	assert(t.callback(check))
-	return t.intersection(t.array, t.strictValues(check))
-end
-
 -- ensures value matches given interface definition
 function t.interface(checkTable)
 	assert(t.map(t.string, t.callback))
@@ -366,7 +361,7 @@ function t.interface(checkTable)
 		for key, check in pairs(checkTable) do
 			local success, errMsg = check(value[key])
 			if success == false then
-				return false, string.format("[interface] bad value for %s: %s", key, errMsg or "")
+				return false, string.format("[interface] bad value for %s:\n\t%s", key, errMsg or "")
 			end
 		end
 		return true
