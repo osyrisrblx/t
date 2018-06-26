@@ -200,7 +200,7 @@ function v.tuple(...)
 	local checks = {...}
 	return function(...)
 		local args = {...}
-		for i = 1, #args do
+		for i = 1, #checks do
 			local success, errMsg = checks[i](args[i])
 			if success == false then
 				return false, string.format("Bad tuple index #%d: %s", i, errMsg)

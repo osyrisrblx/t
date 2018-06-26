@@ -10,7 +10,7 @@ In Roblox specifically, it is important to type check your Remote objects to ens
 
 ## Crash Course
 ```Lua
-local v = require(Path.To.v)
+local v = require(path.to.v)
 
 local fooCheck = v.tuple(v.string, v.number, v.optional(v.string))
 local function foo(a, b, c)
@@ -21,10 +21,10 @@ local function foo(a, b, c)
 	--	c is either a string or nil
 end
 
-foo() --> error
+foo() --> Error: Bad tuple index #1: string expected, got nil
 foo("1", 2)
 foo("1", 2, "3")
-foo("1", 2, 3) --> error
+foo("1", 2, 3) --> Error: Bad tuple index #3: (optional) string expected, got number
 ```
 
 Check out src/v.spec.lua for a variety of good examples!
