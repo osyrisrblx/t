@@ -213,7 +213,16 @@ end
 
 local function instanceOfClass(class)
 	return function(value)
-		return t.table(value) and getmetatable(value).__index == class
+		local tableSuccess, tableErrMsg = t.table(value)
+		if not tableSuccess then
+			return false, tableErrMsg or "" -- pass error message for value not being a table
+		end
+
+		if getmetatable(value).__index ~= class then
+			return false, "bad member of class" -- custom error message
+		end
+
+		return true -- all checks passed
 	end
 end
 
