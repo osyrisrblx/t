@@ -223,6 +223,3 @@ print(instanceOfMyClass(myObject)) --> true
 
 ## Notes
 This library was heavily inspired by [io-ts](https://github.com/gcanti/io-ts), a fantastic runtime type validation library for TypeScript.
-
-## Why did you name it t?
-![badcc](https://i.imgur.com/SR84oE7.png)
