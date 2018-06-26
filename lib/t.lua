@@ -285,7 +285,7 @@ do
 		local arraySize = #value
 		for key in pairs(value) do
 			if key < 1 or key > arraySize then
-				return false, string.format("Bad array, key %s must be sequential", tostring(key))
+				return false, string.format("[array] key %s must be sequential", tostring(key))
 			end
 		end
 
