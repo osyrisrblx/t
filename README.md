@@ -8,7 +8,6 @@ Typechecking helps you ensure that your functions are recieving the appropriate 
 
 In Roblox specifically, it is important to type check your Remote objects to ensure that exploiters aren't sending you bad data which can cause your server to error (and potentially crash!).
 
-----
 ## Crash Course
 ```Lua
 local v = require(Path.To.v)
@@ -30,7 +29,6 @@ foo("1", 2, 3) --> error
 
 Check out src/v.spec.lua for a variety of good examples!
 
-----
 ## Primitives
 |Type     |  |Member     |
 |---------|--|-----------|
@@ -66,7 +64,6 @@ print(v.number(x)) --> true
 print(v.string(x)) --> false
 ```
 
-----
 ## Type Composition
 Often, you can combine types to create a composition of types.\
 For example:
@@ -77,7 +74,6 @@ print(mightBeAString()) --> true
 print(mightBeAString(1)) --> false
 ```
 
-----
 ## Meta Type Functions
 The real power of v is in the meta type functions.
 
@@ -104,7 +100,6 @@ Matches a table's values against `check`
 **`v.map(keyCheck, valueCheck)`**\
 Checks all of a table's keys against `keyCheck` and all of a table's values against `valueCheck`
 
-----
 ## Special Number Functions
 
 v includes a few special functions for checking numbers, these can be useful to ensure the given value is within a certain range.
@@ -139,7 +134,6 @@ checks `v.number` and determines if value < max
 **`v.numberConstrainedExclusive(min, max)`**\
 checks `v.number` and determins if min < value < max
 
-----
 ## Arrays
 In Lua, arrays are a special type of table where all the keys are sequential integers.\
 v has special functions for checking against arrays.
@@ -150,7 +144,6 @@ determines that the value is a table and all of it's keys are sequential integer
 **`v.strictArray(check)`**\
 checks against `v.array` and ensures all of the values in the table match `check`
 
-----
 ## Interfaces
 Interfaces can be defined through `v.interface(definition)` where `definition` is a table of type checkers.\
 For example:
@@ -187,7 +180,6 @@ local myPlayer = {
 print(IPlayer(myPlayer)) --> true
 ```
 
-----
 ## Roblox Instances
 v includes two functions to check the types of Roblox Instances.
 
@@ -197,7 +189,6 @@ ensures the value is an Instance and it's ClassName exactly matches `className`
 **`v.instanceOf(className)`**\
 ensures the value is an Instance and it's ClassName matches `className` by a IsA comparison. ([see here](http://wiki.roblox.com/index.php?title=API:Class/Instance/FindFirstAncestorWhichIsA))
 
-----
 ## Tips and Tricks
 You can create your own type checkers with a simple function that returns a boolean.\
 These custom type checkers fit perfectly with the rest of v's functions.
@@ -226,6 +217,5 @@ local myObject = MyClass.new()
 print(instanceOfMyClass(myObject)) --> true
 ```
 
-----
 ## Notes
 This library was heavily inspired by [io-ts](https://github.com/gcanti/io-ts), a fantastic runtime type validation library for TypeScript.
