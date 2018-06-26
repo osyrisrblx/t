@@ -64,7 +64,7 @@ t.Vector3int16 = primitive("Vector3int16")
 function t.integer(value)
 	local success, errMsg = t.number(value)
 	if not success then
-		return false, errMsg
+		return false, errMsg or ""
 	end
 	if value%1 == 0 then
 		return true
@@ -78,7 +78,7 @@ function t.numberMin(min)
 	return function(value)
 		local success, errMsg = t.number(value)
 		if not success then
-			return false, errMsg
+			return false, errMsg or ""
 		end
 		if value >= min then
 			return true
@@ -108,7 +108,7 @@ function t.numberMinExclusive(min)
 	return function(value)
 		local success, errMsg = t.number(value)
 		if not success then
-			return false, errMsg
+			return false, errMsg or ""
 		end
 		if min < value then
 			return true
@@ -123,7 +123,7 @@ function t.numberMaxExclusive(max)
 	return function(value)
 		local success, errMsg = t.number(value)
 		if not success then
-			return false, errMsg
+			return false, errMsg or ""
 		end
 		if value < max then
 			return true
@@ -147,12 +147,12 @@ function t.numberConstrained(min, max)
 	return function(value)
 		local minSuccess, minErrMsg = minCheck(value)
 		if not minSuccess then
-			return false, minErrMsg
+			return false, minErrMsg or ""
 		end
 
 		local maxSuccess, maxErrMsg = maxCheck(value)
 		if not maxSuccess then
-			return false, maxErrMsg
+			return false, maxErrMsg or ""
 		end
 
 		return true
@@ -167,12 +167,12 @@ function t.numberConstrainedExclusive(min, max)
 	return function(value)
 		local minSuccess, minErrMsg = minCheck(value)
 		if not minSuccess then
-			return false, minErrMsg
+			return false, minErrMsg or ""
 		end
 
 		local maxSuccess, maxErrMsg = maxCheck(value)
 		if not maxSuccess then
-			return false, maxErrMsg
+			return false, maxErrMsg or ""
 		end
 
 		return true
@@ -190,7 +190,7 @@ function t.optional(check)
 		if success then
 			return true
 		else
-			return false, string.format("(optional) %s", errMsg)
+			return false, string.format("(optional) %s", errMsg or "")
 		end
 	end
 end
@@ -203,7 +203,7 @@ function t.tuple(...)
 		for i = 1, #checks do
 			local success, errMsg = checks[i](args[i])
 			if success == false then
-				return false, string.format("Bad tuple index #%d: %s", i, errMsg)
+				return false, string.format("Bad tuple index #%d: %s", i, errMsg or "")
 			end
 		end
 		return true
@@ -216,13 +216,13 @@ function t.strictKeys(check)
 	return function(value)
 		local tableSuccess, tableErrMsg = t.table(value)
 		if tableSuccess == false then
-			return false, tableErrMsg
+			return false, tableErrMsg or ""
 		end
 
 		for key in pairs(value) do
 			local success, errMsg = check(key)
 			if success == false then
-				return false, string.format("table bad key %s: %s", key, errMsg)
+				return false, string.format("table bad key %s: %s", key, errMsg or "")
 			end
 		end
 
@@ -236,13 +236,13 @@ function t.strictValues(check)
 	return function(value)
 		local tableSuccess, tableErrMsg = t.table(value)
 		if tableSuccess == false then
-			return false, tableErrMsg
+			return false, tableErrMsg or ""
 		end
 
 		for _, val in pairs(value) do
 			local success, errMsg = check(val)
 			if success == false then
-				return false, string.format("table bad value, got %s: %s", typeof(value), errMsg)
+				return false, string.format("table bad value, got %s: %s", typeof(value), errMsg or "")
 			end
 		end
 
@@ -258,12 +258,12 @@ function t.map(keyCheck, valueCheck)
 	return function(value)
 		local keySuccess, keyErr = keyChecker(value)
 		if not keySuccess then
-			return false, keyErr
+			return false, keyErr or ""
 		end
 
 		local valueSuccess, valueErr = valueChecker(value)
 		if not valueSuccess then
-			return false, valueErr
+			return false, valueErr or ""
 		end
 
 		return true
@@ -277,7 +277,7 @@ do
 	function t.array(value)
 		local keySuccess, keyErrMsg = arrayKeysCheck(value)
 		if keySuccess == false then
-			return false, keyErrMsg
+			return false, keyErrMsg or ""
 		end
 
 		-- all keys are sequential
@@ -303,12 +303,12 @@ function t.strictArray(check)
 	return function(value)
 		local arraySuccess, arrayErrMsg = t.array(value)
 		if not arraySuccess then
-			return false, arrayErrMsg
+			return false, arrayErrMsg or ""
 		end
 
 		local valueSuccess, valueErrMsg = strictValuesCheck(value)
 		if not valueSuccess then
-			return false, valueErrMsg
+			return false, valueErrMsg or ""
 		end
 
 		return true
@@ -340,7 +340,7 @@ do
 			for _, check in pairs(checks) do
 				local success, errMsg = check(value)
 				if not success then
-					return false, errMsg
+					return false, errMsg or ""
 				end
 			end
 			return true
@@ -359,13 +359,13 @@ function t.interface(checkTable)
 	return function(value)
 		local tableSuccess, tableErrMsg = t.table(value)
 		if tableSuccess == false then
-			return false, tableErrMsg
+			return false, tableErrMsg or ""
 		end
 
 		for key, check in pairs(checkTable) do
 			local success, errMsg = check(value[key])
 			if success == false then
-				return false, string.format("[interface] bad value for %s: %s", key, errMsg)
+				return false, string.format("[interface] bad value for %s: %s", key, errMsg or "")
 			end
 		end
 		return true
@@ -378,7 +378,7 @@ function t.instanceOf(className)
 	return function(value)
 		local instanceSuccess, instanceErrMsg = t.Instance(value)
 		if not instanceSuccess then
-			return false, instanceErrMsg
+			return false, instanceErrMsg or ""
 		end
 
 		if value.ClassName ~= className then
@@ -395,7 +395,7 @@ function t.instanceIsA(className)
 	return function(value)
 		local instanceSuccess, instanceErrMsg = t.Instance(value)
 		if not instanceSuccess then
-			return false, instanceErrMsg
+			return false, instanceErrMsg or ""
 		end
 
 		if not value:IsA(className) then
