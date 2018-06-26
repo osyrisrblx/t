@@ -21,7 +21,7 @@ function t.any(value)
 	if value ~= nil then
 		return true
 	else
-		return "any expected, got nil"
+		return false, "any expected, got nil"
 	end
 end
 
