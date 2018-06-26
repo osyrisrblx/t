@@ -6,10 +6,11 @@ local typeof = typeof or type
 
 local function primitive(typeName)
 	return function(value)
-		if typeof(value) == typeName then
+		local valueType = typeof(value)
+		if valueType == typeName then
 			return true
 		else
-			return false, string.format("%s expected, got %s", typeName, typeof(value))
+			return false, string.format("%s expected, got %s", typeName, valueType)
 		end
 	end
 end
@@ -239,10 +240,10 @@ function t.strictValues(check)
 			return false, tableErrMsg or ""
 		end
 
-		for _, val in pairs(value) do
+		for i, val in pairs(value) do
 			local success, errMsg = check(val)
 			if success == false then
-				return false, string.format("table bad value, got %s: %s", typeof(value), errMsg or "")
+				return false, string.format("table bad value for key %d: %s", i, errMsg or "")
 			end
 		end
 
@@ -288,7 +289,7 @@ do
 					expected = expected + 1
 				end
 			else
-				return false, "Bad array, keys must be sequential"
+				return false, string.format("Bad array, key %d must be sequential", i)
 			end
 		end
 
