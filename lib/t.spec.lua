@@ -91,10 +91,12 @@ return function()
 
 	it("should understand arrays", function()
 		local stringArray = t.strictArray(t.string)
+		local stringValues = t.strictValues(t.string)
 		expect(t.array("foo")).to.equal(false)
 		expect(t.array({1, "2", 3})).to.equal(true)
 		expect(stringArray({1, "2", 3})).to.equal(false)
 		expect(stringArray()).to.equal(false)
+		expect(stringValues()).to.equal(false)
 		expect(t.array({"1", "2", "3"}, t.string)).to.equal(true)
 		expect(t.array({
 			foo = "bar"
