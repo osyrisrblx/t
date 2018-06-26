@@ -74,6 +74,8 @@ print(mightBeAString()) --> true
 print(mightBeAString(1)) --> false
 ```
 
+These get denoted as function calls below with specified arguments. `check` can be any other type checker.
+
 ## Meta Type Functions
 The real power of t is in the meta type functions.
 
