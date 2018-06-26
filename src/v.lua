@@ -215,7 +215,7 @@ end
 
 do
 	local callbackArray = v.strictArray(v.callback)
-	
+
 	-- creates a union type
 	function v.union(...)
 		local checks = {...}
@@ -229,7 +229,7 @@ do
 			return false
 		end
 	end
-	
+
 	-- creates an intersection type
 	function v.intersection(...)
 		local checks = {...}

@@ -47,6 +47,23 @@ do
 	assert(myTupleCheck(1, "2", "3") == false)
 end
 
+-- union
+do
+	local numberOrString = v.union(v.number, v.string)
+	assert(numberOrString(1) == true)
+	assert(numberOrString("1") == true)
+	assert(numberOrString(nil) == false)
+end
+
+-- intersection
+do
+	local integerMax5000 = v.intersection(v.integer, v.numberMax(5000))
+	assert(integerMax5000(1) == true)
+	assert(integerMax5000(5001) == false)
+	assert(integerMax5000(1.1) == false)
+	assert(integerMax5000("1") == false)
+end
+
 -- array
 do
 	local stringArray = v.strictArray(v.string)
