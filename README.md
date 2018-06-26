@@ -120,6 +120,8 @@ Matches a table's values against `check`
 **`t.map(keyCheck, valueCheck)`**\
 Checks all of a table's keys against `keyCheck` and all of a table's values against `valueCheck`
 
+There's also type checks for arrays and interfaces but we'll cover those in their own sections!
+
 ## Special Number Functions
 
 t includes a few special functions for checking numbers, these can be useful to ensure the given value is within a certain range.
