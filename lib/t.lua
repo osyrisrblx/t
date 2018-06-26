@@ -223,7 +223,7 @@ function t.strictKeys(check)
 		for key in pairs(value) do
 			local success, errMsg = check(key)
 			if success == false then
-				return false, string.format("bad key %s:\n\t%s", key, errMsg or "")
+				return false, string.format("bad key %s:\n\t%s", tostring(key), errMsg or "")
 			end
 		end
 
@@ -240,10 +240,10 @@ function t.strictValues(check)
 			return false, tableErrMsg or ""
 		end
 
-		for i, val in pairs(value) do
+		for key, val in pairs(value) do
 			local success, errMsg = check(val)
 			if success == false then
-				return false, string.format("bad value for key %d:\n\t%s", i, errMsg or "")
+				return false, string.format("bad value for key %s:\n\t%s", tostring(key), errMsg or "")
 			end
 		end
 
@@ -282,14 +282,10 @@ do
 		end
 
 		-- all keys are sequential
-		local expected = 1
-		for i = 1, #value do
-			if i == expected then
-				if value[i] ~= nil then
-					expected = expected + 1
-				end
-			else
-				return false, string.format("Bad array, key %d must be sequential", i)
+		local arraySize = #value
+		for key in pairs(value) do
+			if key < 1 or key > arraySize then
+				return false, string.format("Bad array, key %s must be sequential", tostring(key))
 			end
 		end
 
