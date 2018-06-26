@@ -213,9 +213,10 @@ function v.strictArray(check)
 	end
 end
 
--- creates a union type
 do
 	local callbackArray = v.strictArray(v.callback)
+	
+	-- creates a union type
 	function v.union(...)
 		local checks = {...}
 		assert(callbackArray(checks))
@@ -226,6 +227,20 @@ do
 				end
 			end
 			return false
+		end
+	end
+	
+	-- creates an intersection type
+	function v.intersection(...)
+		local checks = {...}
+		assert(callbackArray(checks))
+		return function(value)
+			for _, check in pairs(checks) do
+				if not check(value) then
+					return false
+				end
+			end
+			return true
 		end
 	end
 end

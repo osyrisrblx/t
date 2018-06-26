@@ -91,6 +91,10 @@ The arguments should be a list of type checkers.
 You can define a union type with `v.union(...)`.\
 The arguments should be a list of type checkers.
 
+**`v.intersection(...)`**\
+You can define an intersection type with `v.intersection(...)`.\
+The arguments should be a list of type checkers.
+
 **`v.strictKeys(check)`**\
 Matches a table's keys against `check`
 
