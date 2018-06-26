@@ -6,14 +6,22 @@ local typeof = typeof or type
 
 local function primitive(typeName)
 	return function(value)
-		return typeof(value) == typeName
+		if typeof(value) == typeName then
+			return true
+		else
+			return false, string.format("%s expected, got %s", typeName, typeof(value))
+		end
 	end
 end
 
 local v = {}
 
 function v.any(value)
-	return value ~= nil
+	if value ~= nil then
+		return true
+	else
+		return "any expected, got nil"
+	end
 end
 
 -- lua types
@@ -54,34 +62,74 @@ v.Vector3int16 = primitive("Vector3int16")
 
 -- ensures value is an integer
 function v.integer(value)
-	return v.number(value) and value%1 == 0
+	local success, errMsg = v.number(value)
+	if not success then
+		return false, errMsg
+	end
+	if value%1 == 0 then
+		return true
+	else
+		return false, "integer expected, got non-integer"
+	end
 end
 
 -- ensures value is a number where min <= value
 function v.numberMin(min)
 	return function(value)
-		return v.number(value) and min <= value
+		local success, errMsg = v.number(value)
+		if not success then
+			return false, errMsg
+		end
+		if value >= min then
+			return true
+		else
+			return false, string.format("number >= %d expected", min)
+		end
 	end
 end
 
 -- ensures value is a number where value <= max
 function v.numberMax(max)
 	return function(value)
-		return v.number(value) and value <= max
+		local success, errMsg = v.number(value)
+		if not success then
+			return false, errMsg
+		end
+		if value <= max then
+			return true
+		else
+			return false, string.format("number <= %d expected", max)
+		end
 	end
 end
 
 -- ensures value is a number where min < value
 function v.numberMinExclusive(min)
 	return function(value)
-		return v.number(value) and min < value
+		local success, errMsg = v.number(value)
+		if not success then
+			return false, errMsg
+		end
+		if min < value then
+			return true
+		else
+			return false, string.format("number > %d expected", min)
+		end
 	end
 end
 
 -- ensures value is a number where value < max
 function v.numberMaxExclusive(max)
 	return function(value)
-		return v.number(value) and value < max
+		local success, errMsg = v.number(value)
+		if not success then
+			return false, errMsg
+		end
+		if value < max then
+			return true
+		else
+			return false, string.format("number < %d expected", max)
+		end
 	end
 end
 
@@ -97,7 +145,17 @@ function v.numberConstrained(min, max)
 	local minCheck = v.numberMin(min)
 	local maxCheck = v.numberMax(max)
 	return function(value)
-		return minCheck(value) and maxCheck(value)
+		local minSuccess, minErrMsg = minCheck(value)
+		if not minSuccess then
+			return false, minErrMsg
+		end
+
+		local maxSuccess, maxErrMsg = maxCheck(value)
+		if not maxSuccess then
+			return false, maxErrMsg
+		end
+
+		return true
 	end
 end
 
@@ -107,7 +165,17 @@ function v.numberConstrainedExclusive(min, max)
 	local minCheck = v.numberMinExclusive(min)
 	local maxCheck = v.numberMaxExclusive(max)
 	return function(value)
-		return minCheck(value) and maxCheck(value)
+		local minSuccess, minErrMsg = minCheck(value)
+		if not minSuccess then
+			return false, minErrMsg
+		end
+
+		local maxSuccess, maxErrMsg = maxCheck(value)
+		if not maxSuccess then
+			return false, maxErrMsg
+		end
+
+		return true
 	end
 end
 
@@ -115,7 +183,15 @@ end
 function v.optional(check)
 	assert(v.callback(check))
 	return function(value)
-		return value == nil or check(value)
+		if value == nil then
+			return true
+		end
+		local success, errMsg = check(value)
+		if success then
+			return true
+		else
+			return false, string.format("(optional) %s", errMsg)
+		end
 	end
 end
 
@@ -125,8 +201,9 @@ function v.tuple(...)
 	return function(...)
 		local args = {...}
 		for i = 1, #args do
-			if checks[i](args[i]) == false then
-				return false
+			local success, errMsg = checks[i](args[i])
+			if success == false then
+				return false, string.format("Bad tuple index #%d: %s", i, errMsg)
 			end
 		end
 		return true
@@ -137,13 +214,15 @@ end
 function v.strictKeys(check)
 	assert(v.callback(check))
 	return function(value)
-		if v.table(value) == false then
-			return false
+		local tableSuccess, tableErrMsg = v.table(value)
+		if tableSuccess == false then
+			return false, tableErrMsg
 		end
 
 		for key in pairs(value) do
-			if check(key) == false then
-				return false
+			local success, errMsg = check(key)
+			if success == false then
+				return false, string.format("table bad key %s: %s", key, errMsg)
 			end
 		end
 
@@ -155,13 +234,15 @@ end
 function v.strictValues(check)
 	assert(v.callback(check))
 	return function(value)
-		if v.table(value) == false then
-			return false
+		local tableSuccess, tableErrMsg = v.table(value)
+		if tableSuccess == false then
+			return false, tableErrMsg
 		end
 
 		for _, val in pairs(value) do
-			if check(val) == false then
-				return false
+			local success, errMsg = check(val)
+			if success == false then
+				return false, string.format("table bad value, got %s: %s", typeof(value), errMsg)
 			end
 		end
 
@@ -175,17 +256,28 @@ function v.map(keyCheck, valueCheck)
 	local keyChecker = v.strictKeys(keyCheck)
 	local valueChecker = v.strictValues(valueCheck)
 	return function(value)
-		return keyChecker(value) and valueChecker(value)
+		local keySuccess, keyErr = keyChecker(value)
+		if not keySuccess then
+			return false, keyErr
+		end
+
+		local valueSuccess, valueErr = valueChecker(value)
+		if not valueSuccess then
+			return false, valueErr
+		end
+
+		return true
 	end
 end
 
 
 -- ensures value is an array
 do
-	local arrayKeysCheck = v.strictKeys(v.number)
+	local arrayKeysCheck = v.strictKeys(v.integer)
 	function v.array(value)
-		if arrayKeysCheck(value) == false then
-			return false
+		local keySuccess, keyErrMsg = arrayKeysCheck(value)
+		if keySuccess == false then
+			return false, keyErrMsg
 		end
 
 		-- all keys are sequential
@@ -196,7 +288,7 @@ do
 					expected = expected + 1
 				end
 			else
-				return false
+				return false, "Bad array, keys must be sequential"
 			end
 		end
 
@@ -209,7 +301,17 @@ function v.strictArray(check)
 	assert(v.callback(check))
 	local strictValuesCheck = v.strictValues(check)
 	return function(value)
-		return v.array(value) and strictValuesCheck(value)
+		local arraySuccess, arrayErrMsg = v.array(value)
+		if not arraySuccess then
+			return false, arrayErrMsg
+		end
+
+		local valueSuccess, valueErrMsg = strictValuesCheck(value)
+		if not valueSuccess then
+			return false, valueErrMsg
+		end
+
+		return true
 	end
 end
 
@@ -226,7 +328,7 @@ do
 					return true
 				end
 			end
-			return false
+			return false, "bad type for union"
 		end
 	end
 
@@ -236,8 +338,9 @@ do
 		assert(callbackArray(checks))
 		return function(value)
 			for _, check in pairs(checks) do
-				if not check(value) then
-					return false
+				local success, errMsg = check(value)
+				if not success then
+					return false, errMsg
 				end
 			end
 			return true
@@ -245,17 +348,24 @@ do
 	end
 end
 
+function v.strictArray(check)
+	assert(v.callback(check))
+	return v.intersection(v.array, v.strictValues(check))
+end
+
 -- ensures value matches given interface definition
 function v.interface(checkTable)
 	assert(v.map(v.string, v.callback))
 	return function(value)
-		if v.table(value) == false then
-			return false
+		local tableSuccess, tableErrMsg = v.table(value)
+		if tableSuccess == false then
+			return false, tableErrMsg
 		end
 
 		for key, check in pairs(checkTable) do
-			if check(value[key]) == false then
-				return false
+			local success, errMsg = check(value[key])
+			if success == false then
+				return false, string.format("[interface] bad value for %s: %s", key, errMsg)
 			end
 		end
 		return true
@@ -266,7 +376,16 @@ end
 function v.instanceOf(className)
 	assert(v.string(className))
 	return function(value)
-		return v.Instance(value) and value.ClassName == className
+		local instanceSuccess, instanceErrMsg = v.Instance(value)
+		if not instanceSuccess then
+			return false, instanceErrMsg
+		end
+
+		if value.ClassName ~= className then
+			return false, string.format("%s expected, got %s", className, value.ClassName)
+		end
+
+		return true
 	end
 end
 
@@ -274,7 +393,16 @@ end
 function v.instanceIsA(className)
 	assert(v.string(className))
 	return function(value)
-		return v.Instance(value) and value:IsA(className)
+		local instanceSuccess, instanceErrMsg = v.Instance(value)
+		if not instanceSuccess then
+			return false, instanceErrMsg
+		end
+
+		if not value:IsA(className) then
+			return false, string.format("%s expected, got %s", className, value.ClassName)
+		end
+
+		return true
 	end
 end
 
