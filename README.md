@@ -9,7 +9,7 @@
 </div>
 
 <div align="center">
-	A Runtime Typechecker for Roblox
+	A Runtime Type Checker for Roblox
 </div>
 
 <div>&nbsp;</div>
