@@ -1,4 +1,4 @@
--- v: a runtime typechecker for Roblox
+-- t: a runtime typechecker for Roblox
 -- Osyris
 
 -- regular lua compatibility
@@ -14,9 +14,9 @@ local function primitive(typeName)
 	end
 end
 
-local v = {}
+local t = {}
 
-function v.any(value)
+function t.any(value)
 	if value ~= nil then
 		return true
 	else
@@ -25,44 +25,44 @@ function v.any(value)
 end
 
 -- lua types
-v.boolean = primitive("boolean")
-v.coroutine = primitive("coroutine")
-v.callback = primitive("function")
-v.none = primitive("nil")
-v.number = primitive("number")
-v.string = primitive("string")
-v.table = primitive("table")
+t.boolean = primitive("boolean")
+t.coroutine = primitive("coroutine")
+t.callback = primitive("function")
+t.none = primitive("nil")
+t.number = primitive("number")
+t.string = primitive("string")
+t.table = primitive("table")
 
 -- roblox types
-v.Axes = primitive("Axes")
-v.BrickColor = primitive("BrickColor")
-v.CFrame = primitive("CFrame")
-v.Color3 = primitive("Color3")
-v.ColorSequence = primitive("ColorSequence")
-v.ColorSequenceKeypoint = primitive("ColorSequenceKeypoint")
-v.DockWidgetPluginGuiInfo = primitive("DockWidgetPluginGuiInfo")
-v.Faces = primitive("Faces")
-v.Instance = primitive("Instance")
-v.NumberRange = primitive("NumberRange")
-v.NumberSequence = primitive("NumberSequence")
-v.NumberSequenceKeypoint = primitive("NumberSequenceKeypoint")
-v.PathWaypoint = primitive("PathWaypoint")
-v.PhysicalProperties = primitive("PhysicalProperties")
-v.Random = primitive("Random")
-v.Ray = primitive("Ray")
-v.Rect = primitive("Rect")
-v.Region3 = primitive("Region3")
-v.Region3int16 = primitive("Region3int16")
-v.TweenInfo = primitive("TweenInfo")
-v.UDim = primitive("UDim")
-v.UDim2 = primitive("UDim2")
-v.Vector2 = primitive("Vector2")
-v.Vector3 = primitive("Vector3")
-v.Vector3int16 = primitive("Vector3int16")
+t.Axes = primitive("Axes")
+t.BrickColor = primitive("BrickColor")
+t.CFrame = primitive("CFrame")
+t.Color3 = primitive("Color3")
+t.ColorSequence = primitive("ColorSequence")
+t.ColorSequenceKeypoint = primitive("ColorSequenceKeypoint")
+t.DockWidgetPluginGuiInfo = primitive("DockWidgetPluginGuiInfo")
+t.Faces = primitive("Faces")
+t.Instance = primitive("Instance")
+t.NumberRange = primitive("NumberRange")
+t.NumberSequence = primitive("NumberSequence")
+t.NumberSequenceKeypoint = primitive("NumberSequenceKeypoint")
+t.PathWaypoint = primitive("PathWaypoint")
+t.PhysicalProperties = primitive("PhysicalProperties")
+t.Random = primitive("Random")
+t.Ray = primitive("Ray")
+t.Rect = primitive("Rect")
+t.Region3 = primitive("Region3")
+t.Region3int16 = primitive("Region3int16")
+t.TweenInfo = primitive("TweenInfo")
+t.UDim = primitive("UDim")
+t.UDim2 = primitive("UDim2")
+t.Vector2 = primitive("Vector2")
+t.Vector3 = primitive("Vector3")
+t.Vector3int16 = primitive("Vector3int16")
 
 -- ensures value is an integer
-function v.integer(value)
-	local success, errMsg = v.number(value)
+function t.integer(value)
+	local success, errMsg = t.number(value)
 	if not success then
 		return false, errMsg
 	end
@@ -74,9 +74,9 @@ function v.integer(value)
 end
 
 -- ensures value is a number where min <= value
-function v.numberMin(min)
+function t.numberMin(min)
 	return function(value)
-		local success, errMsg = v.number(value)
+		local success, errMsg = t.number(value)
 		if not success then
 			return false, errMsg
 		end
@@ -89,9 +89,9 @@ function v.numberMin(min)
 end
 
 -- ensures value is a number where value <= max
-function v.numberMax(max)
+function t.numberMax(max)
 	return function(value)
-		local success, errMsg = v.number(value)
+		local success, errMsg = t.number(value)
 		if not success then
 			return false, errMsg
 		end
@@ -104,9 +104,9 @@ function v.numberMax(max)
 end
 
 -- ensures value is a number where min < value
-function v.numberMinExclusive(min)
+function t.numberMinExclusive(min)
 	return function(value)
-		local success, errMsg = v.number(value)
+		local success, errMsg = t.number(value)
 		if not success then
 			return false, errMsg
 		end
@@ -119,9 +119,9 @@ function v.numberMinExclusive(min)
 end
 
 -- ensures value is a number where value < max
-function v.numberMaxExclusive(max)
+function t.numberMaxExclusive(max)
 	return function(value)
-		local success, errMsg = v.number(value)
+		local success, errMsg = t.number(value)
 		if not success then
 			return false, errMsg
 		end
@@ -134,16 +134,16 @@ function v.numberMaxExclusive(max)
 end
 
 -- ensures value is a number where value > 0
-v.numberPositive = v.numberMinExclusive(0)
+t.numberPositive = t.numberMinExclusive(0)
 
 -- ensures value is a number where value < 0
-v.numberNegative = v.numberMaxExclusive(0)
+t.numberNegative = t.numberMaxExclusive(0)
 
 -- ensures value is a number where min <= value <= max
-function v.numberConstrained(min, max)
-	assert(v.number(min) and v.number(max))
-	local minCheck = v.numberMin(min)
-	local maxCheck = v.numberMax(max)
+function t.numberConstrained(min, max)
+	assert(t.number(min) and t.number(max))
+	local minCheck = t.numberMin(min)
+	local maxCheck = t.numberMax(max)
 	return function(value)
 		local minSuccess, minErrMsg = minCheck(value)
 		if not minSuccess then
@@ -160,10 +160,10 @@ function v.numberConstrained(min, max)
 end
 
 -- ensures value is a number where min < value < max
-function v.numberConstrainedExclusive(min, max)
-	assert(v.number(min) and v.number(max))
-	local minCheck = v.numberMinExclusive(min)
-	local maxCheck = v.numberMaxExclusive(max)
+function t.numberConstrainedExclusive(min, max)
+	assert(t.number(min) and t.number(max))
+	local minCheck = t.numberMinExclusive(min)
+	local maxCheck = t.numberMaxExclusive(max)
 	return function(value)
 		local minSuccess, minErrMsg = minCheck(value)
 		if not minSuccess then
@@ -180,8 +180,8 @@ function v.numberConstrainedExclusive(min, max)
 end
 
 -- ensures value is either nil or passes check
-function v.optional(check)
-	assert(v.callback(check))
+function t.optional(check)
+	assert(t.callback(check))
 	return function(value)
 		if value == nil then
 			return true
@@ -196,7 +196,7 @@ function v.optional(check)
 end
 
 -- matches given tuple against tuple type definition
-function v.tuple(...)
+function t.tuple(...)
 	local checks = {...}
 	return function(...)
 		local args = {...}
@@ -211,10 +211,10 @@ function v.tuple(...)
 end
 
 -- ensures all keys in given table pass check
-function v.strictKeys(check)
-	assert(v.callback(check))
+function t.strictKeys(check)
+	assert(t.callback(check))
 	return function(value)
-		local tableSuccess, tableErrMsg = v.table(value)
+		local tableSuccess, tableErrMsg = t.table(value)
 		if tableSuccess == false then
 			return false, tableErrMsg
 		end
@@ -231,10 +231,10 @@ function v.strictKeys(check)
 end
 
 -- ensures all values in given table pass check
-function v.strictValues(check)
-	assert(v.callback(check))
+function t.strictValues(check)
+	assert(t.callback(check))
 	return function(value)
-		local tableSuccess, tableErrMsg = v.table(value)
+		local tableSuccess, tableErrMsg = t.table(value)
 		if tableSuccess == false then
 			return false, tableErrMsg
 		end
@@ -251,10 +251,10 @@ function v.strictValues(check)
 end
 
 -- ensures value is a table and all keys pass keyCheck and all values pass valueCheck
-function v.map(keyCheck, valueCheck)
-	assert(v.callback(keyCheck), v.callback(valueCheck))
-	local keyChecker = v.strictKeys(keyCheck)
-	local valueChecker = v.strictValues(valueCheck)
+function t.map(keyCheck, valueCheck)
+	assert(t.callback(keyCheck), t.callback(valueCheck))
+	local keyChecker = t.strictKeys(keyCheck)
+	local valueChecker = t.strictValues(valueCheck)
 	return function(value)
 		local keySuccess, keyErr = keyChecker(value)
 		if not keySuccess then
@@ -273,8 +273,8 @@ end
 
 -- ensures value is an array
 do
-	local arrayKeysCheck = v.strictKeys(v.integer)
-	function v.array(value)
+	local arrayKeysCheck = t.strictKeys(t.integer)
+	function t.array(value)
 		local keySuccess, keyErrMsg = arrayKeysCheck(value)
 		if keySuccess == false then
 			return false, keyErrMsg
@@ -297,11 +297,11 @@ do
 end
 
 -- ensures value is an array and all values of the array match check
-function v.strictArray(check)
-	assert(v.callback(check))
-	local strictValuesCheck = v.strictValues(check)
+function t.strictArray(check)
+	assert(t.callback(check))
+	local strictValuesCheck = t.strictValues(check)
 	return function(value)
-		local arraySuccess, arrayErrMsg = v.array(value)
+		local arraySuccess, arrayErrMsg = t.array(value)
 		if not arraySuccess then
 			return false, arrayErrMsg
 		end
@@ -316,10 +316,10 @@ function v.strictArray(check)
 end
 
 do
-	local callbackArray = v.strictArray(v.callback)
+	local callbackArray = t.strictArray(t.callback)
 
 	-- creates a union type
-	function v.union(...)
+	function t.union(...)
 		local checks = {...}
 		assert(callbackArray(checks))
 		return function(value)
@@ -333,7 +333,7 @@ do
 	end
 
 	-- creates an intersection type
-	function v.intersection(...)
+	function t.intersection(...)
 		local checks = {...}
 		assert(callbackArray(checks))
 		return function(value)
@@ -348,16 +348,16 @@ do
 	end
 end
 
-function v.strictArray(check)
-	assert(v.callback(check))
-	return v.intersection(v.array, v.strictValues(check))
+function t.strictArray(check)
+	assert(t.callback(check))
+	return t.intersection(t.array, t.strictValues(check))
 end
 
 -- ensures value matches given interface definition
-function v.interface(checkTable)
-	assert(v.map(v.string, v.callback))
+function t.interface(checkTable)
+	assert(t.map(t.string, t.callback))
 	return function(value)
-		local tableSuccess, tableErrMsg = v.table(value)
+		local tableSuccess, tableErrMsg = t.table(value)
 		if tableSuccess == false then
 			return false, tableErrMsg
 		end
@@ -373,10 +373,10 @@ function v.interface(checkTable)
 end
 
 -- ensure value is an Instance and it's ClassName matches the given ClassName
-function v.instanceOf(className)
-	assert(v.string(className))
+function t.instanceOf(className)
+	assert(t.string(className))
 	return function(value)
-		local instanceSuccess, instanceErrMsg = v.Instance(value)
+		local instanceSuccess, instanceErrMsg = t.Instance(value)
 		if not instanceSuccess then
 			return false, instanceErrMsg
 		end
@@ -390,10 +390,10 @@ function v.instanceOf(className)
 end
 
 -- ensure value is an Instance and it's ClassName matches the given ClassName by an IsA comparison
-function v.instanceIsA(className)
-	assert(v.string(className))
+function t.instanceIsA(className)
+	assert(t.string(className))
 	return function(value)
-		local instanceSuccess, instanceErrMsg = v.Instance(value)
+		local instanceSuccess, instanceErrMsg = t.Instance(value)
 		if not instanceSuccess then
 			return false, instanceErrMsg
 		end
@@ -406,4 +406,4 @@ function v.instanceIsA(className)
 	end
 end
 
-return v
+return t

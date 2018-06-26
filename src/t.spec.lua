@@ -1,23 +1,23 @@
-local v = require("src/v")
+local t = require("src/t")
 
 -- basic types
 do
-	assert(v.boolean(true) == true)
-	assert(v.number(1) == true)
-	assert(v.string("foo") == true)
-	assert(v.table({}) == true)
+	assert(t.boolean(true) == true)
+	assert(t.number(1) == true)
+	assert(t.string("foo") == true)
+	assert(t.table({}) == true)
 
-	assert(v.boolean("true") == false)
-	assert(v.number(true) == false)
-	assert(v.string(true) == false)
-	assert(v.table(82) == false)
+	assert(t.boolean("true") == false)
+	assert(t.number(true) == false)
+	assert(t.string(true) == false)
+	assert(t.table(82) == false)
 end
 
 -- numbers
 do
-	local maxTen = v.numberMax(10)
-	local minTwo = v.numberMin(2)
-	local constrainedEightToEleven = v.numberConstrained(8, 11)
+	local maxTen = t.numberMax(10)
+	local minTwo = t.numberMin(2)
+	local constrainedEightToEleven = t.numberConstrained(8, 11)
 	assert(maxTen(5) == true)
 	assert(maxTen(10) == true)
 	assert(maxTen(11) == false)
@@ -33,7 +33,7 @@ end
 
 -- optional
 do
-	local check = v.optional(v.string)
+	local check = t.optional(t.string)
 	assert(check("") == true)
 	assert(check() == true)
 	assert(check(1) == false)
@@ -41,7 +41,7 @@ end
 
 -- tuple
 do
-	local myTupleCheck = v.tuple(v.number, v.string, v.optional(v.number))
+	local myTupleCheck = t.tuple(t.number, t.string, t.optional(t.number))
 	assert(myTupleCheck(1, "2", 3) == true)
 	assert(myTupleCheck(1, "2") == true)
 	assert(myTupleCheck(1, "2", "3") == false)
@@ -49,7 +49,7 @@ end
 
 -- union
 do
-	local numberOrString = v.union(v.number, v.string)
+	local numberOrString = t.union(t.number, t.string)
 	assert(numberOrString(1) == true)
 	assert(numberOrString("1") == true)
 	assert(numberOrString(nil) == false)
@@ -57,7 +57,7 @@ end
 
 -- intersection
 do
-	local integerMax5000 = v.intersection(v.integer, v.numberMax(5000))
+	local integerMax5000 = t.intersection(t.integer, t.numberMax(5000))
 	assert(integerMax5000(1) == true)
 	assert(integerMax5000(5001) == false)
 	assert(integerMax5000(1.1) == false)
@@ -66,22 +66,22 @@ end
 
 -- array
 do
-	local stringArray = v.strictArray(v.string)
-	assert(v.array("foo") == false)
-	assert(v.array({1, "2", 3}) == true)
+	local stringArray = t.strictArray(t.string)
+	assert(t.array("foo") == false)
+	assert(t.array({1, "2", 3}) == true)
 	assert(stringArray({1, "2", 3}) == false)
-	assert(v.array({"1", "2", "3"}, v.string) == true)
-	assert(v.array({
+	assert(t.array({"1", "2", "3"}, t.string) == true)
+	assert(t.array({
 		foo = "bar"
 	}) == false)
 end
 
 -- interface
 do
-	local IVector3 = v.interface({
-		x = v.number,
-		y = v.number,
-		z = v.number,
+	local IVector3 = t.interface({
+		x = t.number,
+		y = t.number,
+		z = t.number,
 	})
 
 	assert(IVector3({
@@ -100,10 +100,10 @@ end
 
 -- deep interface
 do
-	local IPlayer = v.interface({
-		name = v.string,
-		inventory = v.interface({
-			size = v.number
+	local IPlayer = t.interface({
+		name = t.string,
+		inventory = t.interface({
+			size = t.number
 		})
 	})
 
@@ -133,10 +133,10 @@ end
 
 -- deep optional interface
 do
-	local IPlayer = v.interface({
-		name = v.string,
-		inventory = v.optional(v.interface({
-			size = v.number
+	local IPlayer = t.interface({
+		name = t.string,
+		inventory = t.optional(t.interface({
+			size = t.number
 		}))
 	})
 

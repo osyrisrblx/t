@@ -1,6 +1,6 @@
-# v: A Runtime Typechecker for Roblox
+# t: A Runtime Typechecker for Roblox
 
-v is a module which allows you to create type definitions to check values against.
+t is a module which allows you to create type definitions to check values against.
 
 ## Why?
 When building large systems, it can often be difficult to find type mismatch bugs.\
@@ -10,9 +10,9 @@ In Roblox specifically, it is important to type check your Remote objects to ens
 
 ## Crash Course
 ```Lua
-local v = require(path.to.v)
+local t = require(path.to.t)
 
-local fooCheck = v.tuple(v.string, v.number, v.optional(v.string))
+local fooCheck = t.tuple(t.string, t.number, t.optional(t.string))
 local function foo(a, b, c)
 	assert(fooCheck(a, b, c))
 	-- you can now assume:
@@ -27,134 +27,134 @@ foo("1", 2, "3")
 foo("1", 2, 3) --> Error: Bad tuple index #3: (optional) string expected, got number
 ```
 
-Check out src/v.spec.lua for a variety of good examples!
+Check out src/t.spec.lua for a variety of good examples!
 
 ## Primitives
 |Type     |  |Member     |
 |---------|--|-----------|
-|boolean  |=>|v.boolean  |
-|coroutine|=>|v.coroutine|
-|function |=>|v.callback |
-|nil      |=>|v.none     |
-|number   |=>|v.number   |
-|string   |=>|v.string   |
-|table    |=>|v.table    |
+|boolean  |=>|t.boolean  |
+|coroutine|=>|t.coroutine|
+|function |=>|t.callback |
+|nil      |=>|t.none     |
+|number   |=>|t.number   |
+|string   |=>|t.string   |
+|table    |=>|t.table    |
 
 Any primitive can be checked with a built-in primitive function.\
 Primitives are found under the same name as their type name except for two:
-- nil -> v.none
-- function -> v.callback
+- nil -> t.none
+- function -> t.callback
 
 These two are renamed due to Lua restrictions on reserved words.
 
 All Roblox primitives are also available and can be found under their respective type names.\
 We won't list them here to due how many there are, but as an example you can access a few like this:
 ```Lua
-v.Instance
-v.CFrame
-v.Color3
-v.Vector3
+t.Instance
+t.CFrame
+t.Color3
+t.Vector3
 -- etc...
 ```
 
 You can check values against these primitives like this:
 ```Lua
 local x = 1
-print(v.number(x)) --> true
-print(v.string(x)) --> false
+print(t.number(x)) --> true
+print(t.string(x)) --> false
 ```
 
 ## Type Composition
 Often, you can combine types to create a composition of types.\
 For example:
 ```Lua
-local mightBeAString = v.optional(v.string)
+local mightBeAString = t.optional(t.string)
 print(mightBeAString("Hello")) --> true
 print(mightBeAString()) --> true
 print(mightBeAString(1)) --> false
 ```
 
 ## Meta Type Functions
-The real power of v is in the meta type functions.
+The real power of t is in the meta type functions.
 
-**`v.any`**\
+**`t.any`**\
 Passes if value is non-nil.
 
-**`v.optional(check)`**\
+**`t.optional(check)`**\
 Passes if value is either nil or passes `check`
 
-**`v.tuple(...)`**\
-You can define a tuple type with `v.tuple(...)`.\
+**`t.tuple(...)`**\
+You can define a tuple type with `t.tuple(...)`.\
 The arguments should be a list of type checkers.
 
-**`v.union(...)`**\
-You can define a union type with `v.union(...)`.\
+**`t.union(...)`**\
+You can define a union type with `t.union(...)`.\
 The arguments should be a list of type checkers.
 
-**`v.intersection(...)`**\
-You can define an intersection type with `v.intersection(...)`.\
+**`t.intersection(...)`**\
+You can define an intersection type with `t.intersection(...)`.\
 The arguments should be a list of type checkers.
 
-**`v.strictKeys(check)`**\
+**`t.strictKeys(check)`**\
 Matches a table's keys against `check`
 
-**`v.strictValues(check)`**\
+**`t.strictValues(check)`**\
 Matches a table's values against `check`
 
-**`v.map(keyCheck, valueCheck)`**\
+**`t.map(keyCheck, valueCheck)`**\
 Checks all of a table's keys against `keyCheck` and all of a table's values against `valueCheck`
 
 ## Special Number Functions
 
-v includes a few special functions for checking numbers, these can be useful to ensure the given value is within a certain range.
+t includes a few special functions for checking numbers, these can be useful to ensure the given value is within a certain range.
 
 **General:**\
-**`v.integer`**\
-checks `v.number` and determines if value is an integer
+**`t.integer`**\
+checks `t.number` and determines if value is an integer
 
-**`v.numberPositive`**\
-checks `v.number` and determins if the value > 0
+**`t.numberPositive`**\
+checks `t.number` and determins if the value > 0
 
-**`v.numberNegative`**\
-checks `v.number` and determins if the value < 0
+**`t.numberNegative`**\
+checks `t.number` and determins if the value < 0
 
 **Inclusive  Comparisons:**\
-**`v.numberMin(min)`**\
-checks `v.number` and determines if value >= min
+**`t.numberMin(min)`**\
+checks `t.number` and determines if value >= min
 
-**`v.numberMax(max)`**\
-checks `v.number` and determines if value <= max
+**`t.numberMax(max)`**\
+checks `t.number` and determines if value <= max
 
-**`v.numberConstrained(min, max)`**\
-checks `v.number` and determins if min <= value <= max
+**`t.numberConstrained(min, max)`**\
+checks `t.number` and determins if min <= value <= max
 
 **Exclusive Comparisons:**\
-**`v.numberMinExclusive(min)`**\
-checks `v.number` and determines if value > min
+**`t.numberMinExclusive(min)`**\
+checks `t.number` and determines if value > min
 
-**`v.numberMaxExclusive(max)`**\
-checks `v.number` and determines if value < max
+**`t.numberMaxExclusive(max)`**\
+checks `t.number` and determines if value < max
 
-**`v.numberConstrainedExclusive(min, max)`**\
-checks `v.number` and determins if min < value < max
+**`t.numberConstrainedExclusive(min, max)`**\
+checks `t.number` and determins if min < value < max
 
 ## Arrays
 In Lua, arrays are a special type of table where all the keys are sequential integers.\
-v has special functions for checking against arrays.
+t has special functions for checking against arrays.
 
-**`v.array`**\
+**`t.array`**\
 determines that the value is a table and all of it's keys are sequential integers.
 
-**`v.strictArray(check)`**\
-checks against `v.array` and ensures all of the values in the table match `check`
+**`t.strictArray(check)`**\
+checks against `t.array` and ensures all of the values in the table match `check`
 
 ## Interfaces
-Interfaces can be defined through `v.interface(definition)` where `definition` is a table of type checkers.\
+Interfaces can be defined through `t.interface(definition)` where `definition` is a table of type checkers.\
 For example:
 ```Lua
-local IPlayer = v.interface({
-	Name = v.string,
-	Score = v.number,
+local IPlayer = t.interface({
+	Name = t.string,
+	Score = t.number,
 })
 
 local myPlayer = { Name = "TestPlayer", Score = 100 }
@@ -162,15 +162,15 @@ print(IPlayer(myPlayer)) --> true
 print(IPlayer({})) --> false
 ```
 
-You can use `v.optional(check)` to make an interface field optional or `v.union(...)` if a field can be multiple types.
+You can use `t.optional(check)` to make an interface field optional or `t.union(...)` if a field can be multiple types.
 
 You can even put interfaces inside interfaces!
 ```Lua
-local IPlayer = v.interface({
-	Name = v.string,
-	Score = v.number,
-	Inventory = v.interface({
-		Size = v.number
+local IPlayer = t.interface({
+	Name = t.string,
+	Score = t.number,
+	Inventory = t.interface({
+		Size = t.number
 	})
 })
 
@@ -185,19 +185,19 @@ print(IPlayer(myPlayer)) --> true
 ```
 
 ## Roblox Instances
-v includes two functions to check the types of Roblox Instances.
+t includes two functions to check the types of Roblox Instances.
 
-**`v.instanceOf(className)`**\
+**`t.instanceOf(className)`**\
 ensures the value is an Instance and it's ClassName exactly matches `className`
 
-**`v.instanceIsA(className)`**\
+**`t.instanceIsA(className)`**\
 ensures the value is an Instance and it's ClassName matches `className` by a IsA comparison. ([see here](http://wiki.roblox.com/index.php?title=API:Class/Instance/FindFirstAncestorWhichIsA))
 
 ## Tips and Tricks
 You can create your own type checkers with a simple function that returns a boolean.\
-These custom type checkers fit perfectly with the rest of v's functions.
+These custom type checkers fit perfectly with the rest of t's functions.
 
-If you roll your own custom OOP framework, you can easily integrate v with a custom typechecker.\
+If you roll your own custom OOP framework, you can easily integrate t with a custom type checker.\
 For example:
 ```Lua
 local MyClass = {}
@@ -211,7 +211,7 @@ end
 
 local function instanceOfClass(class)
 	return function(value)
-		return v.table(value) and getmetatable(value).__index == class
+		return t.table(value) and getmetatable(value).__index == class
 	end
 end
 
@@ -224,5 +224,5 @@ print(instanceOfMyClass(myObject)) --> true
 ## Notes
 This library was heavily inspired by [io-ts](https://github.com/gcanti/io-ts), a fantastic runtime type validation library for TypeScript.
 
-## Why did you name it v?
+## Why did you name it t?
 ![badcc](https://i.imgur.com/SR84oE7.png)
