@@ -186,7 +186,7 @@ v includes two functions to check the types of Roblox Instances.
 **`v.instanceOf(className)`**\
 ensures the value is an Instance and it's ClassName exactly matches `className`
 
-**`v.instanceOf(className)`**\
+**`v.instanceIsA(className)`**\
 ensures the value is an Instance and it's ClassName matches `className` by a IsA comparison. ([see here](http://wiki.roblox.com/index.php?title=API:Class/Instance/FindFirstAncestorWhichIsA))
 
 ## Tips and Tricks
