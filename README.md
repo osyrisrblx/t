@@ -221,5 +221,10 @@ local myObject = MyClass.new()
 print(instanceOfMyClass(myObject)) --> true
 ```
 
+## Known Issues
+
+You can put a `t.tuple(...)` inside an array or interface, but that doesn't really make any sense..
+In the future, this may error.
+
 ## Notes
 This library was heavily inspired by [io-ts](https://github.com/gcanti/io-ts), a fantastic runtime type validation library for TypeScript.
