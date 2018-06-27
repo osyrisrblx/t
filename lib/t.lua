@@ -61,6 +61,10 @@ t.Vector2 = primitive("Vector2")
 t.Vector3 = primitive("Vector3")
 t.Vector3int16 = primitive("Vector3int16")
 
+-- roblox enum types
+t.Enum = primitive("Enum")
+t.EnumItem = primitive("EnumItem")
+
 -- ensures value is an integer
 function t.integer(value)
 	local success, errMsg = t.number(value)
@@ -384,6 +388,22 @@ function t.instanceIsA(className)
 		end
 
 		return true
+	end
+end
+
+function t.enumOf(enum)
+	assert(t.Enum(enum))
+	return function(value)
+		local enumItemSuccess, enumItemErrMsg = t.EnumItem(value)
+		if not enumItemSuccess then
+			return false, enumItemErrMsg
+		end
+
+		if value.EnumType == enum then
+			return true
+		else
+			return false, string.format("enum of %s expected", tostring(enum))
+		end
 	end
 end
 

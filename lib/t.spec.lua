@@ -218,6 +218,22 @@ return function()
 		expect(guiObjectCheck()).to.equal(false)
 	end)
 
+	--[[
+	it("Roblox Enum", function()
+		local sortOrderEnumCheck = t.enumOf(Enum.SortOrder)
+		expect(t.Enum(Enum.SortOrder)).to.equal(true)
+		expect(t.Enum("Enum.SortOrder")).to.equal(false)
+
+		expect(t.EnumItem(Enum.SortOrder.Name)).to.equal(true)
+		expect(t.EnumItem("Enum.SortOrder.Name")).to.equal(false)
+
+		expect(sortOrderEnumCheck(Enum.SortOrder.Name)).to.equal(true)
+		expect(sortOrderEnumCheck(Enum.SortOrder.Custom)).to.equal(true)
+		expect(sortOrderEnumCheck(Enum.EasingStyle.Linear)).to.equal(false)
+		expect(sortOrderEnumCheck()).to.equal(false)
+	end)
+	--]]
+
 	it("wrap functions", function()
 		local checkFoo = t.tuple(t.string, t.number, t.optional(t.string))
 		local foo = t.wrap(function(a, b, c)

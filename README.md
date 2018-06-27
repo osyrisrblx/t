@@ -208,6 +208,21 @@ ensures the value is an Instance and it's ClassName exactly matches `className`
 **`t.instanceIsA(className)`**\
 ensures the value is an Instance and it's ClassName matches `className` by a IsA comparison. ([see here](http://wiki.roblox.com/index.php?title=API:Class/Instance/FindFirstAncestorWhichIsA))
 
+## Roblox Enums
+
+t allows type checking for Roblox Enums!
+
+**`t.Enum`**\
+Ensures the value is an Enum, i.e. `Enum.Material`.
+
+**`t.EnumItem`**\
+Ensures the value is an EnumItem, i.e. `Enum.Material.Plastic`.
+
+but the real power here is:
+
+**`t.enumOf(enum)`**\
+This will pass if value is an EnumItem which belongs to `enum`.
+
 ## Function Wrapping
 Here's a common pattern people use when working with t:
 ```Lua
