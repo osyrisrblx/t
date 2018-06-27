@@ -235,6 +235,18 @@ local foo = t.wrap(function(a, b, c)
 end, t.tuple(t.string, t.number, t.optional(t.string)))
 ```
 
+Alternatively, there's also:
+**`t.strict(check)`**\
+wrap your whole type in `t.strict(check)` and it will run an `assert` on calls.\
+The example from above could alternatively look like:
+```Lua
+local fooCheck = t.strict(t.tuple(t.string, t.number, t.optional(t.string)))
+local function foo(a, b, c)
+	fooCheck(a, b, c)
+	-- function now assumes a, b, c are valid
+end
+```
+
 ## Tips and Tricks
 You can create your own type checkers with a simple function that returns a boolean.\
 These custom type checkers fit perfectly with the rest of t's functions.

@@ -235,6 +235,16 @@ return function()
 		expect(pcall(foo, "a", 1, "b")).to.equal(true)
 	end)
 
+	it("strict", function()
+		local myType = t.strict(t.tuple(t.string, t.number))
+		expect(pcall(function()
+			myType("a", "b")
+		end)).to.equal(false)
+		expect(pcall(function()
+			myType("a", 1)
+		end)).to.equal(true)
+	end)
+
 	it("common OOP", function()
 		local MyClass = {}
 		MyClass.__index = MyClass

@@ -398,4 +398,10 @@ do
 	end
 end
 
+function t.strict(check)
+	return function(...)
+		assert(check(...))
+	end
+end
+
 return t
