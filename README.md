@@ -261,7 +261,8 @@ local function instanceOfClass(class)
 			return false, tableErrMsg or "" -- pass error message for value not being a table
 		end
 
-		if getmetatable(value).__index ~= class then
+		local mt = getmetatable(value)
+		if not mt or mt.__index ~= class then
 			return false, "bad member of class" -- custom error message
 		end
 

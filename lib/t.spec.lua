@@ -250,7 +250,8 @@ return function()
 					return false, tableErrMsg or ""
 				end
 
-				if getmetatable(value).__index ~= class then
+				local mt = getmetatable(value)
+				if not mt or mt.__index ~= class then
 					return false, "bad member of class"
 				end
 
@@ -262,5 +263,7 @@ return function()
 
 		local myObject = MyClass.new()
 		expect(instanceOfMyClass(myObject)).to.equal(true)
+		expect(instanceOfMyClass({})).to.equal(false)
+		expect(instanceOfMyClass()).to.equal(false)
 	end)
 end
