@@ -1,7 +1,7 @@
 return function()
 	local t = require(script.Parent.t)
 
-	it("should understand basic types", function()
+	it("basic types", function()
 		expect(t.any("")).to.equal(true)
 		expect(t.boolean(true)).to.equal(true)
 		expect(t.none(nil)).to.equal(true)
@@ -17,7 +17,7 @@ return function()
 		expect(t.table(82)).to.equal(false)
 	end)
 
-	it("should understand special number types", function()
+	it("special number types", function()
 		local maxTen = t.numberMax(10)
 		local minTwo = t.numberMin(2)
 		local maxTenEx = t.numberMaxExclusive(10)
@@ -60,28 +60,28 @@ return function()
 		expect(constrainedEightToElevenEx()).to.equal(false)
 	end)
 
-	it("should understand optional", function()
+	it("optional", function()
 		local check = t.optional(t.string)
 		expect(check("")).to.equal(true)
 		expect(check()).to.equal(true)
 		expect(check(1)).to.equal(false)
 	end)
 
-	it("should understand tuples", function()
+	it("tuples", function()
 		local myTupleCheck = t.tuple(t.number, t.string, t.optional(t.number))
 		expect(myTupleCheck(1, "2", 3)).to.equal(true)
 		expect(myTupleCheck(1, "2")).to.equal(true)
 		expect(myTupleCheck(1, "2", "3")).to.equal(false)
 	end)
 
-	it("should understand unions", function()
+	it("unions", function()
 		local numberOrString = t.union(t.number, t.string)
 		expect(numberOrString(1)).to.equal(true)
 		expect(numberOrString("1")).to.equal(true)
 		expect(numberOrString(nil)).to.equal(false)
 	end)
 
-	it("should understand intersections", function()
+	it("intersections", function()
 		local integerMax5000 = t.intersection(t.integer, t.numberMax(5000))
 		expect(integerMax5000(1)).to.equal(true)
 		expect(integerMax5000(5001)).to.equal(false)
@@ -89,7 +89,7 @@ return function()
 		expect(integerMax5000("1")).to.equal(false)
 	end)
 
-	it("should understand arrays", function()
+	it("arrays", function()
 		local stringArray = t.strictArray(t.string)
 		local stringValues = t.strictValues(t.string)
 		expect(t.array("foo")).to.equal(false)
@@ -107,7 +107,7 @@ return function()
 		})).to.equal(false)
 	end)
 
-	it("should understand maps", function()
+	it("maps", function()
 		local stringNumberMap = t.map(t.string, t.number)
 		expect(stringNumberMap({})).to.equal(true)
 		expect(stringNumberMap({a = 1})).to.equal(true)
@@ -116,7 +116,7 @@ return function()
 		expect(stringNumberMap()).to.equal(false)
 	end)
 
-	it("should understand interfaces", function()
+	it("interfaces", function()
 		local IVector3 = t.interface({
 			x = t.number,
 			y = t.number,
@@ -137,7 +137,7 @@ return function()
 		})).to.equal(false)
 	end)
 
-	it("should understand deep interfaces", function()
+	it("deep interfaces", function()
 		local IPlayer = t.interface({
 			name = t.string,
 			inventory = t.interface({
@@ -169,7 +169,7 @@ return function()
 		})).to.equal(false)
 	end)
 
-	it("should understand deep optional interfaces", function()
+	it("deep optional interfaces", function()
 		local IPlayer = t.interface({
 			name = t.string,
 			inventory = t.optional(t.interface({
@@ -195,7 +195,7 @@ return function()
 		})).to.equal(true)
 	end)
 
-	it("should understand Roblox Instances", function()
+	it("Roblox Instances", function()
 		local stringValueCheck = t.instanceOf("StringValue")
 		local stringValue = Instance.new("StringValue")
 		local boolValue = Instance.new("BoolValue")
@@ -205,7 +205,7 @@ return function()
 		expect(stringValueCheck()).to.equal(false)
 	end)
 
-	it("should understand Roblox Instance Inheritance", function()
+	it("Roblox Instance Inheritance", function()
 		local guiObjectCheck = t.instanceIsA("GuiObject")
 		local frame = Instance.new("Frame")
 		local textLabel = Instance.new("TextLabel")
@@ -217,7 +217,7 @@ return function()
 		expect(guiObjectCheck()).to.equal(false)
 	end)
 
-	it("should wrap functions", function()
+	it("wrap functions", function()
 		local checkFoo = t.tuple(t.string, t.number, t.optional(t.string))
 		local foo = t.wrap(function(a, b, c)
 			local result = string.format("%s %d", a, b)
@@ -234,7 +234,7 @@ return function()
 		expect(pcall(foo, "a", 1, "b")).to.equal(true)
 	end)
 
-	it("should work with common OOP", function()
+	it("common OOP", function()
 		local MyClass = {}
 		MyClass.__index = MyClass
 
