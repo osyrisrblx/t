@@ -358,7 +358,7 @@ function t.interface(checkTable)
 end
 
 -- ensure value is an Instance and it's ClassName matches the given ClassName
-function t.instanceOf(className)
+function t.instance(className)
 	assert(t.string(className))
 	return function(value)
 		local instanceSuccess, instanceErrMsg = t.Instance(value)
@@ -391,7 +391,7 @@ function t.instanceIsA(className)
 	end
 end
 
-function t.enumOf(enum)
+function t.enum(enum)
 	assert(t.Enum(enum))
 	return function(value)
 		local enumItemSuccess, enumItemErrMsg = t.EnumItem(value)

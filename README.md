@@ -202,7 +202,7 @@ print(IPlayer(myPlayer)) --> true
 ## Roblox Instances
 t includes two functions to check the types of Roblox Instances.
 
-**`t.instanceOf(className)`**\
+**`t.instance(className)`**\
 ensures the value is an Instance and it's ClassName exactly matches `className`
 
 **`t.instanceIsA(className)`**\
@@ -220,7 +220,7 @@ Ensures the value is an EnumItem, i.e. `Enum.Material.Plastic`.
 
 but the real power here is:
 
-**`t.enumOf(enum)`**\
+**`t.enum(enum)`**\
 This will pass if value is an EnumItem which belongs to `enum`.
 
 ## Function Wrapping

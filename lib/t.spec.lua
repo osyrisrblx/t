@@ -197,7 +197,7 @@ return function()
 	end)
 
 	it("Roblox Instances", function()
-		local stringValueCheck = t.instanceOf("StringValue")
+		local stringValueCheck = t.instance("StringValue")
 		local stringValue = Instance.new("StringValue")
 		local boolValue = Instance.new("BoolValue")
 
@@ -220,7 +220,7 @@ return function()
 
 	--[[
 	it("Roblox Enum", function()
-		local sortOrderEnumCheck = t.enumOf(Enum.SortOrder)
+		local sortOrderEnumCheck = t.enum(Enum.SortOrder)
 		expect(t.Enum(Enum.SortOrder)).to.equal(true)
 		expect(t.Enum("Enum.SortOrder")).to.equal(false)
 
