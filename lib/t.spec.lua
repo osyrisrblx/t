@@ -233,4 +233,34 @@ return function()
 		expect(pcall(foo, "a", 1)).to.equal(true)
 		expect(pcall(foo, "a", 1, "b")).to.equal(true)
 	end)
+
+	it("should work with common OOP", function()
+		local MyClass = {}
+		MyClass.__index = MyClass
+
+		function MyClass.new()
+			local self = setmetatable({}, MyClass)
+			return self
+		end
+
+		local function instanceOfClass(class)
+			return function(value)
+				local tableSuccess, tableErrMsg = t.table(value)
+				if not tableSuccess then
+					return false, tableErrMsg or ""
+				end
+
+				if getmetatable(value).__index ~= class then
+					return false, "bad member of class"
+				end
+
+				return true
+			end
+		end
+
+		local instanceOfMyClass = instanceOfClass(MyClass)
+
+		local myObject = MyClass.new()
+		expect(instanceOfMyClass(myObject)).to.equal(true)
+	end)
 end
