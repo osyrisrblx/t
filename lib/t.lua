@@ -212,7 +212,7 @@ function t.tuple(...)
 end
 
 -- ensures all keys in given table pass check
-function t.strictKeys(check)
+function t.keys(check)
 	assert(t.callback(check))
 	return function(value)
 		local tableSuccess, tableErrMsg = t.table(value)
@@ -232,7 +232,7 @@ function t.strictKeys(check)
 end
 
 -- ensures all values in given table pass check
-function t.strictValues(check)
+function t.values(check)
 	assert(t.callback(check))
 	return function(value)
 		local tableSuccess, tableErrMsg = t.table(value)
@@ -254,8 +254,8 @@ end
 -- ensures value is a table and all keys pass keyCheck and all values pass valueCheck
 function t.map(keyCheck, valueCheck)
 	assert(t.callback(keyCheck), t.callback(valueCheck))
-	local keyChecker = t.strictKeys(keyCheck)
-	local valueChecker = t.strictValues(valueCheck)
+	local keyChecker = t.keys(keyCheck)
+	local valueChecker = t.values(valueCheck)
 	return function(value)
 		local keySuccess, keyErr = keyChecker(value)
 		if not keySuccess then
@@ -273,10 +273,10 @@ end
 
 -- ensures value is an array and all values of the array match check
 do
-	local arrayKeysCheck = t.strictKeys(t.integer)
+	local arrayKeysCheck = t.keys(t.integer)
 	function t.array(check)
 		assert(t.callback(check))
-		local strictValuesCheck = t.strictValues(check)
+		local valuesCheck = t.values(check)
 		return function(value)
 			local keySuccess, keyErrMsg = arrayKeysCheck(value)
 			if keySuccess == false then
@@ -291,7 +291,7 @@ do
 				end
 			end
 
-			local valueSuccess, valueErrMsg = strictValuesCheck(value)
+			local valueSuccess, valueErrMsg = valuesCheck(value)
 			if not valueSuccess then
 				return false, string.format("[array] %s", valueErrMsg or "")
 			end

@@ -111,10 +111,10 @@ The arguments should be a list of type checkers.
 You can define an intersection type with `t.intersection(...)`.\
 The arguments should be a list of type checkers.
 
-**`t.strictKeys(check)`**\
+**`t.keys(check)`**\
 Matches a table's keys against `check`
 
-**`t.strictValues(check)`**\
+**`t.values(check)`**\
 Matches a table's values against `check`
 
 **`t.map(keyCheck, valueCheck)`**\
