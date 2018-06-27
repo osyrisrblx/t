@@ -216,4 +216,21 @@ return function()
 		expect(guiObjectCheck(stringValue)).to.equal(false)
 		expect(guiObjectCheck()).to.equal(false)
 	end)
+
+	it("should wrap functions", function()
+		local checkFoo = t.tuple(t.string, t.number, t.optional(t.string))
+		local foo = t.wrap(function(a, b, c)
+			local result = string.format("%s %d", a, b)
+			if c then
+				result = result .. " " .. c
+			end
+			return result
+		end, checkFoo)
+
+		expect(pcall(foo)).to.equal(false)
+		expect(pcall(foo, "a")).to.equal(false)
+		expect(pcall(foo, 2)).to.equal(false)
+		expect(pcall(foo, "a", 1)).to.equal(true)
+		expect(pcall(foo, "a", 1, "b")).to.equal(true)
+	end)
 end

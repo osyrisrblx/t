@@ -398,4 +398,15 @@ function t.instanceIsA(className)
 	end
 end
 
+do
+	local checkWrap = t.tuple(t.callback, t.callback)
+	function t.wrap(callback, checkArgs)
+		assert(checkWrap(callback, checkArgs))
+		return function(...)
+			assert(checkArgs(...))
+			callback(...)
+		end
+	end
+end
+
 return t

@@ -211,6 +211,33 @@ ensures the value is an Instance and it's ClassName exactly matches `className`
 **`t.instanceIsA(className)`**\
 ensures the value is an Instance and it's ClassName matches `className` by a IsA comparison. ([see here](http://wiki.roblox.com/index.php?title=API:Class/Instance/FindFirstAncestorWhichIsA))
 
+## Function Wrapping
+Here's a common pattern people use when working with t:
+```Lua
+local fooCheck = t.tuple(t.string, t.number, t.optional(t.string))
+local function foo(a, b, c)
+	assert(fooCheck(a, b, c))
+	-- function now assumes a, b, c are valid
+end
+```
+
+**`t.wrap(callback, argCheck)`**\
+`t.wrap(callback, argCheck)` allows you to shorten this to the following:
+```Lua
+local fooCheck = t.tuple(t.string, t.number, t.optional(t.string))
+local foo = t.wrap(function(a, b, c)
+	-- function now assumes a, b, c are valid
+end, fooCheck)
+```
+
+OR
+
+```Lua
+local foo = t.wrap(function(a, b, c)
+	-- function now assumes a, b, c are valid
+end, t.tuple(t.string, t.number, t.optional(t.string)))
+```
+
 ## Tips and Tricks
 You can create your own type checkers with a simple function that returns a boolean.\
 These custom type checkers fit perfectly with the rest of t's functions.
