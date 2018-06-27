@@ -271,49 +271,38 @@ function t.map(keyCheck, valueCheck)
 	end
 end
 
-
--- ensures value is an array
+-- ensures value is an array and all values of the array match check
 do
 	local arrayKeysCheck = t.strictKeys(t.integer)
-	function t.array(value)
-		local keySuccess, keyErrMsg = arrayKeysCheck(value)
-		if keySuccess == false then
-			return false, string.format("[array] %s", keyErrMsg or "")
-		end
-
-		-- all keys are sequential
-		local arraySize = #value
-		for key in pairs(value) do
-			if key < 1 or key > arraySize then
-				return false, string.format("[array] key %s must be sequential", tostring(key))
+	function t.array(check)
+		assert(t.callback(check))
+		local strictValuesCheck = t.strictValues(check)
+		return function(value)
+			local keySuccess, keyErrMsg = arrayKeysCheck(value)
+			if keySuccess == false then
+				return false, string.format("[array] %s", keyErrMsg or "")
 			end
+
+			-- all keys are sequential
+			local arraySize = #value
+			for key in pairs(value) do
+				if key < 1 or key > arraySize then
+					return false, string.format("[array] key %s must be sequential", tostring(key))
+				end
+			end
+
+			local valueSuccess, valueErrMsg = strictValuesCheck(value)
+			if not valueSuccess then
+				return false, string.format("[array] %s", valueErrMsg or "")
+			end
+
+			return true
 		end
-
-		return true
-	end
-end
-
--- ensures value is an array and all values of the array match check
-function t.strictArray(check)
-	assert(t.callback(check))
-	local strictValuesCheck = t.strictValues(check)
-	return function(value)
-		local arraySuccess, arrayErrMsg = t.array(value)
-		if not arraySuccess then
-			return false, arrayErrMsg or ""
-		end
-
-		local valueSuccess, valueErrMsg = strictValuesCheck(value)
-		if not valueSuccess then
-			return false, string.format("[array] %s", valueErrMsg or "")
-		end
-
-		return true
 	end
 end
 
 do
-	local callbackArray = t.strictArray(t.callback)
+	local callbackArray = t.array(t.callback)
 
 	-- creates a union type
 	function t.union(...)

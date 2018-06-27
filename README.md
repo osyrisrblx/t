@@ -160,11 +160,8 @@ checks `t.number` and determins if min < value < max
 In Lua, arrays are a special type of table where all the keys are sequential integers.\
 t has special functions for checking against arrays.
 
-**`t.array`**\
-determines that the value is a table and all of it's keys are sequential integers.
-
-**`t.strictArray(check)`**\
-checks against `t.array` and ensures all of the values in the table match `check`
+**`t.array(check)`**\
+determines that the value is a table and all of it's keys are sequential integers and ensures all of the values in the table match `check`
 
 ## Interfaces
 Interfaces can be defined through `t.interface(definition)` where `definition` is a table of type checkers.\

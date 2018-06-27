@@ -90,18 +90,19 @@ return function()
 	end)
 
 	it("arrays", function()
-		local stringArray = t.strictArray(t.string)
+		local stringArray = t.array(t.string)
+		local anyArray = t.array(t.any)
 		local stringValues = t.strictValues(t.string)
-		expect(t.array("foo")).to.equal(false)
-		expect(t.array({1, "2", 3})).to.equal(true)
+		expect(anyArray("foo")).to.equal(false)
+		expect(anyArray({1, "2", 3})).to.equal(true)
 		expect(stringArray({1, "2", 3})).to.equal(false)
 		expect(stringArray()).to.equal(false)
 		expect(stringValues()).to.equal(false)
-		expect(t.array({"1", "2", "3"}, t.string)).to.equal(true)
-		expect(t.array({
+		expect(anyArray({"1", "2", "3"}, t.string)).to.equal(true)
+		expect(anyArray({
 			foo = "bar"
 		})).to.equal(false)
-		expect(t.array({
+		expect(anyArray({
 			[1] = "non",
 			[5] = "sequential"
 		})).to.equal(false)
