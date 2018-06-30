@@ -118,7 +118,7 @@ function t.numberMinExclusive(min)
 		if min < value then
 			return true
 		else
-			return false, string.format("number > %d expected, got $d", min, value)
+			return false, string.format("number > %d expected, got %d", min, value)
 		end
 	end
 end
@@ -402,7 +402,7 @@ function t.enum(enum)
 		if value.EnumType == enum then
 			return true
 		else
-			return false, string.format("enum of %s expected, got enum of $s", tostring(enum), value.EnumType)
+			return false, string.format("enum of %s expected, got enum of %s", tostring(enum), value.EnumType)
 		end
 	end
 end
