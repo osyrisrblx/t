@@ -1,0 +1,8 @@
+return {
+	include = {
+		"^lib",
+	},
+	exclude = {
+		"%.spec$",
+	},
+}

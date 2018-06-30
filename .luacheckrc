@@ -18,6 +18,8 @@ globals = {
 
 	-- debug library
 	"debug.profilebegin", "debug.profileend",
+
+	"it", "expect",
 }
 
 -- fix methods
