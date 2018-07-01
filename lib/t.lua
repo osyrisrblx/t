@@ -88,7 +88,7 @@ function t.numberMin(min)
 		if value >= min then
 			return true
 		else
-			return false, string.format("number >= %d expected", min)
+			return false, string.format("number >= %d expected, got %d", min, value)
 		end
 	end
 end
@@ -103,7 +103,7 @@ function t.numberMax(max)
 		if value <= max then
 			return true
 		else
-			return false, string.format("number <= %d expected", max)
+			return false, string.format("number <= %d expected, got %d", max, value)
 		end
 	end
 end
@@ -118,7 +118,7 @@ function t.numberMinExclusive(min)
 		if min < value then
 			return true
 		else
-			return false, string.format("number > %d expected", min)
+			return false, string.format("number > %d expected, got %d", min, value)
 		end
 	end
 end
@@ -133,7 +133,7 @@ function t.numberMaxExclusive(max)
 		if value < max then
 			return true
 		else
-			return false, string.format("number < %d expected", max)
+			return false, string.format("number < %d expected, got %d", max, value)
 		end
 	end
 end
@@ -402,7 +402,7 @@ function t.enum(enum)
 		if value.EnumType == enum then
 			return true
 		else
-			return false, string.format("enum of %s expected", tostring(enum))
+			return false, string.format("enum of %s expected, got enum of %s", tostring(enum), value.EnumType)
 		end
 	end
 end
