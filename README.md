@@ -75,7 +75,7 @@ You can check values against these primitives like this:
 ```Lua
 local x = 1
 print(t.number(x)) --> true
-print(t.string(x)) --> false
+print(t.string(x)) --> false, "string expected, got number"
 ```
 
 ## Type Composition
@@ -85,7 +85,7 @@ For example:
 local mightBeAString = t.optional(t.string)
 print(mightBeAString("Hello")) --> true
 print(mightBeAString()) --> true
-print(mightBeAString(1)) --> false
+print(mightBeAString(1)) --> false, "(optional) string expected, got number"
 ```
 
 These get denoted as function calls below with specified arguments. `check` can be any other type checker.
@@ -174,7 +174,7 @@ local IPlayer = t.interface({
 
 local myPlayer = { Name = "TestPlayer", Score = 100 }
 print(IPlayer(myPlayer)) --> true
-print(IPlayer({})) --> false
+print(IPlayer({})) --> false, "[interface] bad value for Name: string expected, got nil"
 ```
 
 You can use `t.optional(check)` to make an interface field optional or `t.union(...)` if a field can be multiple types.
