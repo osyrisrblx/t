@@ -74,7 +74,7 @@ function t.integer(value)
 	if value%1 == 0 then
 		return true
 	else
-		return false, "integer expected, got non-integer"
+		return false, string.format("integer expected, got %d", value)
 	end
 end
 
