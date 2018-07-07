@@ -1,5 +1,4 @@
 -- t: a runtime typechecker for Roblox
--- Osyris
 
 -- regular lua compatibility
 local typeof = typeof or type
