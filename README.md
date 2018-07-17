@@ -1,4 +1,18 @@
-# t: A Runtime Typechecker for Roblox
+<h1 align="center">t</h1>
+<div align="center">
+	<a href="https://travis-ci.org/osyrisrblx/t">
+		<img src="https://api.travis-ci.org/osyrisrblx/t.svg?branch=master" alt="Travis-CI Build Status" />
+	</a>
+	<a href='https://coveralls.io/github/osyrisrblx/t?branch=master'>
+		<img src='https://coveralls.io/repos/github/osyrisrblx/t/badge.svg' alt='Coverage Status' />
+	</a>
+</div>
+
+<div align="center">
+	A Runtime Type Checker for Roblox
+</div>
+
+<div>&nbsp;</div>
 
 t is a module which allows you to create type definitions to check values against.
 
@@ -62,7 +76,7 @@ You can check values against these primitives like this:
 ```Lua
 local x = 1
 print(t.number(x)) --> true
-print(t.string(x)) --> false
+print(t.string(x)) --> false, "string expected, got number"
 ```
 
 ## Type Composition
@@ -72,8 +86,10 @@ For example:
 local mightBeAString = t.optional(t.string)
 print(mightBeAString("Hello")) --> true
 print(mightBeAString()) --> true
-print(mightBeAString(1)) --> false
+print(mightBeAString(1)) --> false, "(optional) string expected, got number"
 ```
+
+These get denoted as function calls below with specified arguments. `check` can be any other type checker.
 
 ## Meta Type Functions
 The real power of t is in the meta type functions.
@@ -96,14 +112,16 @@ The arguments should be a list of type checkers.
 You can define an intersection type with `t.intersection(...)`.\
 The arguments should be a list of type checkers.
 
-**`t.strictKeys(check)`**\
+**`t.keys(check)`**\
 Matches a table's keys against `check`
 
-**`t.strictValues(check)`**\
+**`t.values(check)`**\
 Matches a table's values against `check`
 
 **`t.map(keyCheck, valueCheck)`**\
 Checks all of a table's keys against `keyCheck` and all of a table's values against `valueCheck`
+
+There's also type checks for arrays and interfaces but we'll cover those in their own sections!
 
 ## Special Number Functions
 
@@ -143,11 +161,8 @@ checks `t.number` and determins if min < value < max
 In Lua, arrays are a special type of table where all the keys are sequential integers.\
 t has special functions for checking against arrays.
 
-**`t.array`**\
-determines that the value is a table and all of it's keys are sequential integers.
-
-**`t.strictArray(check)`**\
-checks against `t.array` and ensures all of the values in the table match `check`
+**`t.array(check)`**\
+determines that the value is a table and all of it's keys are sequential integers and ensures all of the values in the table match `check`
 
 ## Interfaces
 Interfaces can be defined through `t.interface(definition)` where `definition` is a table of type checkers.\
@@ -160,7 +175,7 @@ local IPlayer = t.interface({
 
 local myPlayer = { Name = "TestPlayer", Score = 100 }
 print(IPlayer(myPlayer)) --> true
-print(IPlayer({})) --> false
+print(IPlayer({})) --> false, "[interface] bad value for Name: string expected, got nil"
 ```
 
 You can use `t.optional(check)` to make an interface field optional or `t.union(...)` if a field can be multiple types.
@@ -188,11 +203,65 @@ print(IPlayer(myPlayer)) --> true
 ## Roblox Instances
 t includes two functions to check the types of Roblox Instances.
 
-**`t.instanceOf(className)`**\
+**`t.instance(className)`**\
 ensures the value is an Instance and it's ClassName exactly matches `className`
 
 **`t.instanceIsA(className)`**\
 ensures the value is an Instance and it's ClassName matches `className` by a IsA comparison. ([see here](http://wiki.roblox.com/index.php?title=API:Class/Instance/FindFirstAncestorWhichIsA))
+
+## Roblox Enums
+
+t allows type checking for Roblox Enums!
+
+**`t.Enum`**\
+Ensures the value is an Enum, i.e. `Enum.Material`.
+
+**`t.EnumItem`**\
+Ensures the value is an EnumItem, i.e. `Enum.Material.Plastic`.
+
+but the real power here is:
+
+**`t.enum(enum)`**\
+This will pass if value is an EnumItem which belongs to `enum`.
+
+## Function Wrapping
+Here's a common pattern people use when working with t:
+```Lua
+local fooCheck = t.tuple(t.string, t.number, t.optional(t.string))
+local function foo(a, b, c)
+	assert(fooCheck(a, b, c))
+	-- function now assumes a, b, c are valid
+end
+```
+
+**`t.wrap(callback, argCheck)`**\
+`t.wrap(callback, argCheck)` allows you to shorten this to the following:
+```Lua
+local fooCheck = t.tuple(t.string, t.number, t.optional(t.string))
+local foo = t.wrap(function(a, b, c)
+	-- function now assumes a, b, c are valid
+end, fooCheck)
+```
+
+OR
+
+```Lua
+local foo = t.wrap(function(a, b, c)
+	-- function now assumes a, b, c are valid
+end, t.tuple(t.string, t.number, t.optional(t.string)))
+```
+
+Alternatively, there's also:
+**`t.strict(check)`**\
+wrap your whole type in `t.strict(check)` and it will run an `assert` on calls.\
+The example from above could alternatively look like:
+```Lua
+local fooCheck = t.strict(t.tuple(t.string, t.number, t.optional(t.string)))
+local function foo(a, b, c)
+	fooCheck(a, b, c)
+	-- function now assumes a, b, c are valid
+end
+```
 
 ## Tips and Tricks
 You can create your own type checkers with a simple function that returns a boolean.\
@@ -212,7 +281,17 @@ end
 
 local function instanceOfClass(class)
 	return function(value)
-		return t.table(value) and getmetatable(value).__index == class
+		local tableSuccess, tableErrMsg = t.table(value)
+		if not tableSuccess then
+			return false, tableErrMsg or "" -- pass error message for value not being a table
+		end
+
+		local mt = getmetatable(value)
+		if not mt or mt.__index ~= class then
+			return false, "bad member of class" -- custom error message
+		end
+
+		return true -- all checks passed
 	end
 end
 
