@@ -32,6 +32,7 @@ t.none = primitive("nil")
 t.number = primitive("number")
 t.string = primitive("string")
 t.table = primitive("table")
+t.userdata = primitive("userdata")
 
 -- roblox types
 t.Axes = primitive("Axes")

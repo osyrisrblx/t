@@ -39,6 +39,7 @@ Check out src/t.spec.lua for a variety of good examples!
 |number   |=>|t.number   |
 |string   |=>|t.string   |
 |table    |=>|t.table    |
+|userdata |=>|t.userdata |
 
 Any primitive can be checked with a built-in primitive function.\
 Primitives are found under the same name as their type name except for two:
