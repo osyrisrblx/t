@@ -413,7 +413,7 @@ do
 		assert(checkWrap(callback, checkArgs))
 		return function(...)
 			assert(checkArgs(...))
-			callback(...)
+			return callback(...)
 		end
 	end
 end
