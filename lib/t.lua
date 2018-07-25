@@ -26,7 +26,7 @@ end
 
 -- lua types
 t.boolean = primitive("boolean")
-t.coroutine = primitive("coroutine")
+t.coroutine = primitive("thread")
 t.callback = primitive("function")
 t.none = primitive("nil")
 t.number = primitive("number")
