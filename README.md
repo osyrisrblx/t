@@ -47,7 +47,7 @@ Check out src/t.spec.lua for a variety of good examples!
 |Type     |  |Member     |
 |---------|--|-----------|
 |boolean  |=>|t.boolean  |
-|coroutine|=>|t.coroutine|
+|thread   |=>|t.thread   |
 |function |=>|t.callback |
 |nil      |=>|t.none     |
 |number   |=>|t.number   |
