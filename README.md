@@ -4,7 +4,7 @@
 		<img src="https://api.travis-ci.org/osyrisrblx/t.svg?branch=master" alt="Travis-CI Build Status" />
 	</a>
 	<a href='https://coveralls.io/github/osyrisrblx/t?branch=master'>
-		<img src='https://coveralls.io/repos/github/osyrisrblx/t/badge.svg' alt='Coverage Status' />
+		<img src='https://coveralls.io/repos/github/osyrisrblx/t/badge.svg?branch=master' alt='Coverage Status' />
 	</a>
 </div>
 
