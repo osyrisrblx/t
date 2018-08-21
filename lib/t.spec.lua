@@ -218,7 +218,6 @@ return function()
 		expect(guiObjectCheck()).to.equal(false)
 	end)
 
-	--[[
 	it("Roblox Enum", function()
 		local sortOrderEnumCheck = t.enum(Enum.SortOrder)
 		expect(t.Enum(Enum.SortOrder)).to.equal(true)
@@ -232,7 +231,6 @@ return function()
 		expect(sortOrderEnumCheck(Enum.EasingStyle.Linear)).to.equal(false)
 		expect(sortOrderEnumCheck()).to.equal(false)
 	end)
-	--]]
 
 	it("wrap functions", function()
 		local checkFoo = t.tuple(t.string, t.number, t.optional(t.string))
