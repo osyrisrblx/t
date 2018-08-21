@@ -1,5 +1,4 @@
 -- t: a runtime typechecker for Roblox
--- Osyris
 
 -- regular lua compatibility
 local typeof = typeof or type
@@ -27,12 +26,13 @@ end
 
 -- lua types
 t.boolean = primitive("boolean")
-t.coroutine = primitive("coroutine")
+t.coroutine = primitive("thread")
 t.callback = primitive("function")
 t.none = primitive("nil")
 t.number = primitive("number")
 t.string = primitive("string")
 t.table = primitive("table")
+t.userdata = primitive("userdata")
 
 -- roblox types
 t.Axes = primitive("Axes")
@@ -413,7 +413,7 @@ do
 		assert(checkWrap(callback, checkArgs))
 		return function(...)
 			assert(checkArgs(...))
-			callback(...)
+			return callback(...)
 		end
 	end
 end
