@@ -402,7 +402,7 @@ function t.enum(enum)
 		if value.EnumType == enum then
 			return true
 		else
-			return false, string.format("enum of %s expected, got enum of %s", tostring(enum), value.EnumType)
+			return false, string.format("enum of %s expected, got enum of %s", tostring(enum), tostring(value.EnumType))
 		end
 	end
 end
