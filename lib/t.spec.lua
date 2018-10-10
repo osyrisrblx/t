@@ -83,7 +83,7 @@ return function()
 
 	it("exactly", function()
 		local checkSingle = t.exactly("foo")
-		local checkUnion = t.union(t.exactly("foo"), t.exactly("bar"), t.exactly("bar"))
+		local checkUnion = t.union(t.exactly("foo"), t.exactly("bar"), t.exactly("oof"))
 
 		expect(checkSingle("foo")).to.equal(true)
 		expect(checkUnion("foo")).to.equal(true)
