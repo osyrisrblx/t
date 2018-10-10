@@ -97,6 +97,9 @@ The real power of t is in the meta type functions.
 **`t.any`**\
 Passes if value is non-nil.
 
+**`t.exactly(compareValue)`**\
+Passes if value matches compareValue exactly.
+
 **`t.optional(check)`**\
 Passes if value is either nil or passes `check`
 
