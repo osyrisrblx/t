@@ -65,6 +65,13 @@ t.Vector3int16 = primitive("Vector3int16")
 t.Enum = primitive("Enum")
 t.EnumItem = primitive("EnumItem")
 
+-- ensures value is a given value exactly
+function t.exactly(exactValue)
+	return function(value)
+		return value == exactValue
+	end
+end
+
 -- ensures value is an integer
 function t.integer(value)
 	local success, errMsg = t.number(value)
