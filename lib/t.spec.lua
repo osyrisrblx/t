@@ -81,6 +81,21 @@ return function()
 		expect(numberOrString(nil)).to.equal(false)
 	end)
 
+	it("exactly", function()
+		local checkSingle = t.exactly("foo")
+		local checkUnion = t.union(t.exactly("foo"), t.exactly("bar"), t.exactly("oof"))
+
+		expect(checkSingle("foo")).to.equal(true)
+		expect(checkUnion("foo")).to.equal(true)
+		expect(checkUnion("bar")).to.equal(true)
+		expect(checkUnion("oof")).to.equal(true)
+
+		expect(checkSingle("FOO")).to.equal(false)
+		expect(checkUnion("FOO")).to.equal(false)
+		expect(checkUnion("BAR")).to.equal(false)
+		expect(checkUnion("OOF")).to.equal(false)
+	end)
+
 	it("intersections", function()
 		local integerMax5000 = t.intersection(t.integer, t.numberMax(5000))
 		expect(integerMax5000(1)).to.equal(true)
