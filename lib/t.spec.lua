@@ -1,7 +1,7 @@
 return function()
 	local t = require(script.Parent.t)
 
-	it("basic types", function()
+	it("should support basic types", function()
 		expect(t.any("")).to.equal(true)
 		expect(t.boolean(true)).to.equal(true)
 		expect(t.none(nil)).to.equal(true)
@@ -17,7 +17,7 @@ return function()
 		expect(t.table(82)).to.equal(false)
 	end)
 
-	it("special number types", function()
+	it("should support special number types", function()
 		local maxTen = t.numberMax(10)
 		local minTwo = t.numberMin(2)
 		local maxTenEx = t.numberMaxExclusive(10)
@@ -60,28 +60,28 @@ return function()
 		expect(constrainedEightToElevenEx()).to.equal(false)
 	end)
 
-	it("optional", function()
+	it("should support optional types", function()
 		local check = t.optional(t.string)
 		expect(check("")).to.equal(true)
 		expect(check()).to.equal(true)
 		expect(check(1)).to.equal(false)
 	end)
 
-	it("tuples", function()
+	it("should support tuple  types", function()
 		local myTupleCheck = t.tuple(t.number, t.string, t.optional(t.number))
 		expect(myTupleCheck(1, "2", 3)).to.equal(true)
 		expect(myTupleCheck(1, "2")).to.equal(true)
 		expect(myTupleCheck(1, "2", "3")).to.equal(false)
 	end)
 
-	it("unions", function()
+	it("should support union  types", function()
 		local numberOrString = t.union(t.number, t.string)
 		expect(numberOrString(1)).to.equal(true)
 		expect(numberOrString("1")).to.equal(true)
 		expect(numberOrString(nil)).to.equal(false)
 	end)
 
-	it("exactly", function()
+	it("should support exact types", function()
 		local checkSingle = t.exactly("foo")
 		local checkUnion = t.union(t.exactly("foo"), t.exactly("bar"), t.exactly("oof"))
 
@@ -96,7 +96,7 @@ return function()
 		expect(checkUnion("OOF")).to.equal(false)
 	end)
 
-	it("intersections", function()
+	it("should support intersection  types", function()
 		local integerMax5000 = t.intersection(t.integer, t.numberMax(5000))
 		expect(integerMax5000(1)).to.equal(true)
 		expect(integerMax5000(5001)).to.equal(false)
@@ -104,7 +104,7 @@ return function()
 		expect(integerMax5000("1")).to.equal(false)
 	end)
 
-	it("arrays", function()
+	it("should support array  types", function()
 		local stringArray = t.array(t.string)
 		local anyArray = t.array(t.any)
 		local stringValues = t.values(t.string)
@@ -123,7 +123,7 @@ return function()
 		})).to.equal(false)
 	end)
 
-	it("maps", function()
+	it("should support map types", function()
 		local stringNumberMap = t.map(t.string, t.number)
 		expect(stringNumberMap({})).to.equal(true)
 		expect(stringNumberMap({a = 1})).to.equal(true)
@@ -132,7 +132,7 @@ return function()
 		expect(stringNumberMap()).to.equal(false)
 	end)
 
-	it("interfaces", function()
+	it("should support interface types", function()
 		local IVector3 = t.interface({
 			x = t.number,
 			y = t.number,
@@ -153,7 +153,34 @@ return function()
 		})).to.equal(false)
 	end)
 
-	it("deep interfaces", function()
+	it("should support strict interface types", function()
+		local IVector3 = t.strictInterface({
+			x = t.number,
+			y = t.number,
+			z = t.number,
+		})
+
+		expect(IVector3({
+			w = 0,
+			x = 1,
+			y = 2,
+			z = 3,
+		})).to.equal(false)
+
+		expect(IVector3({
+			w = 0,
+			x = 1,
+			y = 2,
+		})).to.equal(false)
+
+		expect(IVector3({
+			x = 1,
+			y = 2,
+			z = 3,
+		})).to.equal(true)
+	end)
+
+	it("should support deep interface types", function()
 		local IPlayer = t.interface({
 			name = t.string,
 			inventory = t.interface({
@@ -185,7 +212,7 @@ return function()
 		})).to.equal(false)
 	end)
 
-	it("deep optional interfaces", function()
+	it("should support deep optional interface types", function()
 		local IPlayer = t.interface({
 			name = t.string,
 			inventory = t.optional(t.interface({
@@ -211,7 +238,7 @@ return function()
 		})).to.equal(true)
 	end)
 
-	it("Roblox Instances", function()
+	it("should support Roblox Instance types", function()
 		local stringValueCheck = t.instance("StringValue")
 		local stringValue = Instance.new("StringValue")
 		local boolValue = Instance.new("BoolValue")
@@ -221,7 +248,7 @@ return function()
 		expect(stringValueCheck()).to.equal(false)
 	end)
 
-	it("Roblox Instance Inheritance", function()
+	it("should support Roblox Instance types inheritance", function()
 		local guiObjectCheck = t.instanceIsA("GuiObject")
 		local frame = Instance.new("Frame")
 		local textLabel = Instance.new("TextLabel")
@@ -233,7 +260,7 @@ return function()
 		expect(guiObjectCheck()).to.equal(false)
 	end)
 
-	it("Roblox Enum", function()
+	it("should support Roblox Enum types", function()
 		local sortOrderEnumCheck = t.enum(Enum.SortOrder)
 		expect(t.Enum(Enum.SortOrder)).to.equal(true)
 		expect(t.Enum("Enum.SortOrder")).to.equal(false)
@@ -247,7 +274,7 @@ return function()
 		expect(sortOrderEnumCheck()).to.equal(false)
 	end)
 
-	it("wrap functions", function()
+	it("should support wrapping function types", function()
 		local checkFoo = t.tuple(t.string, t.number, t.optional(t.string))
 		local foo = t.wrap(function(a, b, c)
 			local result = string.format("%s %d", a, b)
@@ -264,7 +291,7 @@ return function()
 		expect(pcall(foo, "a", 1, "b")).to.equal(true)
 	end)
 
-	it("strict", function()
+	it("should support strict types", function()
 		local myType = t.strict(t.tuple(t.string, t.number))
 		expect(pcall(function()
 			myType("a", "b")
@@ -274,7 +301,7 @@ return function()
 		end)).to.equal(true)
 	end)
 
-	it("common OOP", function()
+	it("should support common OOP types", function()
 		local MyClass = {}
 		MyClass.__index = MyClass
 

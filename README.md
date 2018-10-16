@@ -203,6 +203,21 @@ local myPlayer = {
 print(IPlayer(myPlayer)) --> true
 ```
 
+If you want to make sure an value _exactly_ matches a given interface (no extra fields),\
+you can use `t.strictInterface(definition)` where `definition` is a table of type checkers.\
+For example:
+```Lua
+local IPlayer = t.interface({
+	Name = t.string,
+	Score = t.number,
+})
+
+local myPlayer1 = { Name = "TestPlayer", Score = 100 }
+local myPlayer2 = { Name = "TestPlayer", Score = 100, A = 1 }
+print(IPlayer(myPlayer1)) --> true
+print(IPlayer(myPlayer2)) --> false, "[interface] unexpected field 'A'"
+```
+
 ## Roblox Instances
 t includes two functions to check the types of Roblox Instances.
 

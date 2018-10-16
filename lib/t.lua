@@ -349,21 +349,49 @@ do
 end
 
 -- ensures value matches given interface definition
-function t.interface(checkTable)
-	assert(t.map(t.string, t.callback))
-	return function(value)
-		local tableSuccess, tableErrMsg = t.table(value)
-		if tableSuccess == false then
-			return false, tableErrMsg or ""
-		end
-
-		for key, check in pairs(checkTable) do
-			local success, errMsg = check(value[key])
-			if success == false then
-				return false, string.format("[interface] bad value for %s:\n\t%s", key, errMsg or "")
+do
+	local checkInterface = t.map(t.string, t.callback)
+	function t.interface(checkTable)
+		assert(checkInterface(checkTable))
+		return function(value)
+			local tableSuccess, tableErrMsg = t.table(value)
+			if tableSuccess == false then
+				return false, tableErrMsg or ""
 			end
+
+			for key, check in pairs(checkTable) do
+				local success, errMsg = check(value[key])
+				if success == false then
+					return false, string.format("[interface] bad value for %s:\n\t%s", key, errMsg or "")
+				end
+			end
+			return true
 		end
-		return true
+	end
+
+	function t.strictInterface(checkTable)
+		assert(checkInterface(checkTable))
+		return function(value)
+			local tableSuccess, tableErrMsg = t.table(value)
+			if tableSuccess == false then
+				return false, tableErrMsg or ""
+			end
+
+			for key, check in pairs(checkTable) do
+				local success, errMsg = check(value[key])
+				if success == false then
+					return false, string.format("[interface] bad value for %s:\n\t%s", key, errMsg or "")
+				end
+			end
+
+			for key in pairs(value) do
+				if not checkTable[key] then
+					return false, string.format("[interface] unexpected field '%s'", key)
+				end
+			end
+
+			return true
+		end
 	end
 end
 
