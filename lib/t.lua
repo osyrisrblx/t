@@ -68,7 +68,10 @@ t.EnumItem = primitive("EnumItem")
 -- ensures value is a given value exactly
 function t.exactly(exactValue)
 	return function(value)
-		return value == exactValue
+		if value ~= exactValue then
+			return false, string.format("expected %s, got %s", tostring(exactValue), tostring(value))
+		end
+		return true
 	end
 end
 
