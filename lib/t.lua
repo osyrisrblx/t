@@ -16,6 +16,7 @@ end
 
 local t = {}
 
+-- matches any type except nil
 function t.any(value)
 	if value ~= nil then
 		return true
@@ -29,10 +30,32 @@ t.boolean = primitive("boolean")
 t.coroutine = primitive("thread")
 t.callback = primitive("function")
 t.none = primitive("nil")
-t.number = primitive("number")
 t.string = primitive("string")
 t.table = primitive("table")
 t.userdata = primitive("userdata")
+
+-- ensures value is a number and non-NaN
+function t.number(value)
+	local valueType = typeof(value)
+	if valueType == "number" then
+		if value == value then
+			return true
+		else
+			return false, "unexpected NaN value"
+		end
+	else
+		return false, string.format("number expected, got %s", valueType)
+	end
+end
+
+-- ensures value is NaN
+function t.nan(value)
+	if value ~= value then
+		return true
+	else
+		return false, "unexpected non-NaN value"
+	end
+end
 
 -- roblox types
 t.Axes = primitive("Axes")
@@ -65,15 +88,18 @@ t.Vector3int16 = primitive("Vector3int16")
 t.Enum = primitive("Enum")
 t.EnumItem = primitive("EnumItem")
 
--- ensures value is a given value exactly
-function t.exactly(exactValue)
+-- ensures value is a given literal value
+function t.literal(literal)
 	return function(value)
-		if value ~= exactValue then
-			return false, string.format("expected %s, got %s", tostring(exactValue), tostring(value))
+		if value ~= literal then
+			return false, string.format("expected %s, got %s", tostring(literal), tostring(value))
 		end
 		return true
 	end
 end
+
+-- DEPRECATED
+t.exactly = t.literal
 
 -- ensures value is an integer
 function t.integer(value)

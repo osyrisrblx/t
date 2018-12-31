@@ -97,8 +97,8 @@ The real power of t is in the meta type functions.
 **`t.any`**\
 Passes if value is non-nil.
 
-**`t.exactly(compareValue)`**\
-Passes if value matches compareValue exactly.
+**`t.literal(literalValue)`**\
+Passes if value matches literalValue exactly.
 
 **`t.optional(check)`**\
 Passes if value is either nil or passes `check`
@@ -131,14 +131,20 @@ There's also type checks for arrays and interfaces but we'll cover those in thei
 t includes a few special functions for checking numbers, these can be useful to ensure the given value is within a certain range.
 
 **General:**\
+
+**`t.nan`**\
+determines if value is `NaN`\
+All of the following checks will not pass for `NaN` values.\
+If you need to allow for `NaN`, use `t.union(t.number, t.nan)`
+
 **`t.integer`**\
 checks `t.number` and determines if value is an integer
 
 **`t.numberPositive`**\
-checks `t.number` and determins if the value > 0
+checks `t.number` and determines if the value > 0
 
 **`t.numberNegative`**\
-checks `t.number` and determins if the value < 0
+checks `t.number` and determines if the value < 0
 
 **Inclusive  Comparisons:**\
 **`t.numberMin(min)`**\
@@ -148,7 +154,7 @@ checks `t.number` and determines if value >= min
 checks `t.number` and determines if value <= max
 
 **`t.numberConstrained(min, max)`**\
-checks `t.number` and determins if min <= value <= max
+checks `t.number` and determines if min <= value <= max
 
 **Exclusive Comparisons:**\
 **`t.numberMinExclusive(min)`**\
@@ -158,7 +164,7 @@ checks `t.number` and determines if value > min
 checks `t.number` and determines if value < max
 
 **`t.numberConstrainedExclusive(min, max)`**\
-checks `t.number` and determins if min < value < max
+checks `t.number` and determines if min < value < max
 
 ## Arrays
 In Lua, arrays are a special type of table where all the keys are sequential integers.\

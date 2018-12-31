@@ -333,4 +333,23 @@ return function()
 		expect(instanceOfMyClass({})).to.equal(false)
 		expect(instanceOfMyClass()).to.equal(false)
 	end)
+
+	it("should not treat NaN as numbers", function()
+		expect(t.number(1)).to.equal(true)
+		expect(t.number(0/0)).to.equal(false)
+		expect(t.number("1")).to.equal(false)
+	end)
+
+	it("should not treat numbers as NaN", function()
+		expect(t.nan(1)).to.equal(false)
+		expect(t.nan(0/0)).to.equal(true)
+		expect(t.nan("1")).to.equal(false)
+	end)
+
+	it("should allow union of number and NaN", function()
+		local numberOrNaN = t.union(t.number, t.nan)
+		expect(numberOrNaN(1)).to.equal(true)
+		expect(numberOrNaN(0/0)).to.equal(true)
+		expect(numberOrNaN("1")).to.equal(false)
+	end)
 end
