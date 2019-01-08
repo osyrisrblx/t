@@ -16,7 +16,13 @@ end
 
 local t = {}
 
--- matches any type except nil
+--[[**
+	matches any type except nil
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 function t.any(value)
 	if value ~= nil then
 		return true
@@ -25,16 +31,78 @@ function t.any(value)
 	end
 end
 
--- lua types
+--Lua primitives
+
+--[[**
+	ensures Lua primitive boolean type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.boolean = primitive("boolean")
+
+--[[**
+	ensures Lua primitive coroutine type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.coroutine = primitive("thread")
+
+--[[**
+	ensures Lua primitive callback type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.callback = primitive("function")
+
+--[[**
+	ensures Lua primitive none type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.none = primitive("nil")
+
+--[[**
+	ensures Lua primitive string type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.string = primitive("string")
+
+--[[**
+	ensures Lua primitive table type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.table = primitive("table")
+
+--[[**
+	ensures Lua primitive userdata type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.userdata = primitive("userdata")
 
--- ensures value is a number and non-NaN
+--[[**
+	ensures value is a number and non-NaN
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 function t.number(value)
 	local valueType = typeof(value)
 	if valueType == "number" then
@@ -48,7 +116,13 @@ function t.number(value)
 	end
 end
 
--- ensures value is NaN
+--[[**
+	ensures value is NaN
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 function t.nan(value)
 	if value ~= value then
 		return true
@@ -58,37 +132,259 @@ function t.nan(value)
 end
 
 -- roblox types
+
+--[[**
+	ensures Roblox Axes type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.Axes = primitive("Axes")
+
+--[[**
+	ensures Roblox BrickColor type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.BrickColor = primitive("BrickColor")
+
+--[[**
+	ensures Roblox CFrame type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.CFrame = primitive("CFrame")
+
+--[[**
+	ensures Roblox Color3 type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.Color3 = primitive("Color3")
+
+--[[**
+	ensures Roblox ColorSequence type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.ColorSequence = primitive("ColorSequence")
+
+--[[**
+	ensures Roblox ColorSequenceKeypoint type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.ColorSequenceKeypoint = primitive("ColorSequenceKeypoint")
+
+--[[**
+	ensures Roblox DockWidgetPluginGuiInfo type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.DockWidgetPluginGuiInfo = primitive("DockWidgetPluginGuiInfo")
+
+--[[**
+	ensures Roblox Faces type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.Faces = primitive("Faces")
+
+--[[**
+	ensures Roblox Instance type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.Instance = primitive("Instance")
+
+--[[**
+	ensures Roblox NumberRange type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.NumberRange = primitive("NumberRange")
+
+--[[**
+	ensures Roblox NumberSequence type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.NumberSequence = primitive("NumberSequence")
+
+--[[**
+	ensures Roblox NumberSequenceKeypoint type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.NumberSequenceKeypoint = primitive("NumberSequenceKeypoint")
+
+--[[**
+	ensures Roblox PathWaypoint type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.PathWaypoint = primitive("PathWaypoint")
+
+--[[**
+	ensures Roblox PhysicalProperties type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.PhysicalProperties = primitive("PhysicalProperties")
+
+--[[**
+	ensures Roblox Random type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.Random = primitive("Random")
+
+--[[**
+	ensures Roblox Ray type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.Ray = primitive("Ray")
+
+--[[**
+	ensures Roblox Rect type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.Rect = primitive("Rect")
+
+--[[**
+	ensures Roblox Region3 type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.Region3 = primitive("Region3")
+
+--[[**
+	ensures Roblox Region3int16 type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.Region3int16 = primitive("Region3int16")
+
+--[[**
+	ensures Roblox TweenInfo type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.TweenInfo = primitive("TweenInfo")
+
+--[[**
+	ensures Roblox UDim type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.UDim = primitive("UDim")
+
+--[[**
+	ensures Roblox UDim2 type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.UDim2 = primitive("UDim2")
+
+--[[**
+	ensures Roblox Vector2 type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.Vector2 = primitive("Vector2")
+
+--[[**
+	ensures Roblox Vector3 type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.Vector3 = primitive("Vector3")
+
+--[[**
+	ensures Roblox Vector3int16 type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.Vector3int16 = primitive("Vector3int16")
 
 -- roblox enum types
+
+--[[**
+	ensures Roblox Enum type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.Enum = primitive("Enum")
+
+--[[**
+	ensures Roblox EnumItem type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 t.EnumItem = primitive("EnumItem")
 
--- ensures value is a given literal value
+--[[**
+	ensures value is a given literal value
+
+	@param literal The literal to use
+
+	@returns A function that will return true iff the condition is passed
+**--]]
 function t.literal(literal)
 	return function(value)
 		if value ~= literal then
@@ -98,10 +394,19 @@ function t.literal(literal)
 	end
 end
 
--- DEPRECATED
+--[[**
+	DEPRECATED
+	Please use t.literal
+**--]]
 t.exactly = t.literal
 
--- ensures value is an integer
+--[[**
+	ensures value is an integer
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
 function t.integer(value)
 	local success, errMsg = t.number(value)
 	if not success then
@@ -114,7 +419,13 @@ function t.integer(value)
 	end
 end
 
--- ensures value is a number where min <= value
+--[[**
+	ensures value is a number where min <= value
+
+	@param min The minimum to use
+
+	@returns A function that will return true iff the condition is passed
+**--]]
 function t.numberMin(min)
 	return function(value)
 		local success, errMsg = t.number(value)
@@ -129,7 +440,13 @@ function t.numberMin(min)
 	end
 end
 
--- ensures value is a number where value <= max
+--[[**
+	ensures value is a number where value <= max
+
+	@param max The maximum to use
+
+	@returns A function that will return true iff the condition is passed
+**--]]
 function t.numberMax(max)
 	return function(value)
 		local success, errMsg = t.number(value)
@@ -144,7 +461,13 @@ function t.numberMax(max)
 	end
 end
 
--- ensures value is a number where min < value
+--[[**
+	ensures value is a number where min < value
+
+	@param min The minimum to use
+
+	@returns A function that will return true iff the condition is passed
+**--]]
 function t.numberMinExclusive(min)
 	return function(value)
 		local success, errMsg = t.number(value)
@@ -159,7 +482,13 @@ function t.numberMinExclusive(min)
 	end
 end
 
--- ensures value is a number where value < max
+--[[**
+	ensures value is a number where value < max
+
+	@param max The maximum to use
+
+	@returns A function that will return true iff the condition is passed
+**--]]
 function t.numberMaxExclusive(max)
 	return function(value)
 		local success, errMsg = t.number(value)
@@ -174,13 +503,28 @@ function t.numberMaxExclusive(max)
 	end
 end
 
--- ensures value is a number where value > 0
+--[[**
+	ensures value is a number where value > 0
+
+	@returns A function that will return true iff the condition is passed
+**--]]
 t.numberPositive = t.numberMinExclusive(0)
 
--- ensures value is a number where value < 0
+--[[**
+	ensures value is a number where value < 0
+
+	@returns A function that will return true iff the condition is passed
+**--]]
 t.numberNegative = t.numberMaxExclusive(0)
 
--- ensures value is a number where min <= value <= max
+--[[**
+	ensures value is a number where min <= value <= max
+
+	@param min The minimum to use
+	@param max The maximum to use
+
+	@returns A function that will return true iff the condition is passed
+**--]]
 function t.numberConstrained(min, max)
 	assert(t.number(min) and t.number(max))
 	local minCheck = t.numberMin(min)
@@ -200,7 +544,14 @@ function t.numberConstrained(min, max)
 	end
 end
 
--- ensures value is a number where min < value < max
+--[[**
+	ensures value is a number where min < value < max
+
+	@param min The minimum to use
+	@param max The maximum to use
+
+	@returns A function that will return true iff the condition is passed
+**--]]
 function t.numberConstrainedExclusive(min, max)
 	assert(t.number(min) and t.number(max))
 	local minCheck = t.numberMinExclusive(min)
@@ -220,7 +571,13 @@ function t.numberConstrainedExclusive(min, max)
 	end
 end
 
--- ensures value is either nil or passes check
+--[[**
+	ensures value is either nil or passes check
+
+	@param check The check to use
+
+	@returns A function that will return true iff the condition is passed
+**--]]
 function t.optional(check)
 	assert(t.callback(check))
 	return function(value)
@@ -236,7 +593,13 @@ function t.optional(check)
 	end
 end
 
--- matches given tuple against tuple type definition
+--[[**
+	matches given tuple against tuple type definition
+
+	@param ... The type definition for the tuples
+
+	@returns A function that will return true iff the condition is passed
+**--]]
 function t.tuple(...)
 	local checks = {...}
 	return function(...)
@@ -251,7 +614,13 @@ function t.tuple(...)
 	end
 end
 
--- ensures all keys in given table pass check
+--[[**
+	ensures all keys in given table pass check
+
+	@param check The function to use to check the keys
+
+	@returns A function that will return true iff the condition is passed
+**--]]
 function t.keys(check)
 	assert(t.callback(check))
 	return function(value)
@@ -271,7 +640,13 @@ function t.keys(check)
 	end
 end
 
--- ensures all values in given table pass check
+--[[**
+	ensures all values in given table pass check
+
+	@param check The function to use to check the values
+
+	@returns A function that will return true iff the condition is passed
+**--]]
 function t.values(check)
 	assert(t.callback(check))
 	return function(value)
@@ -291,7 +666,14 @@ function t.values(check)
 	end
 end
 
--- ensures value is a table and all keys pass keyCheck and all values pass valueCheck
+--[[**
+	ensures value is a table and all keys pass keyCheck and all values pass valueCheck
+
+	@param keyCheck The function to use to check the keys
+	@param valueCheck The function to use to check the values
+
+	@returns A function that will return true iff the condition is passed
+**--]]
 function t.map(keyCheck, valueCheck)
 	assert(t.callback(keyCheck), t.callback(valueCheck))
 	local keyChecker = t.keys(keyCheck)
@@ -311,9 +693,15 @@ function t.map(keyCheck, valueCheck)
 	end
 end
 
--- ensures value is an array and all values of the array match check
 do
 	local arrayKeysCheck = t.keys(t.integer)
+	--[[**
+		ensures value is an array and all values of the array match check
+
+		@param check The check to compare all values with
+
+		@returns A function that will return true iff the condition is passed
+	**--]]
 	function t.array(check)
 		assert(t.callback(check))
 		local valuesCheck = t.values(check)
@@ -343,8 +731,13 @@ end
 
 do
 	local callbackArray = t.array(t.callback)
+	--[[**
+		creates a union type
 
-	-- creates a union type
+		@param ... The checks to union
+
+		@returns A function that will return true iff the condition is passed
+	**--]]
 	function t.union(...)
 		local checks = {...}
 		assert(callbackArray(checks))
@@ -358,7 +751,13 @@ do
 		end
 	end
 
-	-- creates an intersection type
+	--[[**
+		creates an intersection type
+
+		@param ... The checks to intersect
+
+		@returns A function that will return true iff the condition is passed
+	**--]]
 	function t.intersection(...)
 		local checks = {...}
 		assert(callbackArray(checks))
@@ -374,9 +773,15 @@ do
 	end
 end
 
--- ensures value matches given interface definition
 do
 	local checkInterface = t.map(t.string, t.callback)
+	--[[**
+		ensures value matches given interface definition
+
+		@param checkTable The interface definition
+		
+		@returns A function that will return true iff the condition is passed
+	**--]]
 	function t.interface(checkTable)
 		assert(checkInterface(checkTable))
 		return function(value)
@@ -395,6 +800,13 @@ do
 		end
 	end
 
+	--[[**
+		ensures value matches given interface definition strictly
+
+		@param checkTable The interface definition
+
+		@returns A function that will return true iff the condition is passed
+	**--]]
 	function t.strictInterface(checkTable)
 		assert(checkInterface(checkTable))
 		return function(value)
@@ -421,7 +833,13 @@ do
 	end
 end
 
--- ensure value is an Instance and it's ClassName matches the given ClassName
+--[[**
+	ensure value is an Instance and it's ClassName matches the given ClassName
+
+	@param className The class name to check for
+
+	@returns A function that will return true iff the condition is passed
+**--]]
 function t.instance(className)
 	assert(t.string(className))
 	return function(value)
@@ -438,7 +856,13 @@ function t.instance(className)
 	end
 end
 
--- ensure value is an Instance and it's ClassName matches the given ClassName by an IsA comparison
+--[[**
+	ensure value is an Instance and it's ClassName matches the given ClassName by an IsA comparison
+
+	@param className The class name to check for
+
+	@returns A function that will return true iff the condition is passed
+**--]]
 function t.instanceIsA(className)
 	assert(t.string(className))
 	return function(value)
@@ -455,6 +879,13 @@ function t.instanceIsA(className)
 	end
 end
 
+--[[**
+	ensures value is an enum of the correct type
+
+	@param enum The enum to check
+
+	@returns A function that will return true iff the condition is passed
+**--]]
 function t.enum(enum)
 	assert(t.Enum(enum))
 	return function(value)
@@ -473,6 +904,15 @@ end
 
 do
 	local checkWrap = t.tuple(t.callback, t.callback)
+
+	--[[**
+		wraps a callback in an assert with checkArgs
+
+		@param callback The function to wrap
+		@param checkArgs The functon to use to check arguments in the assert
+
+		@returns A function that first asserts using checkArgs and then calls callback
+	**--]]
 	function t.wrap(callback, checkArgs)
 		assert(checkWrap(callback, checkArgs))
 		return function(...)
@@ -482,6 +922,13 @@ do
 	end
 end
 
+--[[**
+	asserts a given check
+
+	@param check The function to wrap with an assert
+
+	@returns A function that simply wraps the given check in an assert
+**--]]
 function t.strict(check)
 	return function(...)
 		assert(check(...))
