@@ -779,7 +779,7 @@ do
 		ensures value matches given interface definition
 
 		@param checkTable The interface definition
-		
+
 		@returns A function that will return true iff the condition is passed
 	**--]]
 	function t.interface(checkTable)
