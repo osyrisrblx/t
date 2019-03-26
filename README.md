@@ -130,7 +130,7 @@ There's also type checks for arrays and interfaces but we'll cover those in thei
 
 t includes a few special functions for checking numbers, these can be useful to ensure the given value is within a certain range.
 
-**General:**\
+**General:**
 
 **`t.nan`**\
 determines if value is `NaN`\
