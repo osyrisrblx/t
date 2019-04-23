@@ -1,5 +1,5 @@
 return function()
-	local t = require(script.Parent.t)
+	local t = require(script.Parent)
 
 	it("should support basic types", function()
 		expect(t.any("")).to.equal(true)
