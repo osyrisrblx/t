@@ -352,4 +352,16 @@ return function()
 		expect(numberOrNaN(0/0)).to.equal(true)
 		expect(numberOrNaN("1")).to.equal(false)
 	end)
+
+	it("should support non-string keys for interfaces", function()
+		local key = {}
+		local myInterface = t.interface({ [key] = t.number })
+		expect(myInterface({ [key] = 1 })).to.equal(true)
+		expect(myInterface({ [key] = "1" })).to.equal(false)
+	end)
+
+	it("should support failing on non-string keys for strict interfaces", function()
+		local myInterface = t.strictInterface({ a = t.number })
+		expect(myInterface({ a = 1, [{}] = 2 })).to.equal(false)
+	end)
 end

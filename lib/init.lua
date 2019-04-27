@@ -415,7 +415,7 @@ function t.integer(value)
 	if value%1 == 0 then
 		return true
 	else
-		return false, string.format("integer expected, got %d", value)
+		return false, string.format("integer expected, got %s", value)
 	end
 end
 
@@ -435,7 +435,7 @@ function t.numberMin(min)
 		if value >= min then
 			return true
 		else
-			return false, string.format("number >= %d expected, got %d", min, value)
+			return false, string.format("number >= %s expected, got %s", min, value)
 		end
 	end
 end
@@ -456,7 +456,7 @@ function t.numberMax(max)
 		if value <= max then
 			return true
 		else
-			return false, string.format("number <= %d expected, got %d", max, value)
+			return false, string.format("number <= %s expected, got %s", max, value)
 		end
 	end
 end
@@ -477,7 +477,7 @@ function t.numberMinExclusive(min)
 		if min < value then
 			return true
 		else
-			return false, string.format("number > %d expected, got %d", min, value)
+			return false, string.format("number > %s expected, got %s", min, value)
 		end
 	end
 end
@@ -498,7 +498,7 @@ function t.numberMaxExclusive(max)
 		if value < max then
 			return true
 		else
-			return false, string.format("number < %d expected, got %d", max, value)
+			return false, string.format("number < %s expected, got %s", max, value)
 		end
 	end
 end
@@ -607,7 +607,7 @@ function t.tuple(...)
 		for i = 1, #checks do
 			local success, errMsg = checks[i](args[i])
 			if success == false then
-				return false, string.format("Bad tuple index #%d:\n\t%s", i, errMsg or "")
+				return false, string.format("Bad tuple index #%s:\n\t%s", i, errMsg or "")
 			end
 		end
 		return true
@@ -774,7 +774,7 @@ do
 end
 
 do
-	local checkInterface = t.map(t.string, t.callback)
+	local checkInterface = t.map(t.any, t.callback)
 	--[[**
 		ensures value matches given interface definition
 
@@ -793,7 +793,7 @@ do
 			for key, check in pairs(checkTable) do
 				local success, errMsg = check(value[key])
 				if success == false then
-					return false, string.format("[interface] bad value for %s:\n\t%s", key, errMsg or "")
+					return false, string.format("[interface] bad value for %s:\n\t%s", tostring(key), errMsg or "")
 				end
 			end
 			return true
@@ -818,13 +818,13 @@ do
 			for key, check in pairs(checkTable) do
 				local success, errMsg = check(value[key])
 				if success == false then
-					return false, string.format("[interface] bad value for %s:\n\t%s", key, errMsg or "")
+					return false, string.format("[interface] bad value for %s:\n\t%s", tostring(key), errMsg or "")
 				end
 			end
 
 			for key in pairs(value) do
 				if not checkTable[key] then
-					return false, string.format("[interface] unexpected field '%s'", key)
+					return false, string.format("[interface] unexpected field '%s'", tostring(key))
 				end
 			end
 
