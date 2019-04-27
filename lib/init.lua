@@ -774,7 +774,7 @@ do
 end
 
 do
-	local checkInterface = t.map(t.string, t.callback)
+	local checkInterface = t.map(t.any, t.callback)
 	--[[**
 		ensures value matches given interface definition
 
@@ -793,7 +793,7 @@ do
 			for key, check in pairs(checkTable) do
 				local success, errMsg = check(value[key])
 				if success == false then
-					return false, string.format("[interface] bad value for %s:\n\t%s", key, errMsg or "")
+					return false, string.format("[interface] bad value for %s:\n\t%s", tostring(key), errMsg or "")
 				end
 			end
 			return true
