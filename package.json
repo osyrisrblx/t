@@ -16,7 +16,7 @@
 	},
 	"homepage": "https://github.com/osyrisrblx/t#readme",
 	"peerDependencies": {
-		"rbx-types": "^1.0.187"
+		"@rbxts/types": "^1.0.198"
 	},
 	"dependencies": {
 		"@rbxts/types": "^1.0.198"
