@@ -1,9 +1,9 @@
 {
 	"name": "@rbxts/t",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "A Runtime Type Checker for Roblox",
 	"main": "lib/ts.lua",
-	"types": "index.d.ts",
+	"types": "lib/t.d.ts",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/osyrisrblx/t.git"
