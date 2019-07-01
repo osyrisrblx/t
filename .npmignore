@@ -1,3 +1,3 @@
 *
-^lib/ts.lua
-^lib/t.d.ts
+!lib/ts.lua
+!index.d.ts
