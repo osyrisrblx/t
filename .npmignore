@@ -1,10 +1,3 @@
-.gitignore
-.gitmodules
-.luacov
-.travis.yml
-lib/init.spec.lua
-modules
-node_modules
-rotriever.toml
-spec.lua
-tsconfig.json
+*
+^lib/ts.lua
+^index.d.ts
