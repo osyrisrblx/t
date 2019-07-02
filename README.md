@@ -213,7 +213,7 @@ If you want to make sure an value _exactly_ matches a given interface (no extra 
 you can use `t.strictInterface(definition)` where `definition` is a table of type checkers.\
 For example:
 ```Lua
-local IPlayer = t.interface({
+local IPlayer = t.strictInterface({
 	Name = t.string,
 	Score = t.number,
 })
