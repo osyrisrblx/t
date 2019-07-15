@@ -172,6 +172,8 @@ return function()
 			z = t.number,
 		})
 
+		expect(IVector3(0)).to.equal(false)
+
 		expect(IVector3({
 			w = 0,
 			x = 1,
