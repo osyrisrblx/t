@@ -758,6 +758,11 @@ do
 	end
 
 	--[[**
+		Alias for t.union
+	**--]]
+	t.some = t.union
+
+	--[[**
 		creates an intersection type
 
 		@param ... The checks to intersect
@@ -777,6 +782,11 @@ do
 			return true
 		end
 	end
+
+	--[[**
+		Alias for t.intersection
+	**--]]
+	t.every = t.intersection
 end
 
 do

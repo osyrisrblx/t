@@ -107,13 +107,13 @@ Passes if value is either nil or passes `check`
 You can define a tuple type with `t.tuple(...)`.\
 The arguments should be a list of type checkers.
 
-**`t.union(...)`**\
+**`t.union(...)`** - ( alias: `t.some(...)` )\
 You can define a union type with `t.union(...)`.\
 The arguments should be a list of type checkers.\
 **At least one check must pass**\
 i.e. `t.union(a, b, c)` -> `a OR b OR c`
 
-**`t.intersection(...)`**\
+**`t.intersection(...)`** - ( alias: `t.every(...)` )\
 You can define an intersection type with `t.intersection(...)`.\
 The arguments should be a list of type checkers.\
 **All checks must pass**\
