@@ -109,11 +109,15 @@ The arguments should be a list of type checkers.
 
 **`t.union(...)`**\
 You can define a union type with `t.union(...)`.\
-The arguments should be a list of type checkers.
+The arguments should be a list of type checkers.\
+**At least one check must pass**\
+i.e. `t.union(a, b, c)` -> `a OR b OR c`
 
 **`t.intersection(...)`**\
 You can define an intersection type with `t.intersection(...)`.\
-The arguments should be a list of type checkers.
+The arguments should be a list of type checkers.\
+**All checks must pass**\
+i.e. `t.intersection(a, b, c)` -> `a AND b AND c`
 
 **`t.keys(check)`**\
 Matches a table's keys against `check`
