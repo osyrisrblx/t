@@ -378,4 +378,20 @@ return function()
 		local myInterface = t.strictInterface({ a = t.number })
 		expect(myInterface({ a = 1, [{}] = 2 })).to.equal(false)
 	end)
+
+	it("should support children", function()
+		local myInterface = t.interface({
+			buttonInFrame = t.intersection(t.instanceOf("Frame"), t.children({
+				MyButton = t.instanceOf("ImageButton")
+			}))
+		})
+
+		local frame = Instance.new("Frame")
+		local button = Instance.new("ImageButton", frame)
+		button.Name = "MyButton"
+
+		local object = { buttonInFrame = frame }
+
+		expect(myInterface(object)).to.equal(true)
+	end)
 end

@@ -951,4 +951,44 @@ function t.strict(check)
 	end
 end
 
+do
+	local checkChildren = t.map(t.string, t.callback)
+	function t.children(checkTable)
+		assert(checkChildren(checkTable))
+
+		return function(value)
+			local instanceSuccess, instanceErrMsg = t.Instance(value)
+			if not instanceSuccess then
+				return false, instanceErrMsg or ""
+			end
+
+			local childrenByName = {}
+			for _, child in pairs(value:GetChildren()) do
+				local bin = childrenByName[child.Name]
+				if not bin then
+					bin = {}
+					childrenByName[child.Name] = bin
+				end
+				bin[#bin + 1] = child
+			end
+
+			for name, check in pairs(checkTable) do
+				local bin = childrenByName[name]
+				local success, errMsg
+				for i = 1, #bin do
+					success, errMsg = check(bin[i])
+					if success then
+						break
+					end
+				end
+				if not success then
+					return false, string.format("[%s.%s] %s", value:GetFullName(), name, errMsg or "")
+				end
+			end
+
+			return true
+		end
+	end
+end
+
 return t
