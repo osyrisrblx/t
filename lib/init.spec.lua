@@ -253,7 +253,7 @@ return function()
 	end)
 
 	it("should support Roblox Instance types", function()
-		local stringValueCheck = t.instance("StringValue")
+		local stringValueCheck = t.instanceOf("StringValue")
 		local stringValue = Instance.new("StringValue")
 		local boolValue = Instance.new("BoolValue")
 
@@ -377,5 +377,46 @@ return function()
 	it("should support failing on non-string keys for strict interfaces", function()
 		local myInterface = t.strictInterface({ a = t.number })
 		expect(myInterface({ a = 1, [{}] = 2 })).to.equal(false)
+	end)
+
+	it("should support children", function()
+		local myInterface = t.interface({
+			buttonInFrame = t.intersection(t.instanceOf("Frame"), t.children({
+				MyButton = t.instanceOf("ImageButton")
+			}))
+		})
+
+		expect(t.children({})(5)).to.equal(false)
+		expect(myInterface({ buttonInFrame = Instance.new("Frame") })).to.equal(false)
+
+		do
+			local frame = Instance.new("Frame")
+			local button = Instance.new("ImageButton", frame)
+			button.Name = "MyButton"
+			expect(myInterface({ buttonInFrame = frame })).to.equal(true)
+		end
+
+		do
+			local frame = Instance.new("Frame")
+			local button = Instance.new("ImageButton", frame)
+			button.Name = "NotMyButton"
+			expect(myInterface({ buttonInFrame = frame })).to.equal(false)
+		end
+
+		do
+			local frame = Instance.new("Frame")
+			local button = Instance.new("TextButton", frame)
+			button.Name = "MyButton"
+			expect(myInterface({ buttonInFrame = frame })).to.equal(false)
+		end
+
+		do
+			local frame = Instance.new("Frame")
+			local button1 = Instance.new("ImageButton", frame)
+			button1.Name = "MyButton"
+			local button2 = Instance.new("ImageButton", frame)
+			button2.Name = "MyButton"
+			expect(myInterface({ buttonInFrame = frame })).to.equal(false)
+		end
 	end)
 end

@@ -856,7 +856,7 @@ end
 
 	@returns A function that will return true iff the condition is passed
 **--]]
-function t.instance(className)
+function t.instanceOf(className)
 	assert(t.string(className))
 	return function(value)
 		local instanceSuccess, instanceErrMsg = t.Instance(value)
@@ -871,6 +871,7 @@ function t.instance(className)
 		return true
 	end
 end
+t.instance = t.instanceOf
 
 --[[**
 	ensure value is an Instance and it's ClassName matches the given ClassName by an IsA comparison
@@ -948,6 +949,52 @@ end
 function t.strict(check)
 	return function(...)
 		assert(check(...))
+	end
+end
+
+do
+	local checkChildren = t.map(t.string, t.callback)
+
+	--[[**
+		Takes a table where keys are child names and values are functions to check the children against.
+		Pass an instance tree into the function.
+		If at least one child passes each check, the overall check passes.
+
+		Warning! If you pass in a tree with more than one child of the same name, this function will always return false
+
+		@param checkTable The table to check against
+
+		@returns A function that checks an instance tree
+	**--]]
+	function t.children(checkTable)
+		assert(checkChildren(checkTable))
+
+		return function(value)
+			local instanceSuccess, instanceErrMsg = t.Instance(value)
+			if not instanceSuccess then
+				return false, instanceErrMsg or ""
+			end
+
+			local childrenByName = {}
+			for _, child in pairs(value:GetChildren()) do
+				local name = child.Name
+				if checkTable[name] then
+					if childrenByName[name] then
+						return false, string.format("Cannot process multiple children with the same name \"%s\"", name)
+					end
+					childrenByName[name] = child
+				end
+			end
+
+			for name, check in pairs(checkTable) do
+				local success, errMsg = check(childrenByName[name])
+				if not success then
+					return false, string.format("[%s.%s] %s", value:GetFullName(), name, errMsg or "")
+				end
+			end
+
+			return true
+		end
 	end
 end
 

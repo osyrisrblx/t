@@ -231,11 +231,18 @@ print(IPlayer(myPlayer2)) --> false, "[interface] unexpected field 'A'"
 ## Roblox Instances
 t includes two functions to check the types of Roblox Instances.
 
-**`t.instance(className)`**\
+**`t.instanceOf(className)`**\
 ensures the value is an Instance and it's ClassName exactly matches `className`
 
 **`t.instanceIsA(className)`**\
 ensures the value is an Instance and it's ClassName matches `className` by a IsA comparison. ([see here](http://wiki.roblox.com/index.php?title=API:Class/Instance/FindFirstAncestorWhichIsA))
+
+**`t.children(checkTable)`**\
+Takes a table where keys are child names and values are functions to check the children against.\
+Pass an instance tree into the function.\
+If at least one child passes each check, the overall check passes.
+
+**Warning! If you pass in a tree with more than one child of the same name, this function will always return false**
 
 ## Roblox Enums
 

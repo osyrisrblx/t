@@ -162,8 +162,11 @@ interface t {
 }
 
 interface t {
-	instance: <T extends string>(className: T) => T extends keyof Instances ? check<Instances[T]> : boolean;
+	instanceOf: <T extends string>(className: T) => T extends keyof Instances ? check<Instances[T]> : boolean;
 	instanceIsA: <T extends string>(className: T) => T extends keyof Instances ? check<Instances[T]> : boolean;
+	children: <T extends { [index: string]: (value: unknown) => value is any }>(
+		checkTable: T
+	) => check<Instance & { [P in keyof T]: t.static<T[P]> }>;
 }
 
 declare namespace t {
