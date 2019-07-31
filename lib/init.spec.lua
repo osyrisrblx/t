@@ -419,4 +419,86 @@ return function()
 			expect(myInterface({ buttonInFrame = frame })).to.equal(false)
 		end
 	end)
+
+	it("should support t.instanceOf shorthand", function()
+		local myInterface = t.interface({
+			buttonInFrame = t.instanceOf("Frame", {
+				MyButton = t.instanceOf("ImageButton")
+			})
+		})
+
+		expect(t.children({})(5)).to.equal(false)
+		expect(myInterface({ buttonInFrame = Instance.new("Frame") })).to.equal(false)
+
+		do
+			local frame = Instance.new("Frame")
+			local button = Instance.new("ImageButton", frame)
+			button.Name = "MyButton"
+			expect(myInterface({ buttonInFrame = frame })).to.equal(true)
+		end
+
+		do
+			local frame = Instance.new("Frame")
+			local button = Instance.new("ImageButton", frame)
+			button.Name = "NotMyButton"
+			expect(myInterface({ buttonInFrame = frame })).to.equal(false)
+		end
+
+		do
+			local frame = Instance.new("Frame")
+			local button = Instance.new("TextButton", frame)
+			button.Name = "MyButton"
+			expect(myInterface({ buttonInFrame = frame })).to.equal(false)
+		end
+
+		do
+			local frame = Instance.new("Frame")
+			local button1 = Instance.new("ImageButton", frame)
+			button1.Name = "MyButton"
+			local button2 = Instance.new("ImageButton", frame)
+			button2.Name = "MyButton"
+			expect(myInterface({ buttonInFrame = frame })).to.equal(false)
+		end
+	end)
+
+	it("should support t.instanceIsA shorthand", function()
+		local myInterface = t.interface({
+			buttonInFrame = t.instanceIsA("Frame", {
+				MyButton = t.instanceIsA("ImageButton")
+			})
+		})
+
+		expect(t.children({})(5)).to.equal(false)
+		expect(myInterface({ buttonInFrame = Instance.new("Frame") })).to.equal(false)
+
+		do
+			local frame = Instance.new("Frame")
+			local button = Instance.new("ImageButton", frame)
+			button.Name = "MyButton"
+			expect(myInterface({ buttonInFrame = frame })).to.equal(true)
+		end
+
+		do
+			local frame = Instance.new("Frame")
+			local button = Instance.new("ImageButton", frame)
+			button.Name = "NotMyButton"
+			expect(myInterface({ buttonInFrame = frame })).to.equal(false)
+		end
+
+		do
+			local frame = Instance.new("Frame")
+			local button = Instance.new("TextButton", frame)
+			button.Name = "MyButton"
+			expect(myInterface({ buttonInFrame = frame })).to.equal(false)
+		end
+
+		do
+			local frame = Instance.new("Frame")
+			local button1 = Instance.new("ImageButton", frame)
+			button1.Name = "MyButton"
+			local button2 = Instance.new("ImageButton", frame)
+			button2.Name = "MyButton"
+			expect(myInterface({ buttonInFrame = frame })).to.equal(false)
+		end
+	end)
 end
