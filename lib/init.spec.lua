@@ -506,5 +506,6 @@ return function()
 		local check = t.match("%d+")
 		assert(check("123"))
 		assert(not (check("abc")))
+		assert(not (check()))
 	end)
 end
