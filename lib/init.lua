@@ -965,12 +965,13 @@ do
 
 			local childrenByName = {}
 			for _, child in pairs(value:GetChildren()) do
-				local bin = childrenByName[child.Name]
-				if not bin then
-					bin = {}
-					childrenByName[child.Name] = bin
+				local name = child.Name
+				if checkTable[name] then
+					if childrenByName[name] then
+						return false, string.format("Cannot process multiple children with the same name \"%s\"", name)
+					end
+					childrenByName[name] = child
 				end
-				bin[#bin + 1] = child
 			end
 
 			for name, check in pairs(checkTable) do
