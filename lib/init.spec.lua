@@ -81,9 +81,24 @@ return function()
 		assert(not (numberOrString(nil)))
 	end)
 
-	it("should support exact types", function()
-		local checkSingle = t.exactly("foo")
-		local checkUnion = t.union(t.exactly("foo"), t.exactly("bar"), t.exactly("oof"))
+	it("should support literal types", function()
+		local checkSingle = t.literal("foo")
+		local checkUnion = t.union(t.literal("foo"), t.literal("bar"), t.literal("oof"))
+
+		assert(checkSingle("foo"))
+		assert(checkUnion("foo"))
+		assert(checkUnion("bar"))
+		assert(checkUnion("oof"))
+
+		assert(not (checkSingle("FOO")))
+		assert(not (checkUnion("FOO")))
+		assert(not (checkUnion("BAR")))
+		assert(not (checkUnion("OOF")))
+	end)
+
+	it("should support multiple literal types", function()
+		local checkSingle = t.literal("foo")
+		local checkUnion = t.literal("foo", "bar", "oof")
 
 		assert(checkSingle("foo"))
 		assert(checkUnion("foo"))
