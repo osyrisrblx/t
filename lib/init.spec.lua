@@ -67,14 +67,14 @@ return function()
 		assert(not (check(1)))
 	end)
 
-	it("should support tuple  types", function()
+	it("should support tuple types", function()
 		local myTupleCheck = t.tuple(t.number, t.string, t.optional(t.number))
 		assert(myTupleCheck(1, "2", 3))
 		assert(myTupleCheck(1, "2"))
 		assert(not (myTupleCheck(1, "2", "3")))
 	end)
 
-	it("should support union  types", function()
+	it("should support union types", function()
 		local numberOrString = t.union(t.number, t.string)
 		assert(numberOrString(1))
 		assert(numberOrString("1"))
@@ -111,7 +111,7 @@ return function()
 		assert(not (checkUnion("OOF")))
 	end)
 
-	it("should support intersection  types", function()
+	it("should support intersection types", function()
 		local integerMax5000 = t.intersection(t.integer, t.numberMax(5000))
 		assert(integerMax5000(1))
 		assert(not (integerMax5000(5001)))
@@ -120,7 +120,7 @@ return function()
 	end)
 
 	describe("array", function()
-		it("should support array  types", function()
+		it("should support array types", function()
 			local stringArray = t.array(t.string)
 			local anyArray = t.array(t.any)
 			local stringValues = t.values(t.string)
@@ -522,5 +522,25 @@ return function()
 		assert(check("123"))
 		assert(not (check("abc")))
 		assert(not (check()))
+	end)
+
+	it("should support t.keyOf", function()
+		local myNewEnum = {
+			OptionA = {},
+			OptionB = {},
+		}
+		local check = t.keyOf(myNewEnum)
+		assert(check("OptionA"))
+		assert(not (check("OptionC")))
+	end)
+
+	it("should support t.valueOf", function()
+		local myNewEnum = {
+			OptionA = {},
+			OptionB = {},
+		}
+		local check = t.valueOf(myNewEnum)
+		assert(check(myNewEnum.OptionA))
+		assert(not (check(1010)))
 	end)
 end

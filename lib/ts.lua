@@ -107,6 +107,22 @@ end
 
 t.exactly = t.literal
 
+function t.keyOf(keyTable)
+	local keys = {}
+	for key in pairs(keyTable) do
+		keys[#keys + 1] = key
+	end
+	return t.literal(unpack(keys))
+end
+
+function t.valueOf(valueTable)
+	local values = {}
+	for _, value in pairs(valueTable) do
+		values[#values + 1] = value
+	end
+	return t.literal(unpack(values))
+end
+
 function t.integer(value)
 	local success = t.number(value)
 	if not success then

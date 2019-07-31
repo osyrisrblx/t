@@ -98,6 +98,12 @@ interface t {
 		: never;
 	literal<T>(this: void, literalValue: T): (value: unknown) => value is T;
 
+	/** Returns a t.union of each key in the table as a t.literal */
+	keyOf: <T>(valueTable: T) => check<keyof T>;
+
+	/** Returns a t.union of each value in the table as a t.literal */
+	valueOf: <T>(valueTable: T) => T extends { [P in keyof T]: infer U } ? check<U> : never;
+
 	/** checks to see if `value` is an integer */
 	integer: (value: unknown) => value is number;
 	/** checks to see if `value` is a number and is more than or equal to `min` */
