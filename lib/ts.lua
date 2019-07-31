@@ -405,7 +405,7 @@ do
 	end
 end
 
-function t.instance(className)
+function t.instanceOf(className)
 	assert(t.string(className))
 	return function(value)
 		local instanceSuccess = t.Instance(value)
@@ -420,6 +420,7 @@ function t.instance(className)
 		return true
 	end
 end
+t.instance = t.instanceOf
 
 function t.instanceIsA(className)
 	assert(t.string(className))
@@ -468,6 +469,40 @@ end
 function t.strict(check)
 	return function(...)
 		assert(check(...))
+	end
+end
+
+do
+	local checkChildren = t.map(t.string, t.callback)
+	function t.children(checkTable)
+		assert(checkChildren(checkTable))
+
+		return function(value)
+			local instanceSuccess = t.Instance(value)
+			if not instanceSuccess then
+				return false
+			end
+
+			local childrenByName = {}
+			for _, child in pairs(value:GetChildren()) do
+				local name = child.Name
+				if checkTable[name] then
+					if childrenByName[name] then
+						return false
+					end
+					childrenByName[name] = child
+				end
+			end
+
+			for name, check in pairs(checkTable) do
+				local success = check(childrenByName[name])
+				if not success then
+					return false
+				end
+			end
+
+			return true
+		end
 	end
 end
 
