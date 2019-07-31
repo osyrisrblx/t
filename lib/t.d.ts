@@ -4,85 +4,99 @@ type check<T> = (value: unknown) => value is T;
 interface t {
 	// lua types
 	/** checks to see if `value` is an any */
-	any: (value: unknown) => value is any;
+	any: check<any>;
 	/** checks to see if `value` is a boolean */
-	boolean: (value: unknown) => value is boolean;
+	boolean: check<boolean>;
 	/** checks to see if `value` is a thread */
-	coroutine: (value: unknown) => value is thread;
+	coroutine: check<thread>;
 	/** checks to see if `value` is a Function */
-	callback: (value: unknown) => value is Function;
+	callback: check<Function>;
 	/** checks to see if `value` is undefined */
-	none: (value: unknown) => value is undefined;
+	none: check<undefined>;
 	/** checks to see if `value` is a number, will _not_ match NaN */
-	number: (value: unknown) => value is number;
+	number: check<number>;
 	/** checks to see if `value` is NaN */
-	nan: (value: unknown) => value is number;
+	nan: check<number>;
 	/** checks to see if `value` is a string */
-	string: (value: unknown) => value is string;
+	string: check<string>;
 	/** checks to see if `value` is an object */
-	table: (value: unknown) => value is object;
+	table: check<object>;
 	/** checks to see if `value` is a userdata */
-	userdata: (value: unknown) => value is object;
+	userdata: check<object>;
 
 	// roblox types
 	/** checks to see if `value` is an Axes */
-	Axes: (value: unknown) => value is Axes;
+	Axes: check<Axes>;
 	/** checks to see if `value` is a BrickColor */
-	BrickColor: (value: unknown) => value is BrickColor;
+	BrickColor: check<BrickColor>;
 	/** checks to see if `value` is a CFrame */
-	CFrame: (value: unknown) => value is CFrame;
+	CFrame: check<CFrame>;
 	/** checks to see if `value` is a Color3 */
-	Color3: (value: unknown) => value is Color3;
+	Color3: check<Color3>;
 	/** checks to see if `value` is a ColorSequence */
-	ColorSequence: (value: unknown) => value is ColorSequence;
+	ColorSequence: check<ColorSequence>;
 	/** checks to see if `value` is a ColorSequenceKeypoint */
-	ColorSequenceKeypoint: (value: unknown) => value is ColorSequenceKeypoint;
+	ColorSequenceKeypoint: check<ColorSequenceKeypoint>;
 	/** checks to see if `value` is a DockWidgetPluginGuiInfo */
-	DockWidgetPluginGuiInfo: (value: unknown) => value is DockWidgetPluginGuiInfo;
+	DockWidgetPluginGuiInfo: check<DockWidgetPluginGuiInfo>;
 	/** checks to see if `value` is a Faces */
-	Faces: (value: unknown) => value is Faces;
+	Faces: check<Faces>;
 	/** checks to see if `value` is an Instance */
-	Instance: (value: unknown) => value is Instance;
+	Instance: check<Instance>;
 	/** checks to see if `value` is a NumberRange */
-	NumberRange: (value: unknown) => value is NumberRange;
+	NumberRange: check<NumberRange>;
 	/** checks to see if `value` is a NumberSequence */
-	NumberSequence: (value: unknown) => value is NumberSequence;
+	NumberSequence: check<NumberSequence>;
 	/** checks to see if `value` is a NumberSequenceKeypoint */
-	NumberSequenceKeypoint: (value: unknown) => value is NumberSequenceKeypoint;
+	NumberSequenceKeypoint: check<NumberSequenceKeypoint>;
 	/** checks to see if `value` is a PathWaypoint */
-	PathWaypoint: (value: unknown) => value is PathWaypoint;
+	PathWaypoint: check<PathWaypoint>;
 	/** checks to see if `value` is a PhysicalProperties */
-	PhysicalProperties: (value: unknown) => value is PhysicalProperties;
+	PhysicalProperties: check<PhysicalProperties>;
 	/** checks to see if `value` is a Random */
-	Random: (value: unknown) => value is Random;
+	Random: check<Random>;
 	/** checks to see if `value` is a Ray */
-	Ray: (value: unknown) => value is Ray;
+	Ray: check<Ray>;
 	/** checks to see if `value` is a Rect */
-	Rect: (value: unknown) => value is Rect;
+	Rect: check<Rect>;
 	/** checks to see if `value` is a Region3 */
-	Region3: (value: unknown) => value is Region3;
+	Region3: check<Region3>;
 	/** checks to see if `value` is a Region3int16 */
-	Region3int16: (value: unknown) => value is Region3int16;
+	Region3int16: check<Region3int16>;
 	/** checks to see if `value` is a TweenInfo */
-	TweenInfo: (value: unknown) => value is TweenInfo;
+	TweenInfo: check<TweenInfo>;
 	/** checks to see if `value` is a UDim */
-	UDim: (value: unknown) => value is UDim;
+	UDim: check<UDim>;
 	/** checks to see if `value` is a UDim2 */
-	UDim2: (value: unknown) => value is UDim2;
+	UDim2: check<UDim2>;
 	/** checks to see if `value` is a Vector2 */
-	Vector2: (value: unknown) => value is Vector2;
+	Vector2: check<Vector2>;
 	/** checks to see if `value` is a Vector3 */
-	Vector3: (value: unknown) => value is Vector3;
+	Vector3: check<Vector3>;
 	/** checks to see if `value` is a Vector3int16 */
-	Vector3int16: (value: unknown) => value is Vector3int16;
+	Vector3int16: check<Vector3int16>;
 
 	/**
-	 * checks to see if `value == literalValue`\
-	 * If your `literalValue` is not a primitive, use t.exactly instead.
+	 * checks to see if `value == literalValue`
 	 */
-	literal: <T extends string | number | boolean | undefined>(literalValue: T) => (value: unknown) => value is T;
-	/** checks to see if `value == literalValue` */
-	exactly: <T>(literalValue: T) => (value: unknown) => value is T;
+	literal<T extends string | number | boolean | undefined>(this: void, literalValue: T): check<T>;
+	literal<T extends Array<any>>(
+		this: void,
+		...args: T
+	): T extends [infer A]
+		? (value: unknown) => value is A
+		: T extends [infer A, infer B]
+		? check<A | B>
+		: T extends [infer A, infer B, infer C]
+		? check<A | B | C>
+		: T extends [infer A, infer B, infer C, infer D]
+		? check<A | B | C | D>
+		: T extends [infer A, infer B, infer C, infer D, infer E]
+		? check<A | B | C | D | E>
+		: T extends [infer A, infer B, infer C, infer D, infer E, infer F]
+		? check<A | B | C | D | E | F>
+		: never;
+	literal<T>(this: void, literalValue: T): (value: unknown) => value is T;
 
 	/** checks to see if `value` is an integer */
 	integer: (value: unknown) => value is number;
