@@ -501,4 +501,10 @@ return function()
 			assert(not (myInterface({ buttonInFrame = frame })))
 		end
 	end)
+
+	it("should support t.match", function()
+		local check = t.match("%d+")
+		assert(check("123"))
+		assert(not (check("abc")))
+	end)
 end

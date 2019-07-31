@@ -134,8 +134,7 @@ There's also type checks for arrays and interfaces but we'll cover those in thei
 
 t includes a few special functions for checking numbers, these can be useful to ensure the given value is within a certain range.
 
-**General:**
-
+**General:**\
 **`t.nan`**\
 determines if value is `NaN`\
 All of the following checks will not pass for `NaN` values.\
@@ -169,6 +168,13 @@ checks `t.number` and determines if value < max
 
 **`t.numberConstrainedExclusive(min, max)`**\
 checks `t.number` and determines if min < value < max
+
+## Special String Functions
+
+t includes a few special functions for checking strings
+
+**`t.match(pattern)`**\
+checks `t.string` and determines if value matches the pattern via `string.match(value, pattern)`
 
 ## Arrays
 In Lua, arrays are a special type of table where all the keys are sequential integers.\

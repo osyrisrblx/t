@@ -102,6 +102,8 @@ interface t {
 	numberConstrained: (min: number, max: number) => (value: unknown) => value is number;
 	/** checks to see if `value` is a number and `min < value < max` */
 	numberConstrainedExclusive: (min: number, max: number) => (value: unknown) => value is number;
+	/** checks `t.string` and determines if value matches the pattern via `string.match(value, pattern)` */
+	match: (pattern: string) => check<string>;
 	/** checks to see if `value` is either nil or passes `check` */
 	optional: <T>(check: (value: unknown) => value is T) => check<T | undefined>;
 	/** checks to see if `value` is a table and if its keys match against `check */
