@@ -159,17 +159,21 @@ interface t {
 	strictInterface: <T extends { [index: string]: (value: unknown) => value is any }>(
 		checkTable: T
 	) => check<{ [P in keyof T]: t.static<T[P]> }>;
-}
 
-interface t {
-	instanceOf<T extends string>(this: void, className: T): T extends keyof Instances ? check<Instances[T]> : never;
-	instanceOf<T extends string, U extends { [index: string]: (value: unknown) => value is any }>(
+	instanceOf<S extends keyof Instances>(this: void, className: S): check<Instances[S]>;
+	instanceOf<S extends keyof Instances, T extends { [index: string]: (value: unknown) => value is any }>(
 		this: void,
-		className: T,
-		checkTable: U
-	): T extends keyof Instances ? check<Instances[T] & { [P in keyof U]: t.static<U[P]> }> : never;
+		className: S,
+		checkTable: T
+	): check<Instances[S] & { [P in keyof T]: t.static<T[P]> }>;
 
-	instanceIsA: <T extends string>(className: T) => T extends keyof Instances ? check<Instances[T]> : never;
+	instanceIsA<S extends keyof Instances>(this: void, className: S): check<Instances[S]>;
+	instanceIsA<S extends keyof Instances, T extends { [index: string]: (value: unknown) => value is any }>(
+		this: void,
+		className: S,
+		checkTable: T
+	): check<Instances[S] & { [P in keyof T]: t.static<T[P]> }>;
+
 	children: <T extends { [index: string]: (value: unknown) => value is any }>(
 		checkTable: T
 	) => check<Instance & { [P in keyof T]: t.static<T[P]> }>;
