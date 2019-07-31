@@ -412,6 +412,36 @@ end
 t.exactly = t.literal
 
 --[[**
+	Returns a t.union of each key in the table as a t.literal
+
+	@param keyTable The table to get keys from
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+function t.keyOf(keyTable)
+	local keys = {}
+	for key in pairs(keyTable) do
+		keys[#keys + 1] = key
+	end
+	return t.literal(unpack(keys))
+end
+
+--[[**
+	Returns a t.union of each value in the table as a t.literal
+
+	@param valueTable The table to get values from
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+function t.valueOf(valueTable)
+	local values = {}
+	for _, value in pairs(valueTable) do
+		values[#values + 1] = value
+	end
+	return t.literal(unpack(values))
+end
+
+--[[**
 	ensures value is an integer
 
 	@param value The value to check against

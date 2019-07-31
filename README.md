@@ -100,6 +100,12 @@ Passes if value is non-nil.
 **`t.literal(...)`**\
 Passes if value matches any given value exactly.
 
+**`t.keyOf(keyTable)`**\
+Returns a t.union of each key in the table as a t.literal
+
+**`t.valueOf(valueTable)`**\
+Returns a t.union of each value in the table as a t.literal
+
 **`t.optional(check)`**\
 Passes if value is either nil or passes `check`
 
