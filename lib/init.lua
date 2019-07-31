@@ -975,14 +975,7 @@ do
 			end
 
 			for name, check in pairs(checkTable) do
-				local bin = childrenByName[name]
-				local success, errMsg
-				for i = 1, #bin do
-					success, errMsg = check(bin[i])
-					if success then
-						break
-					end
-				end
+				local success, errMsg = check(childrenByName[name])
 				if not success then
 					return false, string.format("[%s.%s] %s", value:GetFullName(), name, errMsg or "")
 				end
