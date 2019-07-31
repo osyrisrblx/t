@@ -954,6 +954,18 @@ end
 
 do
 	local checkChildren = t.map(t.string, t.callback)
+
+	--[[**
+		Takes a table where keys are child names and values are functions to check the children against.
+		Pass an instance tree into the function.
+		If at least one child passes each check, the overall check passes.
+
+		Warning! If you pass in a tree with more than one child of the same name, this function will always return false
+
+		@param checkTable The table to check against
+
+		@returns A function that checks an instance tree
+	**--]]
 	function t.children(checkTable)
 		assert(checkChildren(checkTable))
 
