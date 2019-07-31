@@ -893,8 +893,14 @@ t.instance = t.instanceOf
 
 	@returns A function that will return true iff the condition is passed
 **--]]
-function t.instanceIsA(className)
+function t.instanceIsA(className, childTable)
 	assert(t.string(className))
+
+	local childrenCheck
+	if childTable ~= nil then
+		childrenCheck = t.children(childTable)
+	end
+
 	return function(value)
 		local instanceSuccess, instanceErrMsg = t.Instance(value)
 		if not instanceSuccess then
@@ -903,6 +909,13 @@ function t.instanceIsA(className)
 
 		if not value:IsA(className) then
 			return false, string.format("%s expected, got %s", className, value.ClassName)
+		end
+
+		if childrenCheck then
+			local childrenSuccess, childrenErrMsg = childrenCheck(value)
+			if not childrenSuccess then
+				return false, childrenErrMsg
+			end
 		end
 
 		return true
