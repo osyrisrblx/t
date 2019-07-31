@@ -205,6 +205,22 @@ function t.numberConstrainedExclusive(min, max)
 	end
 end
 
+function t.match(pattern)
+	assert(t.string(pattern))
+	return function(value)
+		local stringSuccess = t.string(value)
+		if not stringSuccess then
+			return false
+		end
+
+		if string.match(value, pattern) == nil then
+			return false
+		end
+
+		return true
+	end
+end
+
 function t.optional(check)
 	assert(t.callback(check))
 	return function(value)
