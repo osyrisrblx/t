@@ -331,8 +331,16 @@ print(instanceOfMyClass(myObject)) --> true
 
 ## Known Issues
 
-You can put a `t.tuple(...)` inside an array or interface, but that doesn't really make any sense..
+You can put a `t.tuple(...)` inside an array or interface, but that doesn't really make any sense..\
 In the future, this may error.
 
 ## Notes
 This library was heavily inspired by [io-ts](https://github.com/gcanti/io-ts), a fantastic runtime type validation library for TypeScript.
+
+## Why did you name it t?
+The whole idea is that most people import modules via:\
+`local X = require(path.to.X)`\
+So whatever I name the library will be what people name the variable.\
+If I made the name of the library longer, the type definitions become more noisy / less readable.\
+Things like this are pretty common:\
+`local fooCheck = t.tuple(t.string, t.number, t.optional(t.string))`
