@@ -572,6 +572,29 @@ function t.numberConstrainedExclusive(min, max)
 end
 
 --[[**
+	ensures value matches string pattern
+
+	@param string pattern to check against
+
+	@returns A function that will return true iff the condition is passed
+**--]]
+function t.match(pattern)
+	assert(t.string(pattern))
+	return function(value)
+		local stringSuccess, stringErrMsg = t.string(value)
+		if not stringSuccess then
+			return false, stringErrMsg
+		end
+
+		if string.match(value, pattern) == nil then
+			return false, string.format("\"%s\" failed to match pattern \"%s\"", value, pattern)
+		end
+
+		return true
+	end
+end
+
+--[[**
 	ensures value is either nil or passes check
 
 	@param check The check to use
