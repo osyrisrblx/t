@@ -856,8 +856,14 @@ end
 
 	@returns A function that will return true iff the condition is passed
 **--]]
-function t.instanceOf(className)
+function t.instanceOf(className, childTable)
 	assert(t.string(className))
+
+	local childrenCheck
+	if childTable ~= nil then
+		childrenCheck = t.children(childTable)
+	end
+
 	return function(value)
 		local instanceSuccess, instanceErrMsg = t.Instance(value)
 		if not instanceSuccess then
@@ -866,6 +872,13 @@ function t.instanceOf(className)
 
 		if value.ClassName ~= className then
 			return false, string.format("%s expected, got %s", className, value.ClassName)
+		end
+
+		if childrenCheck then
+			local childrenSuccess, childrenErrMsg = childrenCheck(value)
+			if not childrenSuccess then
+				return false, childrenErrMsg
+			end
 		end
 
 		return true
