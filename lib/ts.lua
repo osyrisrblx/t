@@ -85,12 +85,23 @@ t.Vector3int16 = primitive("Vector3int16")
 t.Enum = primitive("Enum")
 t.EnumItem = primitive("EnumItem")
 
-function t.literal(literal)
-	return function(value)
-		if value ~= literal then
-			return false
+function t.literal(...)
+	local size = select("#", ...)
+	if size == 1 then
+		local literal = ...
+		return function(value)
+			if value ~= literal then
+				return false
+			end
+			return true
 		end
-		return true
+	else
+		local literals = {}
+		for i = 1, size do
+			local value = select(i, ...)
+			literals[i] = t.literal(value)
+		end
+		return t.union(unpack(literals))
 	end
 end
 

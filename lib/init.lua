@@ -385,12 +385,23 @@ t.EnumItem = primitive("EnumItem")
 
 	@returns A function that will return true iff the condition is passed
 **--]]
-function t.literal(literal)
-	return function(value)
-		if value ~= literal then
-			return false, string.format("expected %s, got %s", tostring(literal), tostring(value))
+function t.literal(...)
+	local size = select("#", ...)
+	if size == 1 then
+		local literal = ...
+		return function(value)
+			if value ~= literal then
+				return false, string.format("expected %s, got %s", tostring(literal), tostring(value))
+			end
+			return true
 		end
-		return true
+	else
+		local literals = {}
+		for i = 1, size do
+			local value = select(i, ...)
+			literals[i] = t.literal(value)
+		end
+		return t.union(unpack(literals))
 	end
 end
 
