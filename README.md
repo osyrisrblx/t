@@ -231,7 +231,7 @@ print(IPlayer(myPlayer2)) --> false, "[interface] unexpected field 'A'"
 ## Roblox Instances
 t includes two functions to check the types of Roblox Instances.
 
-**`t.instance(className)`**\
+**`t.instanceOf(className)`**\
 ensures the value is an Instance and it's ClassName exactly matches `className`
 
 **`t.instanceIsA(className)`**\

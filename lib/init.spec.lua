@@ -253,7 +253,7 @@ return function()
 	end)
 
 	it("should support Roblox Instance types", function()
-		local stringValueCheck = t.instance("StringValue")
+		local stringValueCheck = t.instanceOf("StringValue")
 		local stringValue = Instance.new("StringValue")
 		local boolValue = Instance.new("BoolValue")
 

@@ -856,7 +856,7 @@ end
 
 	@returns A function that will return true iff the condition is passed
 **--]]
-function t.instance(className)
+function t.instanceOf(className)
 	assert(t.string(className))
 	return function(value)
 		local instanceSuccess, instanceErrMsg = t.Instance(value)
@@ -871,6 +871,7 @@ function t.instance(className)
 		return true
 	end
 end
+t.instance = t.instanceOf
 
 --[[**
 	ensure value is an Instance and it's ClassName matches the given ClassName by an IsA comparison
