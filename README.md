@@ -97,8 +97,8 @@ The real power of t is in the meta type functions.
 **`t.any`**\
 Passes if value is non-nil.
 
-**`t.literal(literalValue)`**\
-Passes if value matches literalValue exactly.
+**`t.literal(...)`**\
+Passes if value matches any given value exactly.
 
 **`t.optional(check)`**\
 Passes if value is either nil or passes `check`
