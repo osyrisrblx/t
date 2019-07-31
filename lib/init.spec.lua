@@ -386,23 +386,28 @@ return function()
 			}))
 		})
 
-		expect(myInterface()).to.equal(false)
-		expect(myInterface(Instance.new("Frame"))).to.equal(false)
+		expect(t.children({})(5)).to.equal(false)
+		expect(myInterface({ buttonInFrame = Instance.new("Frame") })).to.equal(false)
 
 		do
 			local frame = Instance.new("Frame")
 			local button = Instance.new("ImageButton", frame)
 			button.Name = "MyButton"
-			local object = { buttonInFrame = frame }
-			expect(myInterface(object)).to.equal(true)
+			expect(myInterface({ buttonInFrame = frame })).to.equal(true)
 		end
 
 		do
 			local frame = Instance.new("Frame")
 			local button = Instance.new("ImageButton", frame)
 			button.Name = "NotMyButton"
-			local object = { buttonInFrame = frame }
-			expect(myInterface(object)).to.equal(false)
+			expect(myInterface({ buttonInFrame = frame })).to.equal(false)
+		end
+
+		do
+			local frame = Instance.new("Frame")
+			local button = Instance.new("TextButton", frame)
+			button.Name = "MyButton"
+			expect(myInterface({ buttonInFrame = frame })).to.equal(false)
 		end
 
 		do
@@ -411,8 +416,7 @@ return function()
 			button1.Name = "MyButton"
 			local button2 = Instance.new("ImageButton", frame)
 			button2.Name = "MyButton"
-			local object = { buttonInFrame = frame }
-			expect(myInterface(object)).to.equal(false)
+			expect(myInterface({ buttonInFrame = frame })).to.equal(false)
 		end
 	end)
 end
