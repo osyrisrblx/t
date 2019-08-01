@@ -635,6 +635,9 @@ function t.match(pattern)
 	end
 end
 
+local optionalMap = setmetatable({}, { __mode = "k" })
+local interfaceMap = setmetatable({}, { __mode = "k" })
+
 --[[**
 	ensures value is either nil or passes check
 
@@ -642,9 +645,9 @@ end
 
 	@returns A function that will return true iff the condition is passed
 **--]]
-function t.optional(check)
+function t.optional(check, default)
 	assert(t.callback(check))
-	return function(value)
+	local result =  function(value)
 		if value == nil then
 			return true
 		end
@@ -655,6 +658,9 @@ function t.optional(check)
 			return false, string.format("(optional) %s", errMsg or "")
 		end
 	end
+	optionalMap[result] = default
+	interfaceMap[result] = check
+	return result
 end
 
 --[[**
@@ -864,7 +870,7 @@ do
 	**--]]
 	function t.interface(checkTable)
 		assert(checkInterface(checkTable))
-		return function(value)
+		local result = function(value)
 			local tableSuccess, tableErrMsg = t.table(value)
 			if tableSuccess == false then
 				return false, tableErrMsg or ""
@@ -878,6 +884,8 @@ do
 			end
 			return true
 		end
+		interfaceMap[result] = checkTable
+		return result
 	end
 
 	--[[**
@@ -1086,6 +1094,32 @@ do
 			return true
 		end
 	end
+end
+
+local function getInterface(check)
+	local result = interfaceMap[check]
+	while result and not t.table(result) do
+		result = interfaceMap[result]
+	end
+	return result
+end
+
+function t.fromType(check, value)
+	assert(t.callback(check))
+	assert(check(value))
+
+	if value == nil then
+		return t.fromType(interfaceMap[check], optionalMap[check])
+	end
+
+	local int = getInterface(check)
+	if int then
+		for i in pairs(int) do
+			value[i] = t.fromType(int[i], value[i])
+		end
+	end
+
+	return value
 end
 
 return t

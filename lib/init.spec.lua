@@ -543,4 +543,34 @@ return function()
 		assert(check(myNewEnum.OptionA))
 		assert(not (check(1010)))
 	end)
+
+	it("should support t.fromType", function()
+		local IObject = t.optional(t.interface({
+			foo = t.optional(t.string, "a"),
+			bar = t.optional(t.interface({
+				foo = t.optional(t.string, "b"),
+				bar = t.optional(t.interface({
+					foo = t.optional(t.string, "c"),
+					bar = t.optional(t.interface({
+						foo = t.optional(t.string, "d"),
+						bar = t.optional(t.boolean, false)
+					}), {})
+				}), {})
+			}), {})
+		}), {})
+
+		local obj1 = t.fromType(IObject, {})
+		expect(obj1.foo).to.equal("a")
+		expect(obj1.bar.foo).to.equal("b")
+		expect(obj1.bar.bar.foo).to.equal("c")
+		expect(obj1.bar.bar.bar.foo).to.equal("d")
+		expect(obj1.bar.bar.bar.bar).to.equal(false)
+
+		local obj2 = t.fromType(IObject, {})
+		expect(obj2.foo).to.equal("a")
+		expect(obj2.bar.foo).to.equal("b")
+		expect(obj2.bar.bar.foo).to.equal("c")
+		expect(obj2.bar.bar.bar.foo).to.equal("d")
+		expect(obj2.bar.bar.bar.bar).to.equal(false)
+	end)
 end
