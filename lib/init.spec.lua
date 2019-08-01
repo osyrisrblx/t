@@ -566,7 +566,7 @@ return function()
 		expect(obj1.bar.bar.bar.foo).to.equal("d")
 		expect(obj1.bar.bar.bar.bar).to.equal(false)
 
-		local obj2 = t.fromType(IObject, {})
+		local obj2 = t.fromType(IObject)
 		expect(obj2.foo).to.equal("a")
 		expect(obj2.bar.foo).to.equal("b")
 		expect(obj2.bar.bar.foo).to.equal("c")
