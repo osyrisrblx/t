@@ -8,7 +8,7 @@ interface t {
 	/** checks to see if `value` is a boolean */
 	boolean: check<boolean>;
 	/** checks to see if `value` is a thread */
-	coroutine: check<thread>;
+	thread: check<thread>;
 	/** checks to see if `value` is a Function */
 	callback: check<Function>;
 	/** checks to see if `value` is undefined */

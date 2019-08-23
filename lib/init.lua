@@ -43,13 +43,13 @@ end
 t.boolean = primitive("boolean")
 
 --[[**
-	ensures Lua primitive coroutine type
+	ensures Lua primitive thread type
 
 	@param value The value to check against
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.coroutine = primitive("thread")
+t.thread = primitive("thread")
 
 --[[**
 	ensures Lua primitive callback type

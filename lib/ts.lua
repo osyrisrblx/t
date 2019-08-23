@@ -27,7 +27,7 @@ end
 --Lua primitives
 
 t.boolean = primitive("boolean")
-t.coroutine = primitive("thread")
+t.thread = primitive("thread")
 t.callback = primitive("function")
 t.none = primitive("nil")
 t.string = primitive("string")
