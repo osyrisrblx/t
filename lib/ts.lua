@@ -84,6 +84,8 @@ t.Vector3 = primitive("Vector3")
 t.Vector3int16 = primitive("Vector3int16")
 t.Enum = primitive("Enum")
 t.EnumItem = primitive("EnumItem")
+t.RBXScriptSignal = primitive("RBXScriptSignal")
+t.RBXScriptConnection = primitive("RBXScriptConnection")
 
 function t.literal(...)
 	local size = select("#", ...)
