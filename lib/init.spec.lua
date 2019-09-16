@@ -303,6 +303,20 @@ return function()
 		assert(not (sortOrderEnumCheck()))
 	end)
 
+	it("should support Roblox RBXScriptSignal", function()
+		assert(t.RBXScriptSignal(game.ChildAdded))
+		assert(not (t.RBXScriptSignal(nil)))
+		assert(not (t.RBXScriptSignal(Vector3.new())))
+	end)
+
+	-- TODO: Add this back when Lemur supports it
+	-- it("should support Roblox RBXScriptConnection", function()
+	-- 	local conn = game.ChildAdded:Connect(function() end)
+	-- 	assert(t.RBXScriptConnection(conn))
+	-- 	assert(not (t.RBXScriptConnection(nil)))
+	-- 	assert(not (t.RBXScriptConnection(Vector3.new())))
+	-- end)
+
 	it("should support wrapping function types", function()
 		local checkFoo = t.tuple(t.string, t.number, t.optional(t.string))
 		local foo = t.wrap(function(a, b, c)
