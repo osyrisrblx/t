@@ -75,6 +75,10 @@ interface t {
 	Vector3: check<Vector3>;
 	/** checks to see if `value` is a Vector3int16 */
 	Vector3int16: check<Vector3int16>;
+	/** checks to see if `value` is a RBXScriptSignal */
+	RBXScriptSignal: check<RBXScriptSignal>;
+	/** checks to see if `value` is a RBXScriptConnection */
+	RBXScriptConnection: check<RBXScriptConnection>;
 
 	/**
 	 * checks to see if `value == literalValue`
