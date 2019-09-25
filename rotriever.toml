@@ -1,4 +1,5 @@
-name = "t"
+[package]
+name = "osyris/t"
 author = "osyrisrblx"
 content_root = "lib"
 version = "1.0.0"
