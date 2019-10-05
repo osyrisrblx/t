@@ -24,14 +24,16 @@ jobs:
         luarocks install luafilesystem
         luarocks install busted
         luarocks install luacov
-        luarocks install luacov-coveralls
+        luarocks install luacov-reporter-lcov
         luarocks install luacheck
 
     - name: Verify LuaCheck
       run: luacheck lib
 
     - name: Run Tests
-      run: lua -lluacov spec.lua
+      run: |
+        lua -lluacov spec.lua
+        luacov -r lcov
 
     - name: tree
       run: |
