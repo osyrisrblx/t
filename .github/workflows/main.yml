@@ -1,0 +1,42 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Install Lua
+      uses: leafo/gh-actions-lua@master
+      with:
+        luaVersion: 5.1
+
+    - name: Install Luarocks
+      uses: leafo/gh-actions-luarocks@master
+
+    - name: Install Luarocks Packages
+      run: |
+        luarocks install luafilesystem
+        luarocks install busted
+        luarocks install luacov
+        luarocks install luacov-coveralls
+        luarocks install luacheck
+
+    - name: Verify LuaCheck
+      run: luacheck lib
+
+    - name: Run Tests
+      run: lua -lluacov spec.lua
+
+    - name: tree
+      run: |
+        sudo apt-get install tree
+        tree
+
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
