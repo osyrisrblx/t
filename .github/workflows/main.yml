@@ -26,7 +26,7 @@ jobs:
         luarocks install luacov
         luarocks install luacov-reporter-lcov
         luarocks install luacheck
-        luarocks install openssl
+        luarocks install md5
 
     - name: Verify LuaCheck
       run: luacheck lib
