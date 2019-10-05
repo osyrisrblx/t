@@ -8,6 +8,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
+      with:
+        submodules: recursive
 
     - name: Install Lua
       uses: leafo/gh-actions-lua@master
