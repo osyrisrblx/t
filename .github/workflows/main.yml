@@ -1,43 +1,43 @@
 name: CI
 
-on: [push, pull_request]
+on: push
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
-      with:
-        submodules: recursive
+      - uses: actions/checkout@master
+        with:
+          submodules: recursive
 
-    - name: Install Lua
-      uses: leafo/gh-actions-lua@master
-      with:
-        luaVersion: 5.1
+      - name: Install Lua
+        uses: leafo/gh-actions-lua@master
+        with:
+          luaVersion: 5.1
 
-    - name: Install Luarocks
-      uses: leafo/gh-actions-luarocks@master
+      - name: Install Luarocks
+        uses: leafo/gh-actions-luarocks@master
 
-    - name: Install Luarocks Packages
-      run: |
-        luarocks install busted
-        luarocks install luacheck
-        luarocks install luacov
-        luarocks install luacov-reporter-lcov
-        luarocks install luafilesystem
-        luarocks install md5
+      - name: Install Luarocks Packages
+        run: |
+          luarocks install busted
+          luarocks install luacheck
+          luarocks install luacov
+          luarocks install luacov-reporter-lcov
+          luarocks install luafilesystem
+          luarocks install md5
 
-    - name: Verify LuaCheck
-      run: luacheck lib
+      - name: Verify LuaCheck
+        run: luacheck lib
 
-    - name: Run Tests
-      run: |
-        lua -lluacov spec.lua
-        luacov -r lcov
+      - name: Run Tests
+        run: |
+          lua -lluacov spec.lua
+          luacov -r lcov
 
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.github_token }}
-        path-to-lcov: ./luacov.report.out
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          path-to-lcov: ./luacov.report.out
