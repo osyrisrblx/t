@@ -411,6 +411,7 @@ function t.literal(...)
 			if value ~= literal then
 				return false, string.format("expected %s, got %s", tostring(literal), tostring(value))
 			end
+
 			return true
 		end
 	else
@@ -419,6 +420,7 @@ function t.literal(...)
 			local value = select(i, ...)
 			literals[i] = t.literal(value)
 		end
+
 		return t.union(unpack(literals))
 	end
 end
@@ -438,10 +440,13 @@ t.exactly = t.literal
 **--]]
 function t.keyOf(keyTable)
 	local keys = {}
+	local length = 0
 	for key in pairs(keyTable) do
-		keys[#keys + 1] = key
+		length = length + 1
+		keys[length] = key
 	end
-	return t.literal(unpack(keys))
+
+	return t.literal(unpack(keys, 1, length))
 end
 
 --[[**
@@ -453,10 +458,13 @@ end
 **--]]
 function t.valueOf(valueTable)
 	local values = {}
+	local length = 0
 	for _, value in pairs(valueTable) do
-		values[#values + 1] = value
+		length = length + 1
+		values[length] = value
 	end
-	return t.literal(unpack(values))
+
+	return t.literal(unpack(values, 1, length))
 end
 
 --[[**
@@ -471,7 +479,8 @@ function t.integer(value)
 	if not success then
 		return false, errMsg or ""
 	end
-	if value%1 == 0 then
+
+	if value % 1 == 0 then
 		return true
 	else
 		return false, string.format("integer expected, got %s", value)
@@ -491,6 +500,7 @@ function t.numberMin(min)
 		if not success then
 			return false, errMsg or ""
 		end
+
 		if value >= min then
 			return true
 		else
@@ -512,6 +522,7 @@ function t.numberMax(max)
 		if not success then
 			return false, errMsg
 		end
+
 		if value <= max then
 			return true
 		else
@@ -533,6 +544,7 @@ function t.numberMinExclusive(min)
 		if not success then
 			return false, errMsg or ""
 		end
+
 		if min < value then
 			return true
 		else
@@ -554,6 +566,7 @@ function t.numberMaxExclusive(max)
 		if not success then
 			return false, errMsg or ""
 		end
+
 		if value < max then
 			return true
 		else
@@ -588,6 +601,7 @@ function t.numberConstrained(min, max)
 	assert(t.number(min) and t.number(max))
 	local minCheck = t.numberMin(min)
 	local maxCheck = t.numberMax(max)
+
 	return function(value)
 		local minSuccess, minErrMsg = minCheck(value)
 		if not minSuccess then
@@ -615,6 +629,7 @@ function t.numberConstrainedExclusive(min, max)
 	assert(t.number(min) and t.number(max))
 	local minCheck = t.numberMinExclusive(min)
 	local maxCheck = t.numberMaxExclusive(max)
+
 	return function(value)
 		local minSuccess, minErrMsg = minCheck(value)
 		if not minSuccess then
@@ -646,7 +661,7 @@ function t.match(pattern)
 		end
 
 		if string.match(value, pattern) == nil then
-			return false, string.format("\"%s\" failed to match pattern \"%s\"", value, pattern)
+			return false, string.format("%q failed to match pattern %q", value, pattern)
 		end
 
 		return true
@@ -666,6 +681,7 @@ function t.optional(check)
 		if value == nil then
 			return true
 		end
+
 		local success, errMsg = check(value)
 		if success then
 			return true
@@ -686,12 +702,13 @@ function t.tuple(...)
 	local checks = {...}
 	return function(...)
 		local args = {...}
-		for i = 1, #checks do
-			local success, errMsg = checks[i](args[i])
+		for i, check in ipairs(checks) do
+			local success, errMsg = check(args[i])
 			if success == false then
 				return false, string.format("Bad tuple index #%s:\n\t%s", i, errMsg or "")
 			end
 		end
+
 		return true
 	end
 end
@@ -760,6 +777,7 @@ function t.map(keyCheck, valueCheck)
 	assert(t.callback(keyCheck), t.callback(valueCheck))
 	local keyChecker = t.keys(keyCheck)
 	local valueChecker = t.values(valueCheck)
+
 	return function(value)
 		local keySuccess, keyErr = keyChecker(value)
 		if not keySuccess then
@@ -787,6 +805,7 @@ do
 	function t.array(check)
 		assert(t.callback(check))
 		local valuesCheck = t.values(check)
+
 		return function(value)
 			local keySuccess, keyErrMsg = arrayKeysCheck(value)
 			if keySuccess == false then
@@ -797,7 +816,7 @@ do
 			-- Count upwards using ipairs to avoid false positives from the behavior of #
 			local arraySize = 0
 
-			for _, _ in ipairs(value) do
+			for _ in ipairs(value) do
 				arraySize = arraySize + 1
 			end
 
@@ -829,12 +848,14 @@ do
 	function t.union(...)
 		local checks = {...}
 		assert(callbackArray(checks))
+
 		return function(value)
-			for _, check in pairs(checks) do
+			for _, check in ipairs(checks) do
 				if check(value) then
 					return true
 				end
 			end
+
 			return false, "bad type for union"
 		end
 	end
@@ -854,13 +875,15 @@ do
 	function t.intersection(...)
 		local checks = {...}
 		assert(callbackArray(checks))
+
 		return function(value)
-			for _, check in pairs(checks) do
+			for _, check in ipairs(checks) do
 				local success, errMsg = check(value)
 				if not success then
 					return false, errMsg or ""
 				end
 			end
+
 			return true
 		end
 	end
@@ -894,6 +917,7 @@ do
 					return false, string.format("[interface] bad value for %s:\n\t%s", tostring(key), errMsg or "")
 				end
 			end
+
 			return true
 		end
 	end
@@ -922,7 +946,7 @@ do
 
 			for key in pairs(value) do
 				if not checkTable[key] then
-					return false, string.format("[interface] unexpected field '%s'", tostring(key))
+					return false, string.format("[interface] unexpected field %q", tostring(key))
 				end
 			end
 
@@ -966,6 +990,7 @@ function t.instanceOf(className, childTable)
 		return true
 	end
 end
+
 t.instance = t.instanceOf
 
 --[[**
@@ -1084,12 +1109,13 @@ do
 			end
 
 			local childrenByName = {}
-			for _, child in pairs(value:GetChildren()) do
+			for _, child in ipairs(value:GetChildren()) do
 				local name = child.Name
 				if checkTable[name] then
 					if childrenByName[name] then
-						return false, string.format("Cannot process multiple children with the same name \"%s\"", name)
+						return false, string.format("Cannot process multiple children with the same name %q", name)
 					end
+
 					childrenByName[name] = child
 				end
 			end
