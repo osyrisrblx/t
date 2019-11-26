@@ -1,3 +1,6 @@
+-- polyfills
+table.unpack = unpack
+
 -- borrowed from Roact
 
 local LOAD_MODULES = {
