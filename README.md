@@ -1,7 +1,7 @@
 <h1 align="center">t</h1>
 <div align="center">
-	<a href="https://travis-ci.org/osyrisrblx/t">
-		<img src="https://api.travis-ci.org/osyrisrblx/t.svg?branch=master" alt="Travis-CI Build Status" />
+	<a href="https://github.com/osyrisrblx/t/actions">
+		<img src="https://github.com/osyrisrblx/t/workflows/CI/badge.svg" alt="CI Status" />
 	</a>
 	<a href='https://coveralls.io/github/osyrisrblx/t?branch=master'>
 		<img src='https://coveralls.io/repos/github/osyrisrblx/t/badge.svg?branch=master' alt='Coverage Status' />
