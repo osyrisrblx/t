@@ -19,7 +19,7 @@
 		"@rbxts/types": "^1.0.232"
 	},
 	"dependencies": {
-		"@rbxts/types": "^1.0.232"
+		"@rbxts/types": "^1.0.317"
 	},
 	"files": [
 		"lib/ts.lua",
