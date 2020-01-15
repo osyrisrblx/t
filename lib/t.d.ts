@@ -1,7 +1,7 @@
 interface t {
 	// lua types
-	/** checks to see if `value` is an any */
-	any: t.check<any>;
+	/** checks to see if `value` is not undefined */
+	any: t.check<defined>;
 	/** checks to see if `value` is a boolean */
 	boolean: t.check<boolean>;
 	/** checks to see if `value` is a thread */
