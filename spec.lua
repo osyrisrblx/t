@@ -5,7 +5,7 @@ table.unpack = unpack
 
 local LOAD_MODULES = {
 	Library = "lib",
-	TestEZ = "modules/testez/lib",
+	TestEZ = "modules/testez/src",
 }
 
 package.path = package.path .. ";?/init.lua"
