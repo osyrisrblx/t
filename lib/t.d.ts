@@ -136,6 +136,8 @@ interface t {
 		keyCheck: (value: unknown) => value is K,
 		valueCheck: (value: unknown) => value is V
 	) => t.check<Map<K, V>>;
+	/** checks to see if `value` is a table and all of its keys match against `valueCheck` and all of its values are `true` */
+	set: <T>(valueCheck: (value: unknown) => value is T) => t.check<Set<T>>;
 	/** checks to see if `value` is an array and all of its keys are sequential integers and all of its values match `check` */
 	array: <T>(check: (value: unknown) => value is T) => t.check<Array<T>>;
 
