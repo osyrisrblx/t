@@ -793,6 +793,17 @@ function t.map(keyCheck, valueCheck)
 	end
 end
 
+--[[**
+	ensures value is a table and all keys pass valueCheck and all values are true
+
+	@param valueCheck The function to use to check the values
+
+	@returns A function that will return true iff the condition is passed
+**--]]
+function t.set(valueCheck)
+	return t.map(valueCheck, t.literal(true))
+end
+
 do
 	local arrayKeysCheck = t.keys(t.integer)
 	--[[**
