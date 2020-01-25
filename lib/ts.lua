@@ -336,6 +336,10 @@ function t.map(keyCheck, valueCheck)
 	end
 end
 
+function t.set(valueCheck)
+	return t.map(valueCheck, t.literal(true))
+end
+
 do
 	local arrayKeysCheck = t.keys(t.integer)
 
