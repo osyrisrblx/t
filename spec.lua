@@ -1,5 +1,5 @@
 -- polyfills
-table.unpack = unpack
+table.unpack = unpack -- luacheck: ignore
 
 -- borrowed from Roact
 
