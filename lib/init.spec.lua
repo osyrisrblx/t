@@ -159,6 +159,16 @@ return function()
 		assert(not (stringNumberMap()))
 	end)
 
+	it("should support set types", function()
+		local stringSet = t.set(t.string)
+		assert(stringSet({}))
+		assert(stringSet({a = true}))
+		assert(not (stringSet({[1] = "a"})))
+		assert(not (stringSet({a = "a"})))
+		assert(not (stringSet({a = false})))
+		assert(not (stringSet()))
+	end)
+
 	it("should support interface types", function()
 		local IVector3 = t.interface({
 			x = t.number,
