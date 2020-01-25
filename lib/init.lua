@@ -43,13 +43,13 @@ end
 t.boolean = primitive("boolean")
 
 --[[**
-	ensures Lua primitive coroutine type
+	ensures Lua primitive thread type
 
 	@param value The value to check against
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.coroutine = primitive("thread")
+t.thread = primitive("thread")
 
 --[[**
 	ensures Lua primitive callback type
@@ -379,18 +379,49 @@ t.Enum = primitive("Enum")
 t.EnumItem = primitive("EnumItem")
 
 --[[**
+	ensures Roblox RBXScriptSignal type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.RBXScriptSignal = primitive("RBXScriptSignal")
+
+--[[**
+	ensures Roblox RBXScriptConnection type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.RBXScriptConnection = primitive("RBXScriptConnection")
+
+--[[**
 	ensures value is a given literal value
 
 	@param literal The literal to use
 
 	@returns A function that will return true iff the condition is passed
 **--]]
-function t.literal(literal)
-	return function(value)
-		if value ~= literal then
-			return false, string.format("expected %s, got %s", tostring(literal), tostring(value))
+function t.literal(...)
+	local size = select("#", ...)
+	if size == 1 then
+		local literal = ...
+		return function(value)
+			if value ~= literal then
+				return false, string.format("expected %s, got %s", tostring(literal), tostring(value))
+			end
+
+			return true
 		end
-		return true
+	else
+		local literals = {}
+		for i = 1, size do
+			local value = select(i, ...)
+			literals[i] = t.literal(value)
+		end
+
+		return t.union(table.unpack(literals, 1, size))
 	end
 end
 
@@ -399,6 +430,42 @@ end
 	Please use t.literal
 **--]]
 t.exactly = t.literal
+
+--[[**
+	Returns a t.union of each key in the table as a t.literal
+
+	@param keyTable The table to get keys from
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+function t.keyOf(keyTable)
+	local keys = {}
+	local length = 0
+	for key in pairs(keyTable) do
+		length = length + 1
+		keys[length] = key
+	end
+
+	return t.literal(table.unpack(keys, 1, length))
+end
+
+--[[**
+	Returns a t.union of each value in the table as a t.literal
+
+	@param valueTable The table to get values from
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+function t.valueOf(valueTable)
+	local values = {}
+	local length = 0
+	for _, value in pairs(valueTable) do
+		length = length + 1
+		values[length] = value
+	end
+
+	return t.literal(table.unpack(values, 1, length))
+end
 
 --[[**
 	ensures value is an integer
@@ -412,10 +479,11 @@ function t.integer(value)
 	if not success then
 		return false, errMsg or ""
 	end
-	if value%1 == 0 then
+
+	if value % 1 == 0 then
 		return true
 	else
-		return false, string.format("integer expected, got %d", value)
+		return false, string.format("integer expected, got %s", value)
 	end
 end
 
@@ -432,10 +500,11 @@ function t.numberMin(min)
 		if not success then
 			return false, errMsg or ""
 		end
+
 		if value >= min then
 			return true
 		else
-			return false, string.format("number >= %d expected, got %d", min, value)
+			return false, string.format("number >= %s expected, got %s", min, value)
 		end
 	end
 end
@@ -453,10 +522,11 @@ function t.numberMax(max)
 		if not success then
 			return false, errMsg
 		end
+
 		if value <= max then
 			return true
 		else
-			return false, string.format("number <= %d expected, got %d", max, value)
+			return false, string.format("number <= %s expected, got %s", max, value)
 		end
 	end
 end
@@ -474,10 +544,11 @@ function t.numberMinExclusive(min)
 		if not success then
 			return false, errMsg or ""
 		end
+
 		if min < value then
 			return true
 		else
-			return false, string.format("number > %d expected, got %d", min, value)
+			return false, string.format("number > %s expected, got %s", min, value)
 		end
 	end
 end
@@ -495,10 +566,11 @@ function t.numberMaxExclusive(max)
 		if not success then
 			return false, errMsg or ""
 		end
+
 		if value < max then
 			return true
 		else
-			return false, string.format("number < %d expected, got %d", max, value)
+			return false, string.format("number < %s expected, got %s", max, value)
 		end
 	end
 end
@@ -529,6 +601,7 @@ function t.numberConstrained(min, max)
 	assert(t.number(min) and t.number(max))
 	local minCheck = t.numberMin(min)
 	local maxCheck = t.numberMax(max)
+
 	return function(value)
 		local minSuccess, minErrMsg = minCheck(value)
 		if not minSuccess then
@@ -556,6 +629,7 @@ function t.numberConstrainedExclusive(min, max)
 	assert(t.number(min) and t.number(max))
 	local minCheck = t.numberMinExclusive(min)
 	local maxCheck = t.numberMaxExclusive(max)
+
 	return function(value)
 		local minSuccess, minErrMsg = minCheck(value)
 		if not minSuccess then
@@ -565,6 +639,29 @@ function t.numberConstrainedExclusive(min, max)
 		local maxSuccess, maxErrMsg = maxCheck(value)
 		if not maxSuccess then
 			return false, maxErrMsg or ""
+		end
+
+		return true
+	end
+end
+
+--[[**
+	ensures value matches string pattern
+
+	@param string pattern to check against
+
+	@returns A function that will return true iff the condition is passed
+**--]]
+function t.match(pattern)
+	assert(t.string(pattern))
+	return function(value)
+		local stringSuccess, stringErrMsg = t.string(value)
+		if not stringSuccess then
+			return false, stringErrMsg
+		end
+
+		if string.match(value, pattern) == nil then
+			return false, string.format("%q failed to match pattern %q", value, pattern)
 		end
 
 		return true
@@ -584,6 +681,7 @@ function t.optional(check)
 		if value == nil then
 			return true
 		end
+
 		local success, errMsg = check(value)
 		if success then
 			return true
@@ -604,12 +702,13 @@ function t.tuple(...)
 	local checks = {...}
 	return function(...)
 		local args = {...}
-		for i = 1, #checks do
-			local success, errMsg = checks[i](args[i])
+		for i, check in ipairs(checks) do
+			local success, errMsg = check(args[i])
 			if success == false then
-				return false, string.format("Bad tuple index #%d:\n\t%s", i, errMsg or "")
+				return false, string.format("Bad tuple index #%s:\n\t%s", i, errMsg or "")
 			end
 		end
+
 		return true
 	end
 end
@@ -678,6 +777,7 @@ function t.map(keyCheck, valueCheck)
 	assert(t.callback(keyCheck), t.callback(valueCheck))
 	local keyChecker = t.keys(keyCheck)
 	local valueChecker = t.values(valueCheck)
+
 	return function(value)
 		local keySuccess, keyErr = keyChecker(value)
 		if not keySuccess then
@@ -705,14 +805,21 @@ do
 	function t.array(check)
 		assert(t.callback(check))
 		local valuesCheck = t.values(check)
+
 		return function(value)
 			local keySuccess, keyErrMsg = arrayKeysCheck(value)
 			if keySuccess == false then
 				return false, string.format("[array] %s", keyErrMsg or "")
 			end
 
-			-- all keys are sequential
-			local arraySize = #value
+			-- # is unreliable for sparse arrays
+			-- Count upwards using ipairs to avoid false positives from the behavior of #
+			local arraySize = 0
+
+			for _ in ipairs(value) do
+				arraySize = arraySize + 1
+			end
+
 			for key in pairs(value) do
 				if key < 1 or key > arraySize then
 					return false, string.format("[array] key %s must be sequential", tostring(key))
@@ -741,15 +848,22 @@ do
 	function t.union(...)
 		local checks = {...}
 		assert(callbackArray(checks))
+
 		return function(value)
-			for _, check in pairs(checks) do
+			for _, check in ipairs(checks) do
 				if check(value) then
 					return true
 				end
 			end
+
 			return false, "bad type for union"
 		end
 	end
+
+	--[[**
+		Alias for t.union
+	**--]]
+	t.some = t.union
 
 	--[[**
 		creates an intersection type
@@ -761,25 +875,32 @@ do
 	function t.intersection(...)
 		local checks = {...}
 		assert(callbackArray(checks))
+
 		return function(value)
-			for _, check in pairs(checks) do
+			for _, check in ipairs(checks) do
 				local success, errMsg = check(value)
 				if not success then
 					return false, errMsg or ""
 				end
 			end
+
 			return true
 		end
 	end
+
+	--[[**
+		Alias for t.intersection
+	**--]]
+	t.every = t.intersection
 end
 
 do
-	local checkInterface = t.map(t.string, t.callback)
+	local checkInterface = t.map(t.any, t.callback)
 	--[[**
 		ensures value matches given interface definition
 
 		@param checkTable The interface definition
-		
+
 		@returns A function that will return true iff the condition is passed
 	**--]]
 	function t.interface(checkTable)
@@ -793,9 +914,10 @@ do
 			for key, check in pairs(checkTable) do
 				local success, errMsg = check(value[key])
 				if success == false then
-					return false, string.format("[interface] bad value for %s:\n\t%s", key, errMsg or "")
+					return false, string.format("[interface] bad value for %s:\n\t%s", tostring(key), errMsg or "")
 				end
 			end
+
 			return true
 		end
 	end
@@ -818,13 +940,13 @@ do
 			for key, check in pairs(checkTable) do
 				local success, errMsg = check(value[key])
 				if success == false then
-					return false, string.format("[interface] bad value for %s:\n\t%s", key, errMsg or "")
+					return false, string.format("[interface] bad value for %s:\n\t%s", tostring(key), errMsg or "")
 				end
 			end
 
 			for key in pairs(value) do
 				if not checkTable[key] then
-					return false, string.format("[interface] unexpected field '%s'", key)
+					return false, string.format("[interface] unexpected field %q", tostring(key))
 				end
 			end
 
@@ -840,8 +962,14 @@ end
 
 	@returns A function that will return true iff the condition is passed
 **--]]
-function t.instance(className)
+function t.instanceOf(className, childTable)
 	assert(t.string(className))
+
+	local childrenCheck
+	if childTable ~= nil then
+		childrenCheck = t.children(childTable)
+	end
+
 	return function(value)
 		local instanceSuccess, instanceErrMsg = t.Instance(value)
 		if not instanceSuccess then
@@ -852,9 +980,18 @@ function t.instance(className)
 			return false, string.format("%s expected, got %s", className, value.ClassName)
 		end
 
+		if childrenCheck then
+			local childrenSuccess, childrenErrMsg = childrenCheck(value)
+			if not childrenSuccess then
+				return false, childrenErrMsg
+			end
+		end
+
 		return true
 	end
 end
+
+t.instance = t.instanceOf
 
 --[[**
 	ensure value is an Instance and it's ClassName matches the given ClassName by an IsA comparison
@@ -863,8 +1000,14 @@ end
 
 	@returns A function that will return true iff the condition is passed
 **--]]
-function t.instanceIsA(className)
+function t.instanceIsA(className, childTable)
 	assert(t.string(className))
+
+	local childrenCheck
+	if childTable ~= nil then
+		childrenCheck = t.children(childTable)
+	end
+
 	return function(value)
 		local instanceSuccess, instanceErrMsg = t.Instance(value)
 		if not instanceSuccess then
@@ -873,6 +1016,13 @@ function t.instanceIsA(className)
 
 		if not value:IsA(className) then
 			return false, string.format("%s expected, got %s", className, value.ClassName)
+		end
+
+		if childrenCheck then
+			local childrenSuccess, childrenErrMsg = childrenCheck(value)
+			if not childrenSuccess then
+				return false, childrenErrMsg
+			end
 		end
 
 		return true
@@ -932,6 +1082,53 @@ end
 function t.strict(check)
 	return function(...)
 		assert(check(...))
+	end
+end
+
+do
+	local checkChildren = t.map(t.string, t.callback)
+
+	--[[**
+		Takes a table where keys are child names and values are functions to check the children against.
+		Pass an instance tree into the function.
+		If at least one child passes each check, the overall check passes.
+
+		Warning! If you pass in a tree with more than one child of the same name, this function will always return false
+
+		@param checkTable The table to check against
+
+		@returns A function that checks an instance tree
+	**--]]
+	function t.children(checkTable)
+		assert(checkChildren(checkTable))
+
+		return function(value)
+			local instanceSuccess, instanceErrMsg = t.Instance(value)
+			if not instanceSuccess then
+				return false, instanceErrMsg or ""
+			end
+
+			local childrenByName = {}
+			for _, child in ipairs(value:GetChildren()) do
+				local name = child.Name
+				if checkTable[name] then
+					if childrenByName[name] then
+						return false, string.format("Cannot process multiple children with the same name %q", name)
+					end
+
+					childrenByName[name] = child
+				end
+			end
+
+			for name, check in pairs(checkTable) do
+				local success, errMsg = check(childrenByName[name])
+				if not success then
+					return false, string.format("[%s.%s] %s", value:GetFullName(), name, errMsg or "")
+				end
+			end
+
+			return true
+		end
 	end
 end
 

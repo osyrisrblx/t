@@ -1,8 +1,11 @@
+-- polyfills
+table.unpack = unpack
+
 -- borrowed from Roact
 
 local LOAD_MODULES = {
-	{"lib", "Library"},
-	{"modules/testez/lib", "TestEZ"},
+	Library = "lib",
+	TestEZ = "modules/testez/src",
 }
 
 package.path = package.path .. ";?/init.lua"
@@ -12,14 +15,14 @@ local habitat = lemur.Habitat.new()
 local Root = lemur.Instance.new("Folder")
 Root.Name = "Root"
 
-for _, module in ipairs(LOAD_MODULES) do
-	local container = habitat:loadFromFs(module[1])
-	container.Name = module[2]
+for name, path in pairs(LOAD_MODULES) do
+	local container = habitat:loadFromFs(path)
+	container.Name = name
 	container.Parent = Root
 end
 
 local TestEZ = habitat:require(Root.TestEZ)
-local results = TestEZ.TestBootstrap:run(Root.Library, TestEZ.Reporters.TextReporter)
+local results = TestEZ.TestBootstrap:run({ Root.Library }, TestEZ.Reporters.TextReporter)
 
 if results.failureCount > 0 then
 	os.exit(1)

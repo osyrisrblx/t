@@ -1,7 +1,7 @@
 <h1 align="center">t</h1>
 <div align="center">
-	<a href="https://travis-ci.org/osyrisrblx/t">
-		<img src="https://api.travis-ci.org/osyrisrblx/t.svg?branch=master" alt="Travis-CI Build Status" />
+	<a href="https://github.com/osyrisrblx/t/actions">
+		<img src="https://github.com/osyrisrblx/t/workflows/CI/badge.svg" alt="CI Status" />
 	</a>
 	<a href='https://coveralls.io/github/osyrisrblx/t?branch=master'>
 		<img src='https://coveralls.io/repos/github/osyrisrblx/t/badge.svg?branch=master' alt='Coverage Status' />
@@ -97,8 +97,14 @@ The real power of t is in the meta type functions.
 **`t.any`**\
 Passes if value is non-nil.
 
-**`t.literal(literalValue)`**\
-Passes if value matches literalValue exactly.
+**`t.literal(...)`**\
+Passes if value matches any given value exactly.
+
+**`t.keyOf(keyTable)`**\
+Returns a t.union of each key in the table as a t.literal
+
+**`t.valueOf(valueTable)`**\
+Returns a t.union of each value in the table as a t.literal
 
 **`t.optional(check)`**\
 Passes if value is either nil or passes `check`
@@ -107,13 +113,17 @@ Passes if value is either nil or passes `check`
 You can define a tuple type with `t.tuple(...)`.\
 The arguments should be a list of type checkers.
 
-**`t.union(...)`**\
+**`t.union(...)`** - ( alias: `t.some(...)` )\
 You can define a union type with `t.union(...)`.\
-The arguments should be a list of type checkers.
+The arguments should be a list of type checkers.\
+**At least one check must pass**\
+i.e. `t.union(a, b, c)` -> `a OR b OR c`
 
-**`t.intersection(...)`**\
+**`t.intersection(...)`** - ( alias: `t.every(...)` )\
 You can define an intersection type with `t.intersection(...)`.\
-The arguments should be a list of type checkers.
+The arguments should be a list of type checkers.\
+**All checks must pass**\
+i.e. `t.intersection(a, b, c)` -> `a AND b AND c`
 
 **`t.keys(check)`**\
 Matches a table's keys against `check`
@@ -131,7 +141,6 @@ There's also type checks for arrays and interfaces but we'll cover those in thei
 t includes a few special functions for checking numbers, these can be useful to ensure the given value is within a certain range.
 
 **General:**\
-
 **`t.nan`**\
 determines if value is `NaN`\
 All of the following checks will not pass for `NaN` values.\
@@ -165,6 +174,13 @@ checks `t.number` and determines if value < max
 
 **`t.numberConstrainedExclusive(min, max)`**\
 checks `t.number` and determines if min < value < max
+
+## Special String Functions
+
+t includes a few special functions for checking strings
+
+**`t.match(pattern)`**\
+checks `t.string` and determines if value matches the pattern via `string.match(value, pattern)`
 
 ## Arrays
 In Lua, arrays are a special type of table where all the keys are sequential integers.\
@@ -213,7 +229,7 @@ If you want to make sure an value _exactly_ matches a given interface (no extra 
 you can use `t.strictInterface(definition)` where `definition` is a table of type checkers.\
 For example:
 ```Lua
-local IPlayer = t.interface({
+local IPlayer = t.strictInterface({
 	Name = t.string,
 	Score = t.number,
 })
@@ -227,11 +243,18 @@ print(IPlayer(myPlayer2)) --> false, "[interface] unexpected field 'A'"
 ## Roblox Instances
 t includes two functions to check the types of Roblox Instances.
 
-**`t.instance(className)`**\
-ensures the value is an Instance and it's ClassName exactly matches `className`
+**`t.instanceOf(className[, childTable])`**\
+ensures the value is an Instance and it's ClassName exactly matches `className`\
+If you provide a `childTable`, it will be automatically passed to `t.children()`
 
 **`t.instanceIsA(className)`**\
 ensures the value is an Instance and it's ClassName matches `className` by a IsA comparison. ([see here](http://wiki.roblox.com/index.php?title=API:Class/Instance/FindFirstAncestorWhichIsA))
+
+**`t.children(checkTable)`**\
+Takes a table where keys are child names and values are functions to check the children against.\
+Pass an instance tree into the function.
+
+**Warning! If you pass in a tree with more than one child of the same name, this function will always return false**
 
 ## Roblox Enums
 
@@ -327,8 +350,16 @@ print(instanceOfMyClass(myObject)) --> true
 
 ## Known Issues
 
-You can put a `t.tuple(...)` inside an array or interface, but that doesn't really make any sense..
+You can put a `t.tuple(...)` inside an array or interface, but that doesn't really make any sense..\
 In the future, this may error.
 
 ## Notes
 This library was heavily inspired by [io-ts](https://github.com/gcanti/io-ts), a fantastic runtime type validation library for TypeScript.
+
+## Why did you name it t?
+The whole idea is that most people import modules via:\
+`local X = require(path.to.X)`\
+So whatever I name the library will be what people name the variable.\
+If I made the name of the library longer, the type definitions become more noisy / less readable.\
+Things like this are pretty common:\
+`local fooCheck = t.tuple(t.string, t.number, t.optional(t.string))`

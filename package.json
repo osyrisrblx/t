@@ -1,0 +1,28 @@
+{
+	"name": "@rbxts/t",
+	"version": "1.2.7",
+	"description": "A Runtime Type Checker for Roblox",
+	"main": "lib/ts.lua",
+	"types": "lib/t.d.ts",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/osyrisrblx/t.git"
+	},
+	"keywords": [],
+	"author": "osyris",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/osyrisrblx/t/issues"
+	},
+	"homepage": "https://github.com/osyrisrblx/t#readme",
+	"peerDependencies": {
+		"@rbxts/types": "^1.0.232"
+	},
+	"dependencies": {
+		"@rbxts/types": "^1.0.317"
+	},
+	"files": [
+		"lib/ts.lua",
+		"lib/t.d.ts"
+	]
+}
