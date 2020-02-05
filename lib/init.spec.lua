@@ -567,4 +567,19 @@ return function()
 		assert(check(myNewEnum.OptionA))
 		assert(not (check(1010)))
 	end)
+
+	it("should support t.strictArray", function()
+		local fixedArrayCheck = t.strictArray(t.number, t.number)
+
+		assert(fixedArrayCheck({1, 2}))
+		assert(not fixedArrayCheck({1, 2, 3}))
+		assert(not fixedArrayCheck({10}))
+		assert(not fixedArrayCheck({"Hello", 10}))
+
+		local fixedArrayCheck2 = t.strictArray(t.number, t.number, t.optional(t.string))
+
+		assert(fixedArrayCheck2({10, 20}))
+		assert(fixedArrayCheck2({10, 20, "Hello"}))
+		assert(not fixedArrayCheck2({10, 20, 30}))
+	end)
 end

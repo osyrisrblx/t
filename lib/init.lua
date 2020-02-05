@@ -845,6 +845,39 @@ do
 			return true
 		end
 	end
+
+	--[[**
+		ensures value is an array of a strict makeup and size
+
+		@param check The check to compare all values with
+
+		@returns A function that will return true iff the condition is passed
+	**--]]
+	function t.strictArray(...)
+		local valueTypes = { ... }
+		assert(t.array(t.callback)(valueTypes))
+
+		return function(value)
+			local keySuccess, keyErrMsg = arrayKeysCheck(value)
+			if keySuccess == false then
+				return false, string.format("[strictArray] %s", keyErrMsg or "")
+			end
+
+			-- If there's more than the set array size, disallow
+			if #valueTypes < #value then
+				return false, string.format("[strictArray] Array size exceeds limit of %d", #valueTypes)
+			end
+
+			for idx, typeFn in pairs(valueTypes) do
+				local typeSuccess, typeErrMsg = typeFn(value[idx])
+				if not typeSuccess then
+					return false, string.format("[strictArray] Array index #%d - %s", idx, typeErrMsg)
+				end
+			end
+
+			return true
+		end
+	end
 end
 
 do
