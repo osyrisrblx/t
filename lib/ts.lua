@@ -374,6 +374,32 @@ do
 			return true
 		end
 	end
+
+	function t.strictArray(...)
+		local valueTypes = {...}
+		assert(t.array(t.callback)(valueTypes))
+
+		return function(value)
+			local keySuccess = arrayKeysCheck(value)
+			if keySuccess == false then
+				return false
+			end
+
+			-- If there's more than the set array size, disallow
+			if #valueTypes < #value then
+				return false
+			end
+
+			for idx, typeFn in pairs(valueTypes) do
+				local typeSuccess = typeFn(value[idx])
+				if not typeSuccess then
+					return false
+				end
+			end
+
+			return true
+		end
+	end
 end
 
 do

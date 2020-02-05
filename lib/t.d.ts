@@ -141,6 +141,22 @@ interface t {
 	/** checks to see if `value` is an array and all of its keys are sequential integers and all of its values match `check` */
 	array: <T>(check: (value: unknown) => value is T) => t.check<Array<T>>;
 
+	strictArray: <T extends Array<any>>(
+		...args: T
+	) => T extends [t.check<infer A>]
+		? t.check<[A]>
+		: T extends [t.check<infer A>, t.check<infer B>]
+		? t.check<[A, B]>
+		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>]
+		? t.check<[A, B, C]>
+		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>, t.check<infer D>]
+		? t.check<[A, B, C, D]>
+		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>, t.check<infer D>, t.check<infer E>]
+		? t.check<[A, B, C, D, E]>
+		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>, t.check<infer D>, t.check<infer E>, t.check<infer F>]
+		? t.check<[A, B, C, D, E, F]>
+		: never;
+
 	/** checks to see if `value` matches any given check */
 	union: <T extends Array<any>>(
 		...args: T
