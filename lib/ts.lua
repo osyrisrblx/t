@@ -376,7 +376,7 @@ do
 	end
 
 	function t.strictArray(...)
-		local valueTypes = {...}
+		local valueTypes = { ... }
 		assert(t.array(t.callback)(valueTypes))
 
 		return function(value)

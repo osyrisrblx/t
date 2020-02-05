@@ -854,7 +854,7 @@ do
 		@returns A function that will return true iff the condition is passed
 	**--]]
 	function t.strictArray(...)
-		local valueTypes = {...}
+		local valueTypes = { ... }
 		assert(t.array(t.callback)(valueTypes))
 
 		return function(value)
