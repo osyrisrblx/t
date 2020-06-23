@@ -59,6 +59,7 @@ t.thread = primitive("thread")
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
 t.callback = primitive("function")
+t["function"] = t.callback
 
 --[[**
 	ensures Lua primitive none type
@@ -68,6 +69,7 @@ t.callback = primitive("function")
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
 t.none = primitive("nil")
+t["nil"] = t.none
 
 --[[**
 	ensures Lua primitive string type

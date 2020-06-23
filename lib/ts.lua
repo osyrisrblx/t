@@ -29,7 +29,9 @@ end
 t.boolean = primitive("boolean")
 t.thread = primitive("thread")
 t.callback = primitive("function")
+t["function"] = t.callback
 t.none = primitive("nil")
+t["nil"] = t.none
 t.string = primitive("string")
 t.table = primitive("table")
 t.userdata = primitive("userdata")

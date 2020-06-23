@@ -8,8 +8,12 @@ interface t {
 	thread: t.check<thread>;
 	/** checks to see if `value` is a Function */
 	callback: t.check<Function>;
+	/** alias of t.callback */
+	function: t.check<undefined>;
 	/** checks to see if `value` is undefined */
 	none: t.check<undefined>;
+	/** alias of t.none */
+	nil: t.check<undefined>;
 	/** checks to see if `value` is a number, will _not_ match NaN */
 	number: t.check<number>;
 	/** checks to see if `value` is NaN */
@@ -134,7 +138,7 @@ interface t {
 	/** checks to see if `value` is a table and all of its keys match against `keyCheck` and all of its values match against `valueCheck` */
 	map: <K, V>(
 		keyCheck: (value: unknown) => value is K,
-		valueCheck: (value: unknown) => value is V
+		valueCheck: (value: unknown) => value is V,
 	) => t.check<Map<K, V>>;
 	/** checks to see if `value` is a table and all of its keys match against `valueCheck` and all of its values are `true` */
 	set: <T>(valueCheck: (value: unknown) => value is T) => t.check<Set<T>>;
@@ -153,7 +157,14 @@ interface t {
 		? t.check<[A, B, C, D]>
 		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>, t.check<infer D>, t.check<infer E>]
 		? t.check<[A, B, C, D, E]>
-		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>, t.check<infer D>, t.check<infer E>, t.check<infer F>]
+		: T extends [
+				t.check<infer A>,
+				t.check<infer B>,
+				t.check<infer C>,
+				t.check<infer D>,
+				t.check<infer E>,
+				t.check<infer F>,
+		  ]
 		? t.check<[A, B, C, D, E, F]>
 		: never;
 
@@ -170,7 +181,14 @@ interface t {
 		? t.check<A | B | C | D>
 		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>, t.check<infer D>, t.check<infer E>]
 		? t.check<A | B | C | D | E>
-		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>, t.check<infer D>, t.check<infer E>, t.check<infer F>]
+		: T extends [
+				t.check<infer A>,
+				t.check<infer B>,
+				t.check<infer C>,
+				t.check<infer D>,
+				t.check<infer E>,
+				t.check<infer F>,
+		  ]
 		? t.check<A | B | C | D | E | F>
 		: never;
 
@@ -187,36 +205,43 @@ interface t {
 		? t.check<A & B & C & D>
 		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>, t.check<infer D>, t.check<infer E>]
 		? t.check<A & B & C & D & E>
-		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>, t.check<infer D>, t.check<infer E>, t.check<infer F>]
+		: T extends [
+				t.check<infer A>,
+				t.check<infer B>,
+				t.check<infer C>,
+				t.check<infer D>,
+				t.check<infer E>,
+				t.check<infer F>,
+		  ]
 		? t.check<A & B & C & D & E & F>
 		: never;
 
 	/** checks to see if `value` matches a given interface definition */
 	interface: <T extends { [index: string]: (value: unknown) => value is any }>(
-		checkTable: T
+		checkTable: T,
 	) => t.check<{ [P in keyof T]: t.static<T[P]> }>;
 
 	/** checks to see if `value` matches a given interface definition with no extra members */
 	strictInterface: <T extends { [index: string]: (value: unknown) => value is any }>(
-		checkTable: T
+		checkTable: T,
 	) => t.check<{ [P in keyof T]: t.static<T[P]> }>;
 
 	instanceOf<S extends keyof Instances>(this: void, className: S): t.check<Instances[S]>;
 	instanceOf<S extends keyof Instances, T extends { [index: string]: (value: unknown) => value is any }>(
 		this: void,
 		className: S,
-		checkTable: T
+		checkTable: T,
 	): t.check<Instances[S] & { [P in keyof T]: t.static<T[P]> }>;
 
 	instanceIsA<S extends keyof Instances>(this: void, className: S): t.check<Instances[S]>;
 	instanceIsA<S extends keyof Instances, T extends { [index: string]: (value: unknown) => value is any }>(
 		this: void,
 		className: S,
-		checkTable: T
+		checkTable: T,
 	): t.check<Instances[S] & { [P in keyof T]: t.static<T[P]> }>;
 
 	children: <T extends { [index: string]: (value: unknown) => value is any }>(
-		checkTable: T
+		checkTable: T,
 	) => t.check<Instance & { [P in keyof T]: t.static<T[P]> }>;
 }
 
