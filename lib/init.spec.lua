@@ -575,6 +575,7 @@ return function()
 		assert(not fixedArrayCheck({1, 2, 3}))
 		assert(not fixedArrayCheck({10}))
 		assert(not fixedArrayCheck({"Hello", 10}))
+		assert(not fixedArrayCheck({ Foo = "Bar" }))
 
 		local fixedArrayCheck2 = t.strictArray(t.number, t.number, t.optional(t.string))
 
