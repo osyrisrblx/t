@@ -86,17 +86,13 @@ interface t {
 	/** checks to see if `value` is a RBXScriptConnection */
 	RBXScriptConnection: t.check<RBXScriptConnection>;
 
-	/**
-	 * checks to see if `value == literalValue`
-	 */
+	// type functions
+	/** checks to see if `value == literalValue` */
 	literal<T extends Array<Literal>>(this: void, ...args: T): t.check<ArrayType<T>>;
-
 	/** Returns a t.union of each key in the table as a t.literal */
 	keyOf: <T>(valueTable: T) => t.check<keyof T>;
-
 	/** Returns a t.union of each value in the table as a t.literal */
 	valueOf: <T>(valueTable: T) => T extends { [P in keyof T]: infer U } ? t.check<U> : never;
-
 	/** checks to see if `value` is an integer */
 	integer: t.check<number>;
 	/** checks to see if `value` is a number and is more than or equal to `min` */
@@ -129,39 +125,41 @@ interface t {
 	set: <T>(valueCheck: t.check<T>) => t.check<Set<T>>;
 	/** checks to see if `value` is an array and all of its keys are sequential integers and all of its values match `check` */
 	array: <T>(check: t.check<T>) => t.check<Array<T>>;
-
+	/** ensures value is an array of a strict makeup and size */
 	strictArray: <T extends Array<t.check<any>>>(...args: T) => t.check<{ [K in keyof T]: t.static<T[K]> }>;
-
 	/** checks to see if `value` matches any given check */
 	union: <T extends Array<t.check<any>>>(...args: T) => t.check<t.static<ArrayType<T>>>;
-
 	/** checks to see if `value` matches all given checks */
 	intersection: <T extends Array<t.check<any>>>(...args: T) => t.check<UnionToIntersection<t.static<ArrayType<T>>>>;
-
 	/** checks to see if `value` matches a given interface definition */
 	interface: <T extends { [index: string]: t.check<any> }>(
 		checkTable: T,
 	) => t.check<{ [P in keyof T]: t.static<T[P]> }>;
-
 	/** checks to see if `value` matches a given interface definition with no extra members */
 	strictInterface: <T extends { [index: string]: t.check<any> }>(
 		checkTable: T,
 	) => t.check<{ [P in keyof T]: t.static<T[P]> }>;
-
+	/** ensure value is an Instance and it's ClassName matches the given ClassName */
 	instanceOf<S extends keyof Instances>(this: void, className: S): t.check<Instances[S]>;
 	instanceOf<S extends keyof Instances, T extends { [index: string]: t.check<any> }>(
 		this: void,
 		className: S,
 		checkTable: T,
 	): t.check<Instances[S] & { [P in keyof T]: t.static<T[P]> }>;
-
+	/** ensure value is an Instance and it's ClassName matches the given ClassName by an IsA comparison */
 	instanceIsA<S extends keyof Instances>(this: void, className: S): t.check<Instances[S]>;
 	instanceIsA<S extends keyof Instances, T extends { [index: string]: t.check<any> }>(
 		this: void,
 		className: S,
 		checkTable: T,
 	): t.check<Instances[S] & { [P in keyof T]: t.static<T[P]> }>;
-
+	/**
+	 * Takes a table where keys are child names and values are functions to check the children against.
+	 * Pass an instance tree into the function.
+	 * If at least one child passes each check, the overall check passes.
+	 *
+	 * Warning! If you pass in a tree with more than one child of the same name, this function will always return false
+	 */
 	children: <T extends { [index: string]: t.check<any> }>(
 		checkTable: T,
 	) => t.check<Instance & { [P in keyof T]: t.static<T[P]> }>;
