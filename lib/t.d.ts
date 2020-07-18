@@ -89,7 +89,7 @@ interface t {
 	/**
 	 * checks to see if `value == literalValue`
 	 */
-	literal<T extends Literal[]>(this: void, ...args: T): t.check<ArrayType<T>>;
+	literal<T extends Array<Literal>>(this: void, ...args: T): t.check<ArrayType<T>>;
 
 	/** Returns a t.union of each key in the table as a t.literal */
 	keyOf: <T>(valueTable: T) => t.check<keyof T>;
