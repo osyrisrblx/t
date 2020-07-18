@@ -89,7 +89,7 @@ interface t {
 		this: void,
 		...args: T
 	): T extends [infer A]
-		? (value: unknown) => value is A
+		? t.check<A>
 		: T extends [infer A, infer B]
 		? t.check<A | B>
 		: T extends [infer A, infer B, infer C]
@@ -101,7 +101,7 @@ interface t {
 		: T extends [infer A, infer B, infer C, infer D, infer E, infer F]
 		? t.check<A | B | C | D | E | F>
 		: never;
-	literal<T>(this: void, literalValue: T): (value: unknown) => value is T;
+	literal<T>(this: void, literalValue: T): t.check<T>;
 
 	/** Returns a t.union of each key in the table as a t.literal */
 	keyOf: <T>(valueTable: T) => t.check<keyof T>;
@@ -110,40 +110,37 @@ interface t {
 	valueOf: <T>(valueTable: T) => T extends { [P in keyof T]: infer U } ? t.check<U> : never;
 
 	/** checks to see if `value` is an integer */
-	integer: (value: unknown) => value is number;
+	integer: t.check<number>;
 	/** checks to see if `value` is a number and is more than or equal to `min` */
-	numberMin: (min: number) => (value: unknown) => value is number;
+	numberMin: (min: number) => t.check<number>;
 	/** checks to see if `value` is a number and is less than or equal to `max` */
-	numberMax: (max: number) => (value: unknown) => value is number;
+	numberMax: (max: number) => t.check<number>;
 	/** checks to see if `value` is a number and is more than `min` */
-	numberMinExclusive: (min: number) => (value: unknown) => value is number;
+	numberMinExclusive: (min: number) => t.check<number>;
 	/** checks to see if `value` is a number and is less than `max` */
-	numberMaxExclusive: (max: number) => (value: unknown) => value is number;
+	numberMaxExclusive: (max: number) => t.check<number>;
 	/** checks to see if `value` is a number and is more than 0 */
-	numberPositive: (value: unknown) => value is number;
+	numberPositive: t.check<number>;
 	/** checks to see if `value` is a number and is less than 0 */
-	numberNegative: (value: unknown) => value is number;
+	numberNegative: t.check<number>;
 	/** checks to see if `value` is a number and `min <= value <= max` */
-	numberConstrained: (min: number, max: number) => (value: unknown) => value is number;
+	numberConstrained: (min: number, max: number) => t.check<number>;
 	/** checks to see if `value` is a number and `min < value < max` */
-	numberConstrainedExclusive: (min: number, max: number) => (value: unknown) => value is number;
+	numberConstrainedExclusive: (min: number, max: number) => t.check<number>;
 	/** checks `t.string` and determines if value matches the pattern via `string.match(value, pattern)` */
 	match: (pattern: string) => t.check<string>;
 	/** checks to see if `value` is either nil or passes `check` */
-	optional: <T>(check: (value: unknown) => value is T) => t.check<T | undefined>;
+	optional: <T>(check: t.check<T>) => t.check<T | undefined>;
 	/** checks to see if `value` is a table and if its keys match against `check */
-	keys: <T>(check: (value: unknown) => value is T) => t.check<Map<T, unknown>>;
+	keys: <T>(check: t.check<T>) => t.check<Map<T, unknown>>;
 	/** checks to see if `value` is a table and if its values match against `check` */
-	values: <T>(check: (value: unknown) => value is T) => t.check<Map<unknown, T>>;
+	values: <T>(check: t.check<T>) => t.check<Map<unknown, T>>;
 	/** checks to see if `value` is a table and all of its keys match against `keyCheck` and all of its values match against `valueCheck` */
-	map: <K, V>(
-		keyCheck: (value: unknown) => value is K,
-		valueCheck: (value: unknown) => value is V,
-	) => t.check<Map<K, V>>;
+	map: <K, V>(keyCheck: t.check<K>, valueCheck: t.check<V>) => t.check<Map<K, V>>;
 	/** checks to see if `value` is a table and all of its keys match against `valueCheck` and all of its values are `true` */
-	set: <T>(valueCheck: (value: unknown) => value is T) => t.check<Set<T>>;
+	set: <T>(valueCheck: t.check<T>) => t.check<Set<T>>;
 	/** checks to see if `value` is an array and all of its keys are sequential integers and all of its values match `check` */
-	array: <T>(check: (value: unknown) => value is T) => t.check<Array<T>>;
+	array: <T>(check: t.check<T>) => t.check<Array<T>>;
 
 	strictArray: <T extends Array<any>>(
 		...args: T
@@ -172,7 +169,7 @@ interface t {
 	union: <T extends Array<any>>(
 		...args: T
 	) => T extends [t.check<infer A>]
-		? (value: unknown) => value is A
+		? t.check<A>
 		: T extends [t.check<infer A>, t.check<infer B>]
 		? t.check<A | B>
 		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>]
@@ -196,7 +193,7 @@ interface t {
 	intersection: <T extends Array<any>>(
 		...args: T
 	) => T extends [t.check<infer A>]
-		? (value: unknown) => value is A
+		? t.check<A>
 		: T extends [t.check<infer A>, t.check<infer B>]
 		? t.check<A & B>
 		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>]
@@ -217,30 +214,30 @@ interface t {
 		: never;
 
 	/** checks to see if `value` matches a given interface definition */
-	interface: <T extends { [index: string]: (value: unknown) => value is any }>(
+	interface: <T extends { [index: string]: t.check<any> }>(
 		checkTable: T,
 	) => t.check<{ [P in keyof T]: t.static<T[P]> }>;
 
 	/** checks to see if `value` matches a given interface definition with no extra members */
-	strictInterface: <T extends { [index: string]: (value: unknown) => value is any }>(
+	strictInterface: <T extends { [index: string]: t.check<any> }>(
 		checkTable: T,
 	) => t.check<{ [P in keyof T]: t.static<T[P]> }>;
 
 	instanceOf<S extends keyof Instances>(this: void, className: S): t.check<Instances[S]>;
-	instanceOf<S extends keyof Instances, T extends { [index: string]: (value: unknown) => value is any }>(
+	instanceOf<S extends keyof Instances, T extends { [index: string]: t.check<any> }>(
 		this: void,
 		className: S,
 		checkTable: T,
 	): t.check<Instances[S] & { [P in keyof T]: t.static<T[P]> }>;
 
 	instanceIsA<S extends keyof Instances>(this: void, className: S): t.check<Instances[S]>;
-	instanceIsA<S extends keyof Instances, T extends { [index: string]: (value: unknown) => value is any }>(
+	instanceIsA<S extends keyof Instances, T extends { [index: string]: t.check<any> }>(
 		this: void,
 		className: S,
 		checkTable: T,
 	): t.check<Instances[S] & { [P in keyof T]: t.static<T[P]> }>;
 
-	children: <T extends { [index: string]: (value: unknown) => value is any }>(
+	children: <T extends { [index: string]: t.check<any> }>(
 		checkTable: T,
 	) => t.check<Instance & { [P in keyof T]: t.static<T[P]> }>;
 }
