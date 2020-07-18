@@ -1,3 +1,8 @@
+// utility types
+type Literal = string | number | boolean | undefined | null | void | {};
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
+type ArrayType<T> = T extends Array<infer U> ? U : never;
+
 interface t {
 	// lua types
 	/** checks to see if `value` is not undefined */
@@ -84,24 +89,7 @@ interface t {
 	/**
 	 * checks to see if `value == literalValue`
 	 */
-	literal<T extends string | number | boolean | undefined>(this: void, literalValue: T): t.check<T>;
-	literal<T extends Array<any>>(
-		this: void,
-		...args: T
-	): T extends [infer A]
-		? t.check<A>
-		: T extends [infer A, infer B]
-		? t.check<A | B>
-		: T extends [infer A, infer B, infer C]
-		? t.check<A | B | C>
-		: T extends [infer A, infer B, infer C, infer D]
-		? t.check<A | B | C | D>
-		: T extends [infer A, infer B, infer C, infer D, infer E]
-		? t.check<A | B | C | D | E>
-		: T extends [infer A, infer B, infer C, infer D, infer E, infer F]
-		? t.check<A | B | C | D | E | F>
-		: never;
-	literal<T>(this: void, literalValue: T): t.check<T>;
+	literal<T extends Literal[]>(this: void, ...args: T): t.check<ArrayType<T>>;
 
 	/** Returns a t.union of each key in the table as a t.literal */
 	keyOf: <T>(valueTable: T) => t.check<keyof T>;
@@ -142,76 +130,13 @@ interface t {
 	/** checks to see if `value` is an array and all of its keys are sequential integers and all of its values match `check` */
 	array: <T>(check: t.check<T>) => t.check<Array<T>>;
 
-	strictArray: <T extends Array<any>>(
-		...args: T
-	) => T extends [t.check<infer A>]
-		? t.check<[A]>
-		: T extends [t.check<infer A>, t.check<infer B>]
-		? t.check<[A, B]>
-		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>]
-		? t.check<[A, B, C]>
-		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>, t.check<infer D>]
-		? t.check<[A, B, C, D]>
-		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>, t.check<infer D>, t.check<infer E>]
-		? t.check<[A, B, C, D, E]>
-		: T extends [
-				t.check<infer A>,
-				t.check<infer B>,
-				t.check<infer C>,
-				t.check<infer D>,
-				t.check<infer E>,
-				t.check<infer F>,
-		  ]
-		? t.check<[A, B, C, D, E, F]>
-		: never;
+	strictArray: <T extends Array<t.check<any>>>(...args: T) => t.check<{ [K in keyof T]: t.static<T[K]> }>;
 
 	/** checks to see if `value` matches any given check */
-	union: <T extends Array<any>>(
-		...args: T
-	) => T extends [t.check<infer A>]
-		? t.check<A>
-		: T extends [t.check<infer A>, t.check<infer B>]
-		? t.check<A | B>
-		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>]
-		? t.check<A | B | C>
-		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>, t.check<infer D>]
-		? t.check<A | B | C | D>
-		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>, t.check<infer D>, t.check<infer E>]
-		? t.check<A | B | C | D | E>
-		: T extends [
-				t.check<infer A>,
-				t.check<infer B>,
-				t.check<infer C>,
-				t.check<infer D>,
-				t.check<infer E>,
-				t.check<infer F>,
-		  ]
-		? t.check<A | B | C | D | E | F>
-		: never;
+	union: <T extends Array<t.check<any>>>(...args: T) => t.check<t.static<ArrayType<T>>>;
 
 	/** checks to see if `value` matches all given checks */
-	intersection: <T extends Array<any>>(
-		...args: T
-	) => T extends [t.check<infer A>]
-		? t.check<A>
-		: T extends [t.check<infer A>, t.check<infer B>]
-		? t.check<A & B>
-		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>]
-		? t.check<A & B & C>
-		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>, t.check<infer D>]
-		? t.check<A & B & C & D>
-		: T extends [t.check<infer A>, t.check<infer B>, t.check<infer C>, t.check<infer D>, t.check<infer E>]
-		? t.check<A & B & C & D & E>
-		: T extends [
-				t.check<infer A>,
-				t.check<infer B>,
-				t.check<infer C>,
-				t.check<infer D>,
-				t.check<infer E>,
-				t.check<infer F>,
-		  ]
-		? t.check<A & B & C & D & E & F>
-		: never;
+	intersection: <T extends Array<t.check<any>>>(...args: T) => t.check<UnionToIntersection<t.static<ArrayType<T>>>>;
 
 	/** checks to see if `value` matches a given interface definition */
 	interface: <T extends { [index: string]: t.check<any> }>(
