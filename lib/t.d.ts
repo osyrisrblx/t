@@ -11,8 +11,8 @@ interface t {
 	boolean: t.check<boolean>;
 	/** checks to see if `value` is a thread */
 	thread: t.check<thread>;
-	/** checks to see if `value` is a Function */
-	callback: t.check<Function>;
+	/** checks to see if `value` is a function */
+	callback: t.check<(...args: Array<unknown>) => unknown>;
 	/** alias of t.callback */
 	function: t.check<undefined>;
 	/** checks to see if `value` is undefined */
