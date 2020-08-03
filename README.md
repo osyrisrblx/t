@@ -16,6 +16,9 @@
 
 t is a module which allows you to create type definitions to check values against.
 
+## Download
+[You can download the latest copy of t here.](https://raw.githubusercontent.com/osyrisrblx/t/master/lib/init.lua)
+
 ## Why?
 When building large systems, it can often be difficult to find type mismatch bugs.\
 Typechecking helps you ensure that your functions are recieving the appropriate types for their arguments.
