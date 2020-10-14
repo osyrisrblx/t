@@ -21,7 +21,7 @@ local t = {}
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 function t.any(value)
 	if value ~= nil then
@@ -38,7 +38,7 @@ end
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.boolean = primitive("boolean")
 
@@ -47,7 +47,7 @@ t.boolean = primitive("boolean")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.thread = primitive("thread")
 
@@ -56,7 +56,7 @@ t.thread = primitive("thread")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.callback = primitive("function")
 t["function"] = t.callback
@@ -66,7 +66,7 @@ t["function"] = t.callback
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.none = primitive("nil")
 t["nil"] = t.none
@@ -76,7 +76,7 @@ t["nil"] = t.none
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.string = primitive("string")
 
@@ -85,7 +85,7 @@ t.string = primitive("string")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.table = primitive("table")
 
@@ -94,7 +94,7 @@ t.table = primitive("table")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.userdata = primitive("userdata")
 
@@ -103,7 +103,7 @@ t.userdata = primitive("userdata")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 function t.number(value)
 	local valueType = typeof(value)
@@ -123,7 +123,7 @@ end
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 function t.nan(value)
 	if value ~= value then
@@ -140,7 +140,7 @@ end
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.Axes = primitive("Axes")
 
@@ -149,7 +149,7 @@ t.Axes = primitive("Axes")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.BrickColor = primitive("BrickColor")
 
@@ -158,7 +158,7 @@ t.BrickColor = primitive("BrickColor")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.CFrame = primitive("CFrame")
 
@@ -167,7 +167,7 @@ t.CFrame = primitive("CFrame")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.Color3 = primitive("Color3")
 
@@ -176,7 +176,7 @@ t.Color3 = primitive("Color3")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.ColorSequence = primitive("ColorSequence")
 
@@ -185,7 +185,7 @@ t.ColorSequence = primitive("ColorSequence")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.ColorSequenceKeypoint = primitive("ColorSequenceKeypoint")
 
@@ -194,7 +194,7 @@ t.ColorSequenceKeypoint = primitive("ColorSequenceKeypoint")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.DockWidgetPluginGuiInfo = primitive("DockWidgetPluginGuiInfo")
 
@@ -203,7 +203,7 @@ t.DockWidgetPluginGuiInfo = primitive("DockWidgetPluginGuiInfo")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.Faces = primitive("Faces")
 
@@ -212,7 +212,7 @@ t.Faces = primitive("Faces")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.Instance = primitive("Instance")
 
@@ -221,7 +221,7 @@ t.Instance = primitive("Instance")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.NumberRange = primitive("NumberRange")
 
@@ -230,7 +230,7 @@ t.NumberRange = primitive("NumberRange")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.NumberSequence = primitive("NumberSequence")
 
@@ -239,7 +239,7 @@ t.NumberSequence = primitive("NumberSequence")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.NumberSequenceKeypoint = primitive("NumberSequenceKeypoint")
 
@@ -248,7 +248,7 @@ t.NumberSequenceKeypoint = primitive("NumberSequenceKeypoint")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.PathWaypoint = primitive("PathWaypoint")
 
@@ -257,7 +257,7 @@ t.PathWaypoint = primitive("PathWaypoint")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.PhysicalProperties = primitive("PhysicalProperties")
 
@@ -266,7 +266,7 @@ t.PhysicalProperties = primitive("PhysicalProperties")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.Random = primitive("Random")
 
@@ -275,7 +275,7 @@ t.Random = primitive("Random")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.Ray = primitive("Ray")
 
@@ -284,7 +284,7 @@ t.Ray = primitive("Ray")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.Rect = primitive("Rect")
 
@@ -293,7 +293,7 @@ t.Rect = primitive("Rect")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.Region3 = primitive("Region3")
 
@@ -302,7 +302,7 @@ t.Region3 = primitive("Region3")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.Region3int16 = primitive("Region3int16")
 
@@ -311,7 +311,7 @@ t.Region3int16 = primitive("Region3int16")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.TweenInfo = primitive("TweenInfo")
 
@@ -320,7 +320,7 @@ t.TweenInfo = primitive("TweenInfo")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.UDim = primitive("UDim")
 
@@ -329,7 +329,7 @@ t.UDim = primitive("UDim")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.UDim2 = primitive("UDim2")
 
@@ -338,7 +338,7 @@ t.UDim2 = primitive("UDim2")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.Vector2 = primitive("Vector2")
 
@@ -347,7 +347,7 @@ t.Vector2 = primitive("Vector2")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.Vector3 = primitive("Vector3")
 
@@ -356,7 +356,7 @@ t.Vector3 = primitive("Vector3")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.Vector3int16 = primitive("Vector3int16")
 
@@ -367,7 +367,7 @@ t.Vector3int16 = primitive("Vector3int16")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.Enum = primitive("Enum")
 
@@ -376,7 +376,7 @@ t.Enum = primitive("Enum")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.EnumItem = primitive("EnumItem")
 
@@ -385,7 +385,7 @@ t.EnumItem = primitive("EnumItem")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.RBXScriptSignal = primitive("RBXScriptSignal")
 
@@ -394,7 +394,7 @@ t.RBXScriptSignal = primitive("RBXScriptSignal")
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 t.RBXScriptConnection = primitive("RBXScriptConnection")
 
@@ -403,7 +403,7 @@ t.RBXScriptConnection = primitive("RBXScriptConnection")
 
 	@param literal The literal to use
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 function t.literal(...)
 	local size = select("#", ...)
@@ -438,7 +438,7 @@ t.exactly = t.literal
 
 	@param keyTable The table to get keys from
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 function t.keyOf(keyTable)
 	local keys = {}
@@ -456,7 +456,7 @@ end
 
 	@param valueTable The table to get values from
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 function t.valueOf(valueTable)
 	local values = {}
@@ -474,7 +474,7 @@ end
 
 	@param value The value to check against
 
-	@returns True iff the condition is satisfied, false otherwise
+	@returns True if the condition is satisfied, false otherwise
 **--]]
 function t.integer(value)
 	local success, errMsg = t.number(value)
@@ -494,7 +494,7 @@ end
 
 	@param min The minimum to use
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 function t.numberMin(min)
 	return function(value)
@@ -516,7 +516,7 @@ end
 
 	@param max The maximum to use
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 function t.numberMax(max)
 	return function(value)
@@ -538,7 +538,7 @@ end
 
 	@param min The minimum to use
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 function t.numberMinExclusive(min)
 	return function(value)
@@ -560,7 +560,7 @@ end
 
 	@param max The maximum to use
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 function t.numberMaxExclusive(max)
 	return function(value)
@@ -580,14 +580,14 @@ end
 --[[**
 	ensures value is a number where value > 0
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 t.numberPositive = t.numberMinExclusive(0)
 
 --[[**
 	ensures value is a number where value < 0
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 t.numberNegative = t.numberMaxExclusive(0)
 
@@ -597,7 +597,7 @@ t.numberNegative = t.numberMaxExclusive(0)
 	@param min The minimum to use
 	@param max The maximum to use
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 function t.numberConstrained(min, max)
 	assert(t.number(min) and t.number(max))
@@ -625,7 +625,7 @@ end
 	@param min The minimum to use
 	@param max The maximum to use
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 function t.numberConstrainedExclusive(min, max)
 	assert(t.number(min) and t.number(max))
@@ -652,7 +652,7 @@ end
 
 	@param string pattern to check against
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 function t.match(pattern)
 	assert(t.string(pattern))
@@ -675,7 +675,7 @@ end
 
 	@param check The check to use
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 function t.optional(check)
 	assert(t.callback(check))
@@ -698,7 +698,7 @@ end
 
 	@param ... The type definition for the tuples
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 function t.tuple(...)
 	local checks = {...}
@@ -720,7 +720,7 @@ end
 
 	@param check The function to use to check the keys
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 function t.keys(check)
 	assert(t.callback(check))
@@ -746,7 +746,7 @@ end
 
 	@param check The function to use to check the values
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 function t.values(check)
 	assert(t.callback(check))
@@ -773,7 +773,7 @@ end
 	@param keyCheck The function to use to check the keys
 	@param valueCheck The function to use to check the values
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 function t.map(keyCheck, valueCheck)
 	assert(t.callback(keyCheck), t.callback(valueCheck))
@@ -800,7 +800,7 @@ end
 
 	@param valueCheck The function to use to check the values
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 function t.set(valueCheck)
 	return t.map(valueCheck, t.literal(true))
@@ -813,7 +813,7 @@ do
 
 		@param check The check to compare all values with
 
-		@returns A function that will return true iff the condition is passed
+		@returns A function that will return true if the condition is passed
 	**--]]
 	function t.array(check)
 		assert(t.callback(check))
@@ -853,7 +853,7 @@ do
 
 		@param check The check to compare all values with
 
-		@returns A function that will return true iff the condition is passed
+		@returns A function that will return true if the condition is passed
 	**--]]
 	function t.strictArray(...)
 		local valueTypes = { ... }
@@ -889,7 +889,7 @@ do
 
 		@param ... The checks to union
 
-		@returns A function that will return true iff the condition is passed
+		@returns A function that will return true if the condition is passed
 	**--]]
 	function t.union(...)
 		local checks = {...}
@@ -916,7 +916,7 @@ do
 
 		@param ... The checks to intersect
 
-		@returns A function that will return true iff the condition is passed
+		@returns A function that will return true if the condition is passed
 	**--]]
 	function t.intersection(...)
 		local checks = {...}
@@ -947,7 +947,7 @@ do
 
 		@param checkTable The interface definition
 
-		@returns A function that will return true iff the condition is passed
+		@returns A function that will return true if the condition is passed
 	**--]]
 	function t.interface(checkTable)
 		assert(checkInterface(checkTable))
@@ -973,7 +973,7 @@ do
 
 		@param checkTable The interface definition
 
-		@returns A function that will return true iff the condition is passed
+		@returns A function that will return true if the condition is passed
 	**--]]
 	function t.strictInterface(checkTable)
 		assert(checkInterface(checkTable))
@@ -1006,7 +1006,7 @@ end
 
 	@param className The class name to check for
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 function t.instanceOf(className, childTable)
 	assert(t.string(className))
@@ -1044,7 +1044,7 @@ t.instance = t.instanceOf
 
 	@param className The class name to check for
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 function t.instanceIsA(className, childTable)
 	assert(t.string(className))
@@ -1080,7 +1080,7 @@ end
 
 	@param enum The enum to check
 
-	@returns A function that will return true iff the condition is passed
+	@returns A function that will return true if the condition is passed
 **--]]
 function t.enum(enum)
 	assert(t.Enum(enum))
