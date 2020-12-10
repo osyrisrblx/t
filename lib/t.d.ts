@@ -180,4 +180,4 @@ declare namespace t {
 }
 
 declare const t: t;
-export = t;
+export { t };

@@ -583,4 +583,4 @@ do
 	end
 end
 
-return t
+return { t = t }
