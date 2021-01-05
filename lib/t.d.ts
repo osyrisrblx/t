@@ -86,6 +86,14 @@ interface t {
 	/** checks to see if `value` is a RBXScriptConnection */
 	RBXScriptConnection: t.check<RBXScriptConnection>;
 
+	// roblox enum types
+	/** checks to see if `value` is an Enum */
+	Enum: t.check<Enum>;
+	/** checks to see if `value` is an EnumItem */
+	EnumItem: t.check<EnumItem>;
+	/** checks if `value` is an EnumItem which belongs to `Enum`. */
+	enum: (Enum: Enum) => t.check<EnumItem>;
+
 	// type functions
 	/** checks to see if `value == literalValue` */
 	literal<T extends Array<Literal>>(this: void, ...args: T): t.check<ArrayType<T>>;
