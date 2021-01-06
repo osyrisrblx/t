@@ -92,7 +92,7 @@ interface t {
 	/** checks to see if `value` is an EnumItem */
 	EnumItem: t.check<EnumItem>;
 	/** checks if `value` is an EnumItem which belongs to `Enum`. */
-	enum: (Enum: Enum) => t.check<EnumItem>;
+	enum: <T extends { Name: string; }>(Enum: Enum.EnumType<T>) => t.check<T>;
 
 	// type functions
 	/** checks to see if `value == literalValue` */
