@@ -600,7 +600,8 @@ t.numberNegative = t.numberMaxExclusive(0)
 	@returns A function that will return true iff the condition is passed
 **--]]
 function t.numberConstrained(min, max)
-	assert(t.number(min) and t.number(max))
+	assert(t.number(min))
+	assert(t.number(max))
 	local minCheck = t.numberMin(min)
 	local maxCheck = t.numberMax(max)
 
@@ -628,7 +629,8 @@ end
 	@returns A function that will return true iff the condition is passed
 **--]]
 function t.numberConstrainedExclusive(min, max)
-	assert(t.number(min) and t.number(max))
+	assert(t.number(min))
+	assert(t.number(max))
 	local minCheck = t.numberMinExclusive(min)
 	local maxCheck = t.numberMaxExclusive(max)
 
@@ -776,7 +778,8 @@ end
 	@returns A function that will return true iff the condition is passed
 **--]]
 function t.map(keyCheck, valueCheck)
-	assert(t.callback(keyCheck) and t.callback(valueCheck))
+	assert(t.callback(keyCheck))
+	assert(t.callback(valueCheck))
 	local keyChecker = t.keys(keyCheck)
 	local valueChecker = t.values(valueCheck)
 
