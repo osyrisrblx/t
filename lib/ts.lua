@@ -330,7 +330,7 @@ function t.values(check)
 end
 
 function t.map(keyCheck, valueCheck)
-	assert(t.callback(keyCheck), t.callback(valueCheck))
+	assert(t.callback(keyCheck) and t.callback(valueCheck))
 	local keyChecker = t.keys(keyCheck)
 	local valueChecker = t.values(valueCheck)
 	return function(value)

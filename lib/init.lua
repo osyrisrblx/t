@@ -776,7 +776,7 @@ end
 	@returns A function that will return true iff the condition is passed
 **--]]
 function t.map(keyCheck, valueCheck)
-	assert(t.callback(keyCheck), t.callback(valueCheck))
+	assert(t.callback(keyCheck) and t.callback(valueCheck))
 	local keyChecker = t.keys(keyCheck)
 	local valueChecker = t.values(valueCheck)
 
