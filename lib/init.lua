@@ -126,10 +126,15 @@ end
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
 function t.nan(value)
-	if value ~= value then
-		return true
+	local valueType = typeof(value)
+	if valueType == "number" then
+		if value ~= value then
+			return true
+		else
+			return false, "unexpected non-NaN value"
+		end
 	else
-		return false, "unexpected non-NaN value"
+		return false, string.format("number expected, got %s", valueType)
 	end
 end
 

@@ -126,8 +126,13 @@ end
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
 function t.nan(value)
-	if value ~= value then
-		return true
+	local valueType = typeof(value)
+	if valueType == "number" then
+		if value ~= value then
+			return true
+		else
+			return false
+		end
 	else
 		return false
 	end
