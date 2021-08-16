@@ -1113,7 +1113,7 @@ do
 		wraps a callback in an assert with checkArgs
 
 		@param callback The function to wrap
-		@param checkArgs The functon to use to check arguments in the assert
+		@param checkArgs The function to use to check arguments in the assert
 
 		@returns A function that first asserts using checkArgs and then calls callback
 	**--]]
