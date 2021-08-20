@@ -28,7 +28,7 @@ interface t {
 	/** checks to see if `value` is an object */
 	table: t.check<object>;
 	/** checks to see if `value` is a userdata */
-	userdata: t.check<object>;
+	userdata: t.check<Player>;
 
 	// roblox types
 	/** checks to see if `value` is an Axes */
