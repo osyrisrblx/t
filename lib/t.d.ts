@@ -4,9 +4,10 @@ type ArrayType<T> = T extends Array<infer U> ? U : never;
 
 interface t {
 	// lua types
+	/** checks to see if `type(value) == typeName` */
 	type: <T extends keyof CheckablePrimitives>(typeName: T) => t.check<CheckablePrimitives[T]>;
+	/** checks to see if `typeof(value) == typeName` */
 	typeof: <T extends keyof CheckableTypes>(typeName: T) => t.check<CheckableTypes[T]>;
-
 	/** checks to see if `value` is not undefined */
 	any: t.check<defined>;
 	/** checks to see if `value` is a boolean */
@@ -110,9 +111,9 @@ interface t {
 	// type functions
 	/** checks to see if `value == literalValue` */
 	literal<T extends Array<Literal>>(this: void, ...args: T): t.check<ArrayType<T>>;
-	/** Returns a t.union of each key in the table as a t.literal */
+	/** returns a t.union of each key in the table as a t.literal */
 	keyOf: <T>(valueTable: T) => t.check<keyof T>;
-	/** Returns a t.union of each value in the table as a t.literal */
+	/** returns a t.union of each value in the table as a t.literal */
 	valueOf: <T>(valueTable: T) => T extends { [P in keyof T]: infer U } ? t.check<U> : never;
 	/** checks to see if `value` is an integer */
 	integer: t.check<number>;
