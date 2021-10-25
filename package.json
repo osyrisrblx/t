@@ -1,6 +1,6 @@
 {
 	"name": "@rbxts/t",
-	"version": "2.1.5",
+	"version": "2.2.0",
 	"description": "A Runtime Type Checker for Roblox",
 	"main": "lib/ts.lua",
 	"types": "lib/t.d.ts",
@@ -16,7 +16,8 @@
 	},
 	"homepage": "https://github.com/osyrisrblx/t#readme",
 	"devDependencies": {
-		"@rbxts/types": "^1.0.469"
+		"@rbxts/compiler-types": "^1.2.7-types.0",
+		"@rbxts/types": "^1.0.544"
 	},
 	"files": [
 		"lib/ts.lua",

@@ -1,9 +1,19 @@
 -- t: a runtime typechecker for Roblox
 
--- regular lua compatibility
-local typeof = typeof or type
+local t = {}
 
-local function primitive(typeName)
+function t.type(typeName)
+	return function(value)
+		local valueType = type(value)
+		if valueType == typeName then
+			return true
+		else
+			return false, string.format("%s expected, got %s", typeName, valueType)
+		end
+	end
+end
+
+function t.typeof(typeName)
 	return function(value)
 		local valueType = typeof(value)
 		if valueType == typeName then
@@ -13,8 +23,6 @@ local function primitive(typeName)
 		end
 	end
 end
-
-local t = {}
 
 --[[**
 	matches any type except nil
@@ -40,7 +48,7 @@ end
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.boolean = primitive("boolean")
+t.boolean = t.typeof("boolean")
 
 --[[**
 	ensures Lua primitive thread type
@@ -49,7 +57,7 @@ t.boolean = primitive("boolean")
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.thread = primitive("thread")
+t.thread = t.typeof("thread")
 
 --[[**
 	ensures Lua primitive callback type
@@ -58,7 +66,7 @@ t.thread = primitive("thread")
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.callback = primitive("function")
+t.callback = t.typeof("function")
 t["function"] = t.callback
 
 --[[**
@@ -68,7 +76,7 @@ t["function"] = t.callback
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.none = primitive("nil")
+t.none = t.typeof("nil")
 t["nil"] = t.none
 
 --[[**
@@ -78,7 +86,7 @@ t["nil"] = t.none
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.string = primitive("string")
+t.string = t.typeof("string")
 
 --[[**
 	ensures Lua primitive table type
@@ -87,7 +95,7 @@ t.string = primitive("string")
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.table = primitive("table")
+t.table = t.typeof("table")
 
 --[[**
 	ensures Lua primitive userdata type
@@ -96,7 +104,7 @@ t.table = primitive("table")
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.userdata = primitive("userdata")
+t.userdata = t.type("userdata")
 
 --[[**
 	ensures value is a number and non-NaN
@@ -147,7 +155,7 @@ end
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.Axes = primitive("Axes")
+t.Axes = t.typeof("Axes")
 
 --[[**
 	ensures Roblox BrickColor type
@@ -156,7 +164,16 @@ t.Axes = primitive("Axes")
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.BrickColor = primitive("BrickColor")
+t.BrickColor = t.typeof("BrickColor")
+
+--[[**
+	ensures Roblox CatalogSearchParams type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.CatalogSearchParams = t.typeof("CatalogSearchParams")
 
 --[[**
 	ensures Roblox CFrame type
@@ -165,7 +182,7 @@ t.BrickColor = primitive("BrickColor")
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.CFrame = primitive("CFrame")
+t.CFrame = t.typeof("CFrame")
 
 --[[**
 	ensures Roblox Color3 type
@@ -174,7 +191,7 @@ t.CFrame = primitive("CFrame")
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.Color3 = primitive("Color3")
+t.Color3 = t.typeof("Color3")
 
 --[[**
 	ensures Roblox ColorSequence type
@@ -183,7 +200,7 @@ t.Color3 = primitive("Color3")
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.ColorSequence = primitive("ColorSequence")
+t.ColorSequence = t.typeof("ColorSequence")
 
 --[[**
 	ensures Roblox ColorSequenceKeypoint type
@@ -192,7 +209,16 @@ t.ColorSequence = primitive("ColorSequence")
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.ColorSequenceKeypoint = primitive("ColorSequenceKeypoint")
+t.ColorSequenceKeypoint = t.typeof("ColorSequenceKeypoint")
+
+--[[**
+	ensures Roblox DateTime type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.DateTime = t.typeof("DateTime")
 
 --[[**
 	ensures Roblox DockWidgetPluginGuiInfo type
@@ -201,171 +227,7 @@ t.ColorSequenceKeypoint = primitive("ColorSequenceKeypoint")
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.DockWidgetPluginGuiInfo = primitive("DockWidgetPluginGuiInfo")
-
---[[**
-	ensures Roblox Faces type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.Faces = primitive("Faces")
-
---[[**
-	ensures Roblox Instance type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.Instance = primitive("Instance")
-
---[[**
-	ensures Roblox NumberRange type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.NumberRange = primitive("NumberRange")
-
---[[**
-	ensures Roblox NumberSequence type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.NumberSequence = primitive("NumberSequence")
-
---[[**
-	ensures Roblox NumberSequenceKeypoint type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.NumberSequenceKeypoint = primitive("NumberSequenceKeypoint")
-
---[[**
-	ensures Roblox PathWaypoint type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.PathWaypoint = primitive("PathWaypoint")
-
---[[**
-	ensures Roblox PhysicalProperties type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.PhysicalProperties = primitive("PhysicalProperties")
-
---[[**
-	ensures Roblox Random type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.Random = primitive("Random")
-
---[[**
-	ensures Roblox Ray type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.Ray = primitive("Ray")
-
---[[**
-	ensures Roblox Rect type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.Rect = primitive("Rect")
-
---[[**
-	ensures Roblox Region3 type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.Region3 = primitive("Region3")
-
---[[**
-	ensures Roblox Region3int16 type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.Region3int16 = primitive("Region3int16")
-
---[[**
-	ensures Roblox TweenInfo type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.TweenInfo = primitive("TweenInfo")
-
---[[**
-	ensures Roblox UDim type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.UDim = primitive("UDim")
-
---[[**
-	ensures Roblox UDim2 type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.UDim2 = primitive("UDim2")
-
---[[**
-	ensures Roblox Vector2 type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.Vector2 = primitive("Vector2")
-
---[[**
-	ensures Roblox Vector3 type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.Vector3 = primitive("Vector3")
-
---[[**
-	ensures Roblox Vector3int16 type
-
-	@param value The value to check against
-
-	@returns True iff the condition is satisfied, false otherwise
-**--]]
-t.Vector3int16 = primitive("Vector3int16")
-
--- roblox enum types
+t.DockWidgetPluginGuiInfo = t.typeof("DockWidgetPluginGuiInfo")
 
 --[[**
 	ensures Roblox Enum type
@@ -374,7 +236,7 @@ t.Vector3int16 = primitive("Vector3int16")
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.Enum = primitive("Enum")
+t.Enum = t.typeof("Enum")
 
 --[[**
 	ensures Roblox EnumItem type
@@ -383,16 +245,115 @@ t.Enum = primitive("Enum")
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.EnumItem = primitive("EnumItem")
+t.EnumItem = t.typeof("EnumItem")
 
 --[[**
-	ensures Roblox RBXScriptSignal type
+	ensures Roblox Enums type
 
 	@param value The value to check against
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.RBXScriptSignal = primitive("RBXScriptSignal")
+t.Enums = t.typeof("Enums")
+
+--[[**
+	ensures Roblox Faces type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.Faces = t.typeof("Faces")
+
+--[[**
+	ensures Roblox Instance type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.Instance = t.typeof("Instance")
+
+--[[**
+	ensures Roblox NumberRange type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.NumberRange = t.typeof("NumberRange")
+
+--[[**
+	ensures Roblox NumberSequence type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.NumberSequence = t.typeof("NumberSequence")
+
+--[[**
+	ensures Roblox NumberSequenceKeypoint type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.NumberSequenceKeypoint = t.typeof("NumberSequenceKeypoint")
+
+--[[**
+	ensures Roblox PathWaypoint type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.PathWaypoint = t.typeof("PathWaypoint")
+
+--[[**
+	ensures Roblox PhysicalProperties type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.PhysicalProperties = t.typeof("PhysicalProperties")
+
+--[[**
+	ensures Roblox Random type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.Random = t.typeof("Random")
+
+--[[**
+	ensures Roblox Ray type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.Ray = t.typeof("Ray")
+
+--[[**
+	ensures Roblox RaycastParams type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.RaycastParams = t.typeof("RaycastParams")
+
+--[[**
+	ensures Roblox RaycastResult type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.RaycastResult = t.typeof("RaycastResult")
 
 --[[**
 	ensures Roblox RBXScriptConnection type
@@ -401,7 +362,106 @@ t.RBXScriptSignal = primitive("RBXScriptSignal")
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.RBXScriptConnection = primitive("RBXScriptConnection")
+t.RBXScriptConnection = t.typeof("RBXScriptConnection")
+
+--[[**
+	ensures Roblox RBXScriptSignal type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.RBXScriptSignal = t.typeof("RBXScriptSignal")
+
+--[[**
+	ensures Roblox Rect type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.Rect = t.typeof("Rect")
+
+--[[**
+	ensures Roblox Region3 type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.Region3 = t.typeof("Region3")
+
+--[[**
+	ensures Roblox Region3int16 type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.Region3int16 = t.typeof("Region3int16")
+
+--[[**
+	ensures Roblox TweenInfo type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.TweenInfo = t.typeof("TweenInfo")
+
+--[[**
+	ensures Roblox UDim type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.UDim = t.typeof("UDim")
+
+--[[**
+	ensures Roblox UDim2 type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.UDim2 = t.typeof("UDim2")
+
+--[[**
+	ensures Roblox Vector2 type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.Vector2 = t.typeof("Vector2")
+
+--[[**
+	ensures Roblox Vector2int16 type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.Vector2int16 = t.typeof("Vector2int16")
+
+--[[**
+	ensures Roblox Vector3 type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.Vector3 = t.typeof("Vector3")
+
+--[[**
+	ensures Roblox Vector3int16 type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.Vector3int16 = t.typeof("Vector3int16")
 
 --[[**
 	ensures value is a given literal value

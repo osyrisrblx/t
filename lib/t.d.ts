@@ -1,10 +1,12 @@
 // utility types
 type Literal = string | number | boolean | undefined | null | void | {};
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
 type ArrayType<T> = T extends Array<infer U> ? U : never;
 
 interface t {
 	// lua types
+	type: <T extends keyof CheckablePrimitives>(typeName: T) => t.check<CheckablePrimitives[T]>;
+	typeof: <T extends keyof CheckableTypes>(typeName: T) => t.check<CheckableTypes[T]>;
+
 	/** checks to see if `value` is not undefined */
 	any: t.check<defined>;
 	/** checks to see if `value` is a boolean */
@@ -35,6 +37,8 @@ interface t {
 	Axes: t.check<Axes>;
 	/** checks to see if `value` is a BrickColor */
 	BrickColor: t.check<BrickColor>;
+	/** checks to see if `value` is a CatalogSearchParams */
+	CatalogSearchParams: t.check<CatalogSearchParams>;
 	/** checks to see if `value` is a CFrame */
 	CFrame: t.check<CFrame>;
 	/** checks to see if `value` is a Color3 */
@@ -43,8 +47,16 @@ interface t {
 	ColorSequence: t.check<ColorSequence>;
 	/** checks to see if `value` is a ColorSequenceKeypoint */
 	ColorSequenceKeypoint: t.check<ColorSequenceKeypoint>;
+	/** checks to see if `value` is a DateTime */
+	DateTime: t.check<DateTime>;
 	/** checks to see if `value` is a DockWidgetPluginGuiInfo */
 	DockWidgetPluginGuiInfo: t.check<DockWidgetPluginGuiInfo>;
+	/** checks to see if `value` is an Enum */
+	Enum: t.check<Enum>;
+	/** checks to see if `value` is an EnumItem */
+	EnumItem: t.check<EnumItem>;
+	/** checks to see if `value` is an Enums */
+	Enums: t.check<Enums>;
 	/** checks to see if `value` is a Faces */
 	Faces: t.check<Faces>;
 	/** checks to see if `value` is an Instance */
@@ -63,6 +75,14 @@ interface t {
 	Random: t.check<Random>;
 	/** checks to see if `value` is a Ray */
 	Ray: t.check<Ray>;
+	/** checks to see if `value` is a RaycastParams */
+	RaycastParams: t.check<RaycastParams>;
+	/** checks to see if `value` is a RaycastResult */
+	RaycastResult: t.check<RaycastResult>;
+	/** checks to see if `value` is a RBXScriptConnection */
+	RBXScriptConnection: t.check<RBXScriptConnection>;
+	/** checks to see if `value` is a RBXScriptSignal */
+	RBXScriptSignal: t.check<RBXScriptSignal>;
 	/** checks to see if `value` is a Rect */
 	Rect: t.check<Rect>;
 	/** checks to see if `value` is a Region3 */
@@ -77,22 +97,15 @@ interface t {
 	UDim2: t.check<UDim2>;
 	/** checks to see if `value` is a Vector2 */
 	Vector2: t.check<Vector2>;
+	/** checks to see if `value` is a Vector2int16 */
+	Vector2int16: t.check<Vector2int16>;
 	/** checks to see if `value` is a Vector3 */
 	Vector3: t.check<Vector3>;
 	/** checks to see if `value` is a Vector3int16 */
 	Vector3int16: t.check<Vector3int16>;
-	/** checks to see if `value` is a RBXScriptSignal */
-	RBXScriptSignal: t.check<RBXScriptSignal>;
-	/** checks to see if `value` is a RBXScriptConnection */
-	RBXScriptConnection: t.check<RBXScriptConnection>;
 
-	// roblox enum types
-	/** checks to see if `value` is an Enum */
-	Enum: t.check<Enum>;
-	/** checks to see if `value` is an EnumItem */
-	EnumItem: t.check<EnumItem>;
 	/** checks if `value` is an EnumItem which belongs to `Enum`. */
-	enum: <T extends { Name: string; }>(Enum: Enum.EnumType<T>) => t.check<T>;
+	enum: <T extends { Name: string }>(Enum: Enum.EnumType<T>) => t.check<T>;
 
 	// type functions
 	/** checks to see if `value == literalValue` */
@@ -139,12 +152,12 @@ interface t {
 	union: <T extends Array<t.check<any>>>(...args: T) => t.check<t.static<ArrayType<T>>>;
 	/** checks to see if `value` matches all given checks */
 	intersection: <T extends Array<t.check<any>>>(
-	    ...args: T
+		...args: T
 	) => T[Exclude<keyof T, keyof Array<any> | "length">] extends infer U
-	    ? (U extends any ? (k: U) => void : never) extends (k: t.check<infer I>) => void
-		? t.check<I>
-		: never
-	    : never;
+		? (U extends any ? (k: U) => void : never) extends (k: t.check<infer I>) => void
+			? t.check<I>
+			: never
+		: never;
 	/** checks to see if `value` matches a given interface definition */
 	interface: <T extends { [index: string]: t.check<any> }>(
 		checkTable: T,
