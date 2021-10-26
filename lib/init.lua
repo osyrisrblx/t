@@ -1246,4 +1246,51 @@ do
 	end
 end
 
+do
+	
+	-- Observed unit vector magnitude epsilon doesn't seem to exceed 10^-6
+	local unitVectorEpsilon = 10 ^ -4
+	
+--[[**
+	ensures Roblox Vector2 type and it being a unit vector
+
+	@param value The value to check against
+
+	@returns True if the condition is satisfied, false otherwise
+	**--]]
+	function t.unitVector2(value)
+		local valueType = typeof(value)
+		if valueType == "Vector2" then
+			if math.abs(value.Magnitude - 1) < unitVectorEpsilon then
+				return true
+			else
+				return false, "Unit vector expected, received non-unit vector"
+			end
+		else
+			return false, string.format("Vector2 expected, got %s", valueType)
+		end
+	end
+	
+--[[**
+	ensures Roblox Vector3 type and it being a unit vector
+
+	@param value The value to check against
+
+	@returns True if the condition is satisfied, false otherwise
+	**--]]
+	function t.unitVector3(value)
+		local valueType = typeof(value)
+		if valueType == "Vector3" then
+			if math.abs(value.Magnitude - 1) < unitVectorEpsilon then
+				return true
+			else
+				return false, "Unit vector expected, received non-unit vector"
+			end
+		else
+			return false, string.format("Vector3 expected, got %s", valueType)
+		end
+	end
+	
+end
+
 return t
