@@ -1,0 +1,5 @@
+[package]
+name = "osyrisrblx/t"
+version = "2.0.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
