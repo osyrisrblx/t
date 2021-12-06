@@ -1,7 +1,7 @@
 [package]
 name = "osyrisrblx/t"
 description = "A Runtime Typechecker for Roblox"
-version = "2.2.1"
+version = "3.0.0"
 license = "MIT"
 authors = ["Osyris"]
 realm = "shared"
