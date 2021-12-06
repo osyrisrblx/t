@@ -6,6 +6,7 @@ license = "MIT"
 authors = ["Osyris"]
 realm = "shared"
 registry = "https://github.com/upliftgames/wally-index"
-include = ["lib/init.lua"]
+# include = ["lib", "default.project.json"]
+exclude = ["node_modules", "package.json", "package-lock.json", "spec.lua", "lib/ts.lua", "lib/t.d.ts", "lib/init.spec.lua", "tsconfig.json", "rotriever.toml", "modules"]
 
 [dependencies]
