@@ -1,0 +1,11 @@
+[package]
+name = "osyrisrblx/t"
+description = "A Runtime Typechecker for Roblox"
+version = "2.2.1"
+license = "MIT"
+authors = ["Osyris"]
+realm = "shared"
+registry = "https://github.com/upliftgames/wally-index"
+include = ["lib/init.lua"]
+
+[dependencies]
