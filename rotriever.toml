@@ -4,6 +4,6 @@ authors = [
     "osyrisrblx"
 ]
 content_root = "lib"
-version = "1.2.6"
+version = "3.0.0"
 license = "MIT"
 files = [ "init.lua" ]
