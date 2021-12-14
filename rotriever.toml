@@ -1,6 +1,9 @@
 [package]
-name = "osyris/t"
-author = "osyrisrblx"
+name = "t"
+authors = [
+    "osyrisrblx"
+]
 content_root = "lib"
 version = "1.2.5"
 license = "MIT"
+files = [ "init.lua" ]
