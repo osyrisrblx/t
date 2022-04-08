@@ -266,6 +266,15 @@ t.Enums = t.typeof("Enums")
 t.Faces = t.typeof("Faces")
 
 --[[**
+	ensures Roblox FloatCurveKey type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.FloatCurveKey = t.typeof("FloatCurveKey")
+
+--[[**
 	ensures Roblox Instance type
 
 	@param value The value to check against
@@ -300,6 +309,15 @@ t.NumberSequence = t.typeof("NumberSequence")
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
 t.NumberSequenceKeypoint = t.typeof("NumberSequenceKeypoint")
+
+--[[**
+	ensures Roblox OverlapParams type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.OverlapParams = t.typeof("OverlapParams")
 
 --[[**
 	ensures Roblox PathWaypoint type
