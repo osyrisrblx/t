@@ -1246,4 +1246,24 @@ do
 	end
 end
 
+do
+	local checkCallback = t.callback
+	
+	--[[**
+		Takes a callback to check a value against.
+		
+		@param callback The callback to check the value against.
+		
+		@returns A function that will return true iff the callback returns true, false otherwise.
+	**--]]
+	
+	function t.custom(callback)
+		assert(checkCallback(callback))
+		
+		return function(value)
+			return callback(value) == true
+		end
+	end
+end
+
 return t
