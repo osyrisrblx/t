@@ -16,8 +16,8 @@
 	},
 	"homepage": "https://github.com/osyrisrblx/t#readme",
 	"devDependencies": {
-		"@rbxts/compiler-types": "^1.2.7-types.0",
-		"@rbxts/types": "^1.0.544"
+		"@rbxts/compiler-types": "^2.0.4-types.1",
+		"@rbxts/types": "^1.0.654"
 	},
 	"files": [
 		"lib/ts.lua",
