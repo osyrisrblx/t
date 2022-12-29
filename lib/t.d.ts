@@ -60,6 +60,10 @@ interface t {
 	Enums: t.check<Enums>;
 	/** checks to see if `value` is a Faces */
 	Faces: t.check<Faces>;
+	/** checks to see if `value` is a FloatCurveKey */
+	FloatCurveKey: t.check<FloatCurveKey>;
+	/** checks to see if `value` is a Font */
+	Font: t.check<Font>;
 	/** checks to see if `value` is an Instance */
 	Instance: t.check<Instance>;
 	/** checks to see if `value` is a NumberRange */
@@ -68,6 +72,8 @@ interface t {
 	NumberSequence: t.check<NumberSequence>;
 	/** checks to see if `value` is a NumberSequenceKeypoint */
 	NumberSequenceKeypoint: t.check<NumberSequenceKeypoint>;
+	/** checks to see if `value` is a OverlapParams */
+	OverlapParams: t.check<OverlapParams>;
 	/** checks to see if `value` is a PathWaypoint */
 	PathWaypoint: t.check<PathWaypoint>;
 	/** checks to see if `value` is a PhysicalProperties */
