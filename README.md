@@ -250,7 +250,7 @@ t includes two functions to check the types of Roblox Instances.
 ensures the value is an Instance and it's ClassName exactly matches `className`\
 If you provide a `childTable`, it will be automatically passed to `t.children()`
 
-**`t.instanceIsA(className)`**\
+**`t.instanceIsA(className[, childTable])`**\
 ensures the value is an Instance and it's ClassName matches `className` by a IsA comparison. ([see here](http://wiki.roblox.com/index.php?title=API:Class/Instance/FindFirstAncestorWhichIsA))
 
 **`t.children(checkTable)`**\
