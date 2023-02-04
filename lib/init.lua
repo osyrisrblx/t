@@ -1,6 +1,161 @@
 -- t: a runtime typechecker for Roblox
 
-local t = {}
+type tWrapped<T...> = (T...) -> (boolean, string?)
+type tw<T...> = tWrapped<T...>
+
+type userdata = typeof(newproxy())
+type tUnionCompromise = (
+	(<A>(tw<A>) -> tw<A>) &
+	(<A,B>(tw<A>,tw<B>) -> tw<A|B>) &
+	(<A,B,C>(tw<A>,tw<B>,tw<C>) -> tw<A|B|C>) &
+	(<A,B,C,D>(tw<A>,tw<B>,tw<C>,tw<D>) -> tw<A|B|C|D>) &
+	(<A,B,C,D,E>(tw<A>,tw<B>,tw<C>,tw<D>,tw<E>) -> tw<A|B|C|D|E>) &
+	(<A,B,C,D,E,F>(tw<A>,tw<B>,tw<C>,tw<D>,tw<E>,tw<F>) -> tw<A|B|C|D|E|F>) &
+	(<A,B,C,D,E,F,G>(tw<A>,tw<B>,tw<C>,tw<D>,tw<E>,tw<F>,tw<G>) -> tw<A|B|C|D|E|F|G>) &
+	(<A,B,C,D,E,F,G,H>(tw<A>,tw<B>,tw<C>,tw<D>,tw<E>,tw<F>,tw<G>,tw<H>) -> tw<A|B|C|D|E|F|G|H>) &
+	(<A,B,C,D,E,F,G,H,I>(tw<A>,tw<B>,tw<C>,tw<D>,tw<E>,tw<F>,tw<G>,tw<H>,tw<I>) -> tw<A|B|C|D|E|F|G|H|I>) &
+	(<A,B,C,D,E,F,G,H,I,J>(tw<A>,tw<B>,tw<C>,tw<D>,tw<E>,tw<F>,tw<G>,tw<H>,tw<I>,tw<J>) -> tw<A|B|C|D|E|F|G|H|I|J>)
+)
+-- Unions only show the types that it is sure of, but if a generic that it
+-- is union'd with doesn't contain a type, it'll remove complete autocomplete
+type tLiteralCompromise = (
+	(<A>(A) -> tw<A>) &
+	(<A,B>(A,B) -> tw<A|B>) &
+	(<A,B,C>(A,B,C) -> tw<A|B|C>) &
+	(<A,B,C,D>(A,B,C,D) -> tw<A|B|C|D>) &
+	(<A,B,C,D,E>(A,B,C,D,E) -> tw<A|B|C|D|E>) &
+	(<A,B,C,D,E,F>(A,B,C,D,E,F) -> tw<A|B|C|D|E|F>) &
+	(<A,B,C,D,E,F,G>(A,B,C,D,E,F,G) -> tw<A|B|C|D|E|F|G>) &
+	(<A,B,C,D,E,F,G,H>(A,B,C,D,E,F,G,H) -> tw<A|B|C|D|E|F|G|H>) &
+	(<A,B,C,D,E,F,G,H,I>(A,B,C,D,E,F,G,H,I) -> tw<A|B|C|D|E|F|G|H|I>) &
+	(<A,B,C,D,E,F,G,H,I,J>(A,B,C,D,E,F,G,H,I,J) -> tw<A|B|C|D|E|F|G|H|I|J>)
+)
+-- Unions only show the types that it is sure of, but if a generic that it
+-- is union'd with doesn't contain a type, it'll remove complete autocomplete
+
+type tIntersectionCompromise = <A,B,C,D,E,F,G,H,I,J>(tw<A>?, tw<B>?, tw<C>?, tw<D>?, tw<E>?, tw<F>?, tw<G>?, tw<H>?, tw<I>?, tw<J>?) -> tw<A&B&C&D&E&F&G&H&I&J>
+type tTupleCompromise = (
+	(<A>(tw<A>) -> tw<A>) &
+	(<A,B>(tw<A>,tw<B>) -> tw<A,B>) &
+	(<A,B,C>(tw<A>,tw<B>,tw<C>) -> tw<A,B,C>) &
+	(<A,B,C,D>(tw<A>,tw<B>,tw<C>,tw<D>) -> tw<A,B,C,D>) &
+	(<A,B,C,D,E>(tw<A>,tw<B>,tw<C>,tw<D>,tw<E>) -> tw<A,B,C,D,E>) &
+	(<A,B,C,D,E,F>(tw<A>,tw<B>,tw<C>,tw<D>,tw<E>,tw<F>) -> tw<A,B,C,D,E,F>) &
+	(<A,B,C,D,E,F,G>(tw<A>,tw<B>,tw<C>,tw<D>,tw<E>,tw<F>,tw<G>) -> tw<A,B,C,D,E,F,G>) &
+	(<A,B,C,D,E,F,G,H>(tw<A>,tw<B>,tw<C>,tw<D>,tw<E>,tw<F>,tw<G>,tw<H>) -> tw<A,B,C,D,E,F,G,H>) &
+	(<A,B,C,D,E,F,G,H,I>(tw<A>,tw<B>,tw<C>,tw<D>,tw<E>,tw<F>,tw<G>,tw<H>,tw<I>) -> tw<A,B,C,D,E,F,G,H,I>) &
+	(<A,B,C,D,E,F,G,H,I,J>(tw<A>,tw<B>,tw<C>,tw<D>,tw<E>,tw<F>,tw<G>,tw<H>,tw<I>,tw<J>) -> tw<A,B,C,D,E,F,G,H,I,J>)
+) 
+-- tTupleCompromise has to be typed like this, if we opt for the same method
+-- we use in the intersection compromise, the type checker will start saying
+-- that whenever we call the test, that we need all 10 arguments. Even if we
+-- only defined 3, which would be incorrect. If we we're to type every generic
+-- as <A?, B?, C?, D?, E?, F?>, we'd be incorrectly casting the type and would
+-- have the typechecker complain about the values possibly being nil. Which is
+-- also incorrect as we have to manually define when a value may be nil using
+-- t.optional
+
+type t = {
+	
+	any: tWrapped<any>,
+	boolean: tWrapped<boolean>,
+	thread: tWrapped<thread>,
+	callback: tWrapped<(...any) -> ...any>,
+	none: tWrapped<nil>,
+	string: tWrapped<string>,
+	table: tWrapped<{[any]: any}>,
+	userdata: tWrapped<userdata>,
+	number: tWrapped<number>,
+	nan: tWrapped<number>,
+	
+	Axes: tWrapped<Axes>,
+	BrickColor: tWrapped<BrickColor>,
+	CatalogSearchParams: tWrapped<CatalogSearchParams>,
+	CFrame: tWrapped<CFrame>,
+	Color3: tWrapped<Color3>,
+	ColorSequence: tWrapped<ColorSequence>,
+	ColorSequenceKeypoint: tWrapped<ColorSequenceKeypoint>,
+	DateTime: tWrapped<DateTime>,
+	DockWidgetPluginGuiInfo: tWrapped<DockWidgetPluginGuiInfo>,
+	Enum: tWrapped<Enum>,
+	EnumItem: tWrapped<EnumItem>,
+	Enums: tWrapped<Enums>,
+	Faces: tWrapped<Faces>,
+	FloatCurveKey: tWrapped<FloatCurveKey>,
+	Font: tWrapped<Font>,
+	Instance: tWrapped<Instance>,
+	NumberRange: tWrapped<NumberRange>,
+	NumberSequence: tWrapped<NumberSequence>,
+	NumberSequenceKeypoint: tWrapped<NumberSequenceKeypoint>,
+	OverlapParams: tWrapped<OverlapParams>,
+	PathWaypoint: tWrapped<PathWaypoint>,
+	PhysicalProperties: tWrapped<PhysicalProperties>,
+	Random: tWrapped<Random>,
+	Ray: tWrapped<Ray>,
+	RaycastParams: tWrapped<RaycastParams>,
+	RaycastResult: tWrapped<RaycastResult>,
+	RBXScriptConnection: tWrapped<RBXScriptConnection>,
+	RBXScriptSignal: tWrapped<RBXScriptSignal>,
+	Rect: tWrapped<Rect>,
+	Region3: tWrapped<Region3>,
+	Region3int16: tWrapped<Region3int16>,
+	TweenInfo: tWrapped<TweenInfo>,
+	UDim: tWrapped<UDim>,
+	UDim2: tWrapped<UDim2>,
+	Vector2: tWrapped<Vector2>,
+	Vector2int16: tWrapped<Vector2int16>,
+	Vector3: tWrapped<Vector3>,
+	Vector3int16: tWrapped<Vector3int16>,
+	
+	-- Custom
+	literal: tLiteralCompromise,
+	keyOf: <K>({[K]: any}) -> tWrapped<K>,
+	valueOf: <V>({[any]: V}) -> tWrapped<V>,
+	integer: tWrapped<number>,
+	numberMin: (min: number) -> tWrapped<number>,
+	numberMax: (max: number) -> tWrapped<number>,
+	numberMinExclusive: (min: number) -> tWrapped<number>,
+	numberMaxExclusive: (max: number) -> tWrapped<number>,
+	numberPositive: tWrapped<number>,
+	numberNegative: tWrapped<number>,
+	numberConstrained: (min: number, max: number) -> tWrapped<number>,
+	numberConstrainedExclusive: (min: number, max: number) -> tWrapped<number>,
+	match: (pattern: string) -> tWrapped<string>,
+	optional: <T>(tWrapped<T>) -> tWrapped<T?>,
+	tuple: tTupleCompromise,
+	keys: <T>(check: tWrapped<T>) -> tWrapped<{[T]: any}>,
+	values: <T>(check: tWrapped<T>) -> tWrapped<{[any]: T}>,
+	map: <K, V>(keyCheck: tWrapped<K>, valueCheck: tWrapped<V>) -> tWrapped<{[K]: V}>,
+	set: <V>(valueCheck: tWrapped<V>) -> tWrapped<{[V]: boolean}>,
+	array: tWrapped<{[number]: any}>,
+	strictArray: (...any) -> tWrapped<{[number]: any}>,
+	union: tUnionCompromise,
+	some: tUnionCompromise,
+	intersection: tIntersectionCompromise,
+	every: tIntersectionCompromise,
+	
+	-- interfaces cannot be properly typed, as we are unable to properly extract
+	-- the keys and values out of every tWrapped and turn them into a table.
+	-- The dilemna here is: We could type this incorrectly, but have the user typecast
+	-- the given table so that it is considered correct and have autocompletes
+	-- OR we type it as correctly as possible, but without any autocomplete
+	interface: <K,V>(check: {[K]: tWrapped<V>}) -> tWrapped<{[K]: V}>,
+	--interface: <T>(check: T) -> tWrapped<T>,
+	strictInterface: <K,V>(check: {[K]: tWrapped<V>}) -> tWrapped<{[K]: V}>,
+	--strictInterface: <T>(check: T) -> tWrapped<T>,
+	instanceOf: (className: string, childTable: {}?) -> tWrapped<Instance>,
+	instance: (className: string, childTable: {}?) -> tWrapped<Instance>,
+	instanceIsA: (className: string, childTable: {}?) -> tWrapped<Instance>,
+	enum: (enum: Enum) -> tWrapped<EnumItem>,
+	strict: <T...>(tWrapped<T...>) -> tWrapped<T...>,
+	children: (checkTable: {[string]: tWrapped<any>}) -> tWrapped<Instance>,
+	
+	-- extra
+	wrap: <T..., R...>(callback: (T...) -> R..., tWrapped<T...>) -> (T...) -> R...,
+	
+}
+
+local t = {} :: t
 
 function t.type(typeName)
 	return function(value)
