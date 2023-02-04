@@ -127,7 +127,7 @@ type t = {
 	values: <T>(check: tWrapped<T>) -> tWrapped<{[any]: T}>,
 	map: <K, V>(keyCheck: tWrapped<K>, valueCheck: tWrapped<V>) -> tWrapped<{[K]: V}>,
 	set: <V>(valueCheck: tWrapped<V>) -> tWrapped<{[V]: boolean}>,
-	array: tWrapped<{[number]: any}>,
+	array: <V>(check: tWrapped<V>) -> tWrapped<{[number]: V}>,
 	strictArray: (...any) -> tWrapped<{[number]: any}>,
 	union: tUnionCompromise,
 	some: tUnionCompromise,
