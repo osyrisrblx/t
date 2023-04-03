@@ -168,11 +168,11 @@ interface t {
 	/** checks to see if `value` matches a given interface definition */
 	interface: <T extends { [index: string]: t.check<any> }>(
 		checkTable: T,
-	) => t.check<{ [P in keyof T]: t.static<T[P]> }>;
+	) => t.check<{ [P in keyof T]: t.static<T[P]> }> | LuaTuple<[t.check<{ [P in keyof T]: t.static<T[P]> }>, string]>;
 	/** checks to see if `value` matches a given interface definition with no extra members */
 	strictInterface: <T extends { [index: string]: t.check<any> }>(
 		checkTable: T,
-	) => t.check<{ [P in keyof T]: t.static<T[P]> }>;
+	) => t.check<{ [P in keyof T]: t.static<T[P]> }> | LuaTuple<[t.check<{ [P in keyof T]: t.static<T[P]> }>, string]>;
 	/** ensure value is an Instance and it's ClassName matches the given ClassName */
 	instanceOf<S extends keyof Instances>(this: void, className: S): t.check<Instances[S]>;
 	instanceOf<S extends keyof Instances, T extends { [index: string]: t.check<any> }>(
