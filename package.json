@@ -1,6 +1,6 @@
 {
 	"name": "@rbxts/t",
-	"version": "3.1.0",
+	"version": "3.1.1",
 	"description": "A Runtime Type Checker for Roblox",
 	"main": "lib/ts.lua",
 	"types": "lib/t.d.ts",
