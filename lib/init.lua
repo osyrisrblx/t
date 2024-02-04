@@ -122,7 +122,7 @@ t.userdata = t.type("userdata")
 
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
-t.vector = t.typeof("vector")
+t.vector = t.type("vector")
 
 --[[**
 	ensures value is a number and non-NaN
