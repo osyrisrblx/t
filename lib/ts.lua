@@ -51,6 +51,15 @@ end
 t.boolean = t.typeof("boolean")
 
 --[[**
+	ensures Lua primitive buffer type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.buffer = t.typeof("buffer")
+
+--[[**
 	ensures Lua primitive thread type
 
 	@param value The value to check against
@@ -105,6 +114,15 @@ t.table = t.typeof("table")
 	@returns True iff the condition is satisfied, false otherwise
 **--]]
 t.userdata = t.type("userdata")
+
+--[[**
+	ensures Lua primitive vector type
+
+	@param value The value to check against
+
+	@returns True iff the condition is satisfied, false otherwise
+**--]]
+t.vector = t.type("vector")
 
 --[[**
 	ensures value is a number and non-NaN
