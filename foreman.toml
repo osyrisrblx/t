@@ -1,0 +1,2 @@
+[tools]
+wally = { github = "UpliftGames/wally", version = "0.3.2" }
