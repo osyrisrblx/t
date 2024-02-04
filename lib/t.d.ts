@@ -12,6 +12,8 @@ interface t {
 	any: t.check<defined>;
 	/** checks to see if `value` is a boolean */
 	boolean: t.check<boolean>;
+	/** checks to see if `value` is a buffer */
+	buffer: t.check<buffer>;
 	/** checks to see if `value` is a thread */
 	thread: t.check<thread>;
 	/** checks to see if `value` is a function */
@@ -32,6 +34,8 @@ interface t {
 	table: t.check<object>;
 	/** checks to see if `value` is a userdata */
 	userdata: t.check<object>;
+	/** checks to see if `value` is a vector (Vector3 in Roblox) */
+	vector: t.check<Vector3>;
 
 	// roblox types
 	/** checks to see if `value` is an Axes */
