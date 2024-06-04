@@ -509,6 +509,23 @@ t.Vector3 = t.typeof("Vector3")
 t.Vector3int16 = t.typeof("Vector3int16")
 
 --[[**
+	ensures value is any of the given literal values
+
+	@param literals The literals to check against
+
+	@returns A function that will return true if the condition is passed
+**--]]
+function t.literalList(literals)
+	return function(value)
+		if table.find(literals, value) == nil then
+			return false
+		end
+
+		return true
+	end
+end
+
+--[[**
 	ensures value is a given literal value
 
 	@param literal The literal to use
@@ -533,7 +550,7 @@ function t.literal(...)
 			literals[i] = t.literal(value)
 		end
 
-		return t.union(table.unpack(literals, 1, size))
+		return t.unionList(literals)
 	end
 end
 
@@ -1000,12 +1017,11 @@ do
 --[[**
 		creates a union type
 
-		@param ... The checks to union
+		@param checks The checks to union
 
 		@returns A function that will return true iff the condition is passed
 	**--]]
-	function t.union(...)
-		local checks = { ... }
+	function t.unionList(checks)
 		assert(callbackArray(checks))
 
 		return function(value)
@@ -1020,6 +1036,17 @@ do
 	end
 
 --[[**
+		creates a union type
+
+		@param ... The checks to union
+
+		@returns A function that will return true iff the condition is passed
+	**--]]
+	function t.union(...)
+		return t.unionList({ ... })
+	end
+
+--[[**
 		Alias for t.union
 	**--]]
 	t.some = t.union
@@ -1027,12 +1054,11 @@ do
 --[[**
 		creates an intersection type
 
-		@param ... The checks to intersect
+		@param checks The checks to intersect
 
 		@returns A function that will return true iff the condition is passed
 	**--]]
-	function t.intersection(...)
-		local checks = { ... }
+	function t.intersectionList(checks)
 		assert(callbackArray(checks))
 
 		return function(value)
@@ -1045,6 +1071,17 @@ do
 
 			return true
 		end
+	end
+
+--[[**
+		creates an intersection type
+
+		@param ... The checks to intersect
+
+		@returns A function that will return true iff the condition is passed
+	**--]]
+	function t.intersection(...)
+		return t.intersectionList({ ... })
 	end
 
 --[[**
