@@ -517,11 +517,13 @@ t.Vector3int16 = t.typeof("Vector3int16")
 **--]]
 function t.literalList(literals)
 	return function(value)
-		if table.find(literals, value) == nil then
-			return false
+		for _, literal in ipairs(literals) do
+			if literal == value then
+				return true
+			end
 		end
 
-		return true
+		return false, "bad type for literal list"
 	end
 end
 
