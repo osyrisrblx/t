@@ -120,6 +120,8 @@ interface t {
 
 	// type functions
 	/** checks to see if `value == literalValue` */
+	literalList<T extends Array<Literal>>(this: void, checks: T): t.check<ArrayType<T>>;
+	/** checks to see if `value == literalValue` */
 	literal<T extends Array<Literal>>(this: void, ...args: T): t.check<ArrayType<T>>;
 	/** returns a t.union of each key in the table as a t.literal */
 	keyOf: <T>(valueTable: T) => t.check<keyof T>;
@@ -160,15 +162,13 @@ interface t {
 	/** ensures value is an array of a strict makeup and size */
 	strictArray: <T extends Array<t.check<any>>>(...args: T) => t.check<{ [K in keyof T]: t.static<T[K]> }>;
 	/** checks to see if `value` matches any given check */
+	unionList: <T extends Array<t.check<any>>>(checks: T) => t.check<t.static<ArrayType<T>>>;
+	/** checks to see if `value` matches any given check */
 	union: <T extends Array<t.check<any>>>(...args: T) => t.check<t.static<ArrayType<T>>>;
 	/** checks to see if `value` matches all given checks */
-	intersection: <T extends Array<t.check<any>>>(
-		...args: T
-	) => T[Exclude<keyof T, keyof Array<any> | "length">] extends infer U
-		? (U extends any ? (k: U) => void : never) extends (k: t.check<infer I>) => void
-			? t.check<I>
-			: never
-		: never;
+	intersectionList: <T extends Array<t.check<any>>>(checks: T) => t.check<UnionToIntersection<t.static<T[number]>>>;
+	/** checks to see if `value` matches all given checks */
+	intersection: <T extends Array<t.check<any>>>(...args: T) => t.check<UnionToIntersection<t.static<T[number]>>>;
 	/** checks to see if `value` matches a given interface definition */
 	interface: <T extends { [index: string]: t.check<any> }>(
 		checkTable: T,
