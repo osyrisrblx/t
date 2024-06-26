@@ -9,7 +9,7 @@ return function()
 		assert(t.type("table")({}))
 		assert(t.type("userdata")(newproxy()))
 		assert(t.type("function")(function() end))
-		assert(t.type("thread")(coroutine.create(nction() end)))
+		assert(t.type("thread")(coroutine.create(function() end)))
 
 		assert(not t.type("nil")(true))
 		assert(not t.type("boolean")("true"))
