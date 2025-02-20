@@ -523,7 +523,7 @@ function t.literalList(literals)
 			end
 		end
 
-		return false, "bad type for literal list"
+		return false
 	end
 end
 
