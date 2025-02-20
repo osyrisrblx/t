@@ -516,7 +516,15 @@ t.Vector3int16 = t.typeof("Vector3int16")
 	@returns A function that will return true if the condition is passed
 **--]]
 function t.literalList(literals)
+	-- optimization for primitive types
+	local set = {}
+	for _, literal in ipairs(literals) do
+		set[literal] = true
+	end
 	return function(value)
+		if set[value] then
+			return true
+		end
 		for _, literal in ipairs(literals) do
 			if literal == value then
 				return true
