@@ -21,7 +21,7 @@ t is a module which allows you to create type definitions to check values agains
 
 ## Why?
 When building large systems, it can often be difficult to find type mismatch bugs.\
-Typechecking helps you ensure that your functions are recieving the appropriate types for their arguments.
+Typechecking helps you ensure that your functions are receiving the appropriate types for their arguments.
 
 In Roblox specifically, it is important to type check your Remote objects to ensure that exploiters aren't sending you bad data which can cause your server to error (and potentially crash!).
 
@@ -66,7 +66,7 @@ Primitives are found under the same name as their type name except for two:
 These two are renamed due to Lua restrictions on reserved words.
 
 All Roblox primitives are also available and can be found under their respective type names.\
-We won't list them here to due how many there are, but as an example you can access a few like this:
+We won't list them here due to how many there are, but as an example you can access a few like this:
 ```Lua
 t.Instance
 t.CFrame
