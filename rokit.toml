@@ -1,0 +1,8 @@
+# This file lists tools managed by Rokit, a toolchain manager for Roblox projects.
+# For more information, see https://github.com/rojo-rbx/rokit
+
+# New tools can be added by running `rokit add <tool>` in a terminal.
+
+[tools]
+luau-lsp = "JohnnyMorganz/luau-lsp@1.53.3"
+selene = "Kampfkarren/selene@0.29.0"
